@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="docs/assets/bo-bo-logo.png" alt="Maskot Bo’bo, ayam pustakawan yang sedang membaca buku" width="260" />
+  <img src="public/brand/bo-bo-logo.png" alt="Maskot Bo’bo, ayam pustakawan yang sedang membaca buku" width="260" />
 
   <h1>Bo’bo (ᨅᨚᨅᨚ) — Digital Library</h1>
 
