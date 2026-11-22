@@ -1,0 +1,211 @@
+/* ===== BO'BO INTRO SCREEN ===== */
+.bobo-intro {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: #F7EBD8;
+  color: #79543D;
+  opacity: 1;
+  transition: opacity 700ms ease, visibility 700ms ease;
+}
+
+.bobo-intro--leave {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.bobo-intro__grain {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: .22;
+  background-image: radial-gradient(rgba(121,84,61,.18) .65px, transparent .65px);
+  background-size: 7px 7px;
+}
+
+.bobo-intro__content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  width: min(92vw, 560px);
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.bobo-intro__ornament {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  color: #929D75;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .2em;
+  animation: boboIntroFade .7s .1s both;
+}
+
+.bobo-intro__ornament span:first-child {
+  font-family: Georgia, serif;
+  font-size: 16px;
+  letter-spacing: .08em;
+}
+
+.bobo-intro__ornament i {
+  width: 28px;
+  height: 1px;
+  background: #C9B18E;
+}
+
+.bobo-intro__scene {
+  position: relative;
+  width: min(76vw, 360px);
+  height: min(66vw, 300px);
+  margin-top: 10px;
+}
+
+.bobo-intro__glow {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 75%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: rgba(235,207,169,.55);
+  filter: blur(38px);
+  transform: translate(-50%, -50%);
+  animation: boboIntroGlow 2.8s ease-in-out infinite;
+}
+
+.bobo-intro__mascot {
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  top: 4%;
+  width: 84%;
+  height: 92%;
+  transform: translateX(-50%);
+  animation: boboIntroRise 1.1s .35s cubic-bezier(.2,.75,.25,1) both,
+             boboIntroBob 3.5s 1.5s ease-in-out infinite;
+}
+
+.bobo-intro__mascot-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 15px 18px rgba(121,84,61,.13));
+}
+
+.bobo-intro__spark {
+  position: absolute;
+  z-index: 4;
+  color: #C96858;
+  animation: boboIntroSpark 2.4s ease-in-out infinite;
+}
+
+.bobo-intro__spark--one { left: 8%; top: 32%; font-size: 24px; }
+.bobo-intro__spark--two { right: 8%; top: 20%; color: #D5A85F; font-size: 20px; animation-delay: .5s; }
+.bobo-intro__spark--three { right: 12%; bottom: 24%; color: #929D75; font-size: 17px; animation-delay: 1s; }
+
+.bobo-intro__brand {
+  margin-top: 4px;
+  animation: boboIntroFade .8s 1s both;
+}
+
+.bobo-intro__brand h1 {
+  margin: 0;
+  color: #79543D;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(42px, 8vw, 58px);
+  font-weight: 700;
+  letter-spacing: -.055em;
+  line-height: 1;
+}
+
+.bobo-intro__brand p {
+  margin: 10px 0 0;
+  color: #929D75;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+}
+
+.bobo-intro__brand > span {
+  display: block;
+  margin-top: 9px;
+  color: rgba(121,84,61,.65);
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 13px;
+  font-style: italic;
+}
+
+.bobo-intro__loading {
+  width: 104px;
+  height: 3px;
+  margin-top: 25px;
+  overflow: hidden;
+  border-radius: 99px;
+  background: rgba(146,157,117,.2);
+  animation: boboIntroFade .6s 1.2s both;
+}
+
+.bobo-intro__loading span {
+  display: block;
+  width: 42%;
+  height: 100%;
+  border-radius: inherit;
+  background: #929D75;
+  animation: boboIntroProgress 1.25s 1.25s ease-in-out forwards;
+}
+
+.bobo-intro__caption {
+  margin-top: 10px;
+  color: rgba(121,84,61,.52);
+  font-size: 10px;
+  letter-spacing: .04em;
+  animation: boboIntroFade .6s 1.3s both;
+}
+
+@keyframes boboIntroFade {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes boboIntroRise {
+  from { opacity: 0; transform: translate(-50%, 38px) scale(.92); }
+  to { opacity: 1; transform: translate(-50%, 0) scale(1); }
+}
+@keyframes boboIntroBob {
+  0%, 100% { transform: translate(-50%, 0); }
+  50% { transform: translate(-50%, -7px); }
+}
+@keyframes boboIntroGlow {
+  0%, 100% { opacity: .65; transform: translate(-50%, -50%) scale(.94); }
+  50% { opacity: 1; transform: translate(-50%, -50%) scale(1.06); }
+}
+@keyframes boboIntroSpark {
+  0%, 100% { opacity: .45; transform: translateY(0) rotate(0); }
+  50% { opacity: 1; transform: translateY(-9px) rotate(18deg); }
+}
+@keyframes boboIntroProgress {
+  from { width: 8%; }
+  to { width: 100%; }
+}
+
+@media (max-width: 480px) {
+  .bobo-intro__scene { margin-top: 16px; }
+  .bobo-intro__caption { font-size: 9px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bobo-intro *,
+  .bobo-intro *::before,
+  .bobo-intro *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}
