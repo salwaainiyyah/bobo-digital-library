@@ -1,0 +1,409 @@
+'use client';
+
+import { useState, useRef, useEffect, useCallback } from 'react';
+import Link from 'next/link';
+
+const FALLBACK_THEMES = [
+  'from-[#68774E] to-[#4E5B39] text-[#FAF6EE]',
+  'from-[#8C5A3C] to-[#6B4229] text-[#FAF6EE]',
+  'from-[#B5654D] to-[#8F4934] text-[#FAF6EE]',
+  'from-[#5A6E65] to-[#3F5049] text-[#FAF6EE]',
+  'from-[#79543D] to-[#563928] text-[#FAF6EE]',
+];
+
+function CarouselCover({ book, index }) {
+  const [imgError, setImgError] = useState(false);
+  const theme = FALLBACK_THEMES[index % FALLBACK_THEMES.length];
+
+  if (!book.cover_url || imgError) {
+    return (
+      <div className={`w-full h-full bg-gradient-to-br ${theme} p-3 pl-3.5 flex flex-col justify-between select-none`}>
+        <div className="border border-white/25 rounded-xs h-full p-2 flex flex-col justify-between text-left">
+          <div className="flex items-center justify-between text-[8px] font-bold uppercase tracking-[0.15em] opacity-80">
+            <span>Bo&apos;bo</span>
+            <span className="font-serif text-[10px]">ᨅᨚᨅᨚ</span>
+          </div>
+          <p className="font-editorial text-xs font-bold leading-snug line-clamp-4">
+            {book.title}
+          </p>
+          <p className="text-[9px] opacity-80 line-clamp-1 border-t border-white/15 pt-1">
+            {book.author}
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <img
+      src={book.cover_url}
+      alt={book.title}
+      draggable={false}
+      onError={() => setImgError(true)}
+      className="w-full h-full object-cover select-none"
+    />
+  );
+}
+
+// Komponen Jepitan Kayu & Pin Peringkat
+function WoodenClip({ rank, isCenter }) {
+  const isFirst = rank === 1;
+
+  return (
+    <div
+      aria-hidden="true"
+      className="absolute -top-7 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center pointer-events-none"
+    >
+      <span
+        className={`mb-0.5 px-2 py-0.5 rounded-full text-[10px] font-extrabold tracking-wide shadow-xs border transition-colors duration-300 ${
+          isFirst
+            ? 'bg-[#F5C875] text-[#4F3524] border-[#FFFDF7]'
+            : isCenter
+            ? 'bg-[#929D75] text-white border-[#FFFDF7]'
+            : 'bg-[#FFFDF9]/95 text-[#79543D] border-[#EBCFA9]'
+        }`}
+      >
+        {isFirst ? '👑 #1' : `#${rank}`}
+      </span>
+
+      <div className="relative w-3.5 h-7 rounded-t-[3px] rounded-b-[2px] bg-gradient-to-b from-[#D7AC7B] via-[#C1905B] to-[#9E6E3E] shadow-[0_3px_6px_rgba(92,59,40,0.3)] border border-[#79543D]/35 flex flex-col justify-center">
+        <div className="w-full h-[2px] bg-[#5C5852]/60" />
+        <div className="w-[1px] h-2.5 bg-[#79543D]/30 mx-auto mt-0.5" />
+      </div>
+    </div>
+  );
+}
+
+export default function FeaturedCarousel({ books = [] }) {
+  const topFiveBooks = books.slice(0, 5);
+  const total = topFiveBooks.length;
+
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [dragOffset, setDragOffset] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const [stageWidth, setStageWidth] = useState(1024);
+
+  const containerRef = useRef(null);
+  const startXRef = useRef(0);
+  const hasDraggedRef = useRef(false);
+  const wheelAccumRef = useRef(0);
+  const wheelLockedRef = useRef(false);
+  const wheelResetTimerRef = useRef(null);
+
+  // Ukur lebar area agar posisi jepitan selalu menempel pas di garis tali
+  useEffect(() => {
+    const updateWidth = () => {
+      if (containerRef.current) {
+        setStageWidth(containerRef.current.offsetWidth);
+      }
+    };
+    updateWidth();
+    window.addEventListener('resize', updateWidth);
+    return () => window.removeEventListener('resize', updateWidth);
+  }, []);
+
+  const goPrev = useCallback(() => {
+    if (total <= 1) return;
+    setActiveIndex((prev) => (prev - 1 + total) % total);
+  }, [total]);
+
+  const goNext = useCallback(() => {
+    if (total <= 1) return;
+    setActiveIndex((prev) => (prev + 1) % total);
+  }, [total]);
+
+  // 1. Gestur Sapuan Dua Jari Touchpad Laptop (Horizontal Wheel)
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el || total <= 1) return;
+
+    const handleWheel = (e) => {
+      if (Math.abs(e.deltaX) > Math.abs(e.deltaY) && Math.abs(e.deltaX) > 3) {
+        e.preventDefault();
+
+        if (wheelLockedRef.current) return;
+
+        wheelAccumRef.current += e.deltaX;
+        const clampedPreview = Math.max(-70, Math.min(70, -wheelAccumRef.current * 0.55));
+        setDragOffset(clampedPreview);
+
+        window.clearTimeout(wheelResetTimerRef.current);
+        wheelResetTimerRef.current = window.setTimeout(() => {
+          wheelAccumRef.current = 0;
+          setDragOffset(0);
+        }, 140);
+
+        if (Math.abs(wheelAccumRef.current) >= 48) {
+          if (wheelAccumRef.current > 0) {
+            goNext();
+          } else {
+            goPrev();
+          }
+          wheelAccumRef.current = 0;
+          setDragOffset(0);
+          wheelLockedRef.current = true;
+
+          window.setTimeout(() => {
+            wheelLockedRef.current = false;
+          }, 340);
+        }
+      }
+    };
+
+    el.addEventListener('wheel', handleWheel, { passive: false });
+    return () => {
+      el.removeEventListener('wheel', handleWheel);
+      window.clearTimeout(wheelResetTimerRef.current);
+    };
+  }, [total, goNext, goPrev]);
+
+  // 2. Gestur Tarik Mouse & Sentuh Layar (Pointer Drag)
+  const handlePointerDown = (e) => {
+    if (total <= 1) return;
+    if (e.target.closest('button')) return;
+
+    setIsDragging(true);
+    hasDraggedRef.current = false;
+    startXRef.current = e.clientX;
+  };
+
+  const handlePointerMove = (e) => {
+    if (!isDragging) return;
+    const dx = e.clientX - startXRef.current;
+    if (Math.abs(dx) > 6) {
+      hasDraggedRef.current = true;
+    }
+    setDragOffset(dx);
+  };
+
+  const finishDrag = () => {
+    if (!isDragging) return;
+    if (dragOffset < -45) {
+      goNext();
+    } else if (dragOffset > 45) {
+      goPrev();
+    }
+    setIsDragging(false);
+    setDragOffset(0);
+  };
+
+  if (!total) return null;
+
+  const activeBook = topFiveBooks[activeIndex];
+  const borrowCount =
+    activeBook.borrow_count ?? activeBook.total_borrows ?? activeBook.loan_count ?? 0;
+
+  // Hitung jarak posisi melingkar (-2 sampai +2)
+  const getRelativeOffset = (index) => {
+    let diff = index - activeIndex;
+    if (diff > total / 2) diff -= total;
+    if (diff < -total / 2) diff += total;
+    return diff;
+  };
+
+  // Hitung titik ketinggian kurva Bezier tali (M 0,18 Q 500,98 1000,18)
+  const getRopeDropY = (offsetX) => {
+    const t = Math.max(0, Math.min(1, (stageWidth / 2 + offsetX) / stageWidth));
+    const ropeY = 18 + 160 * t * (1 - t);
+    return ropeY + 14;
+  };
+
+  const isCompact = stageWidth < 640;
+  const baseSpacing = isCompact ? 132 : Math.min(198, stageWidth * 0.195);
+
+  return (
+    <div className="w-full select-none">
+      {/* Stage Tali Gantung Interaktif */}
+      <div
+        ref={containerRef}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={finishDrag}
+        onPointerCancel={finishDrag}
+        onPointerLeave={finishDrag}
+        className={`relative mx-auto h-[340px] sm:h-[395px] max-w-5xl overflow-visible touch-pan-y ${
+          isDragging ? 'cursor-grabbing' : 'cursor-grab'
+        }`}
+      >
+        {/* Tali Gantung Melengkung (SVG) */}
+        <svg
+          aria-hidden="true"
+          viewBox="0 0 1000 110"
+          preserveAspectRatio="none"
+          className="pointer-events-none absolute top-0 left-0 w-full h-[110px] z-10 overflow-visible"
+        >
+          <path
+            d="M 0,18 Q 500,98 1000,18"
+            fill="none"
+            stroke="rgba(121, 84, 61, 0.14)"
+            strokeWidth="4"
+            transform="translate(0, 4)"
+          />
+          <path
+            d="M 0,18 Q 500,98 1000,18"
+            fill="none"
+            stroke="#B69168"
+            strokeWidth="2.6"
+            strokeLinecap="round"
+          />
+          <path
+            d="M 0,18 Q 500,98 1000,18"
+            fill="none"
+            stroke="#E7CFAF"
+            strokeWidth="1"
+            strokeDasharray="5 5"
+          />
+        </svg>
+
+        {/* Tombol Geser Kiri */}
+        {total > 1 && (
+          <button
+            type="button"
+            onClick={goPrev}
+            aria-label="Geser ke buku sebelumnya"
+            className="absolute left-1 sm:left-3 top-1/2 -translate-y-1/2 z-40 w-10 h-10 rounded-full
+                       bg-[#FFFCF7]/95 border border-[#EBCFA9] text-[#79543D] shadow-md
+                       hover:bg-[#929D75] hover:text-white hover:border-[#929D75]
+                       active:scale-95 transition-all duration-200 flex items-center justify-center cursor-pointer"
+          >
+            ‹
+          </button>
+        )}
+
+        {/* Barisan 5 Buku Gantung yang Bisa Digeser */}
+        <div className="relative w-full h-full">
+          {topFiveBooks.map((book, idx) => {
+            const rel = getRelativeOffset(idx);
+            const absRel = Math.abs(rel);
+
+            if (absRel > 2) return null;
+
+            const isCenter = rel === 0;
+            const translateX = rel * baseSpacing + dragOffset * 0.7;
+            const translateY = getRopeDropY(translateX);
+            const scale = isCenter ? 1 : absRel === 1 ? 0.86 : 0.74;
+            const tilt = isCenter ? 0 : rel < 0 ? -1.8 : 1.8;
+            const opacity = isCenter ? 1 : absRel === 1 ? 0.92 : 0.72;
+            const zIndex = 30 - absRel * 5;
+
+            const itemBorrowCount =
+              book.borrow_count ?? book.total_borrows ?? book.loan_count ?? 0;
+
+            return (
+              <div
+                key={book.id}
+                onClick={() => {
+                  if (!isCenter && !hasDraggedRef.current) {
+                    setActiveIndex(idx);
+                  }
+                }}
+                style={{
+                  transform: `translate3d(${translateX}px, ${translateY}px, 0) scale(${scale}) rotate(${tilt}deg)`,
+                  opacity,
+                  zIndex,
+                }}
+                className={`absolute top-0 left-1/2 -ml-[80px] sm:-ml-[96px] w-[160px] sm:w-[192px] origin-top
+                            ${
+                              isDragging
+                                ? 'transition-none'
+                                : 'transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]'
+                            }
+                            ${!isCenter ? 'cursor-pointer hover:opacity-100' : ''}`}
+              >
+                {/* Jepitan Kayu yang Ikut Bergerak di Sepanjang Tali */}
+                <WoodenClip rank={idx + 1} isCenter={isCenter} />
+
+                {isCenter ? (
+                  <Link
+                    href={`/catalog/${book.id}`}
+                    draggable={false}
+                    onClick={(e) => {
+                      if (hasDraggedRef.current) e.preventDefault();
+                    }}
+                    className="block relative w-full aspect-[3/4.2] rounded-r-xl rounded-l-sm overflow-hidden bg-[#EFE2CE]
+                               border border-[#929D75] ring-3 ring-[#FFFDF9]/95
+                               shadow-[0_22px_36px_-10px_rgba(92,59,40,0.40)]
+                               transition-transform duration-300 hover:scale-[1.02]"
+                  >
+                    <CarouselCover book={book} index={idx} />
+                    <div
+                      aria-hidden="true"
+                      className="pointer-events-none absolute inset-y-0 left-0 w-3 bg-gradient-to-r from-black/25 via-white/15 to-transparent"
+                    />
+                    <div className="absolute bottom-2 inset-x-2 z-20 flex items-center justify-between px-2.5 py-1 rounded-full bg-[#FFFCF7]/92 backdrop-blur-md border border-[#EBCFA9]/80 text-[10px] font-semibold text-[#79543D]">
+                      <span className="text-[#C96858]">🔥 {itemBorrowCount}x</span>
+                      <span className="text-[#855B10] font-bold">
+                        ★ {book.avg_rating > 0 ? book.avg_rating : 'Baru'}
+                      </span>
+                    </div>
+                  </Link>
+                ) : (
+                  <div
+                    className="relative w-full aspect-[3/4.2] rounded-r-xl rounded-l-sm overflow-hidden bg-[#EFE2CE]
+                               border border-[#79543D]/15 shadow-[0_14px_24px_-8px_rgba(92,59,40,0.24)]"
+                  >
+                    <CarouselCover book={book} index={idx} />
+                    <div
+                      aria-hidden="true"
+                      className="pointer-events-none absolute inset-y-0 left-0 w-2.5 bg-gradient-to-r from-black/20 to-transparent"
+                    />
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Tombol Geser Kanan */}
+        {total > 1 && (
+          <button
+            type="button"
+            onClick={goNext}
+            aria-label="Geser ke buku berikutnya"
+            className="absolute right-1 sm:right-3 top-1/2 -translate-y-1/2 z-40 w-10 h-10 rounded-full
+                       bg-[#FFFCF7]/95 border border-[#EBCFA9] text-[#79543D] shadow-md
+                       hover:bg-[#929D75] hover:text-white hover:border-[#929D75]
+                       active:scale-95 transition-all duration-200 flex items-center justify-center cursor-pointer"
+          >
+            ›
+          </button>
+        )}
+      </div>
+
+      {/* Informasi Buku Aktif di Bawah Tali (Tanpa Bar Aktif di Bawah) */}
+      <div className="mt-2 text-center max-w-xl mx-auto px-4 space-y-2.5">
+        {activeBook.category_name && (
+          <span className="inline-block px-3.5 py-1 rounded-full bg-[#FFFDF9]/85 border border-[#EBCFA9]/70 text-[#68774E] text-[10px] font-bold uppercase tracking-[0.16em]">
+            {activeBook.category_name}
+          </span>
+        )}
+
+        <h3 className="font-editorial text-2xl sm:text-3xl font-bold text-[#79543D] leading-tight">
+          {activeBook.title}
+        </h3>
+
+        <div className="text-xs text-[#79543D]/75 space-y-0.5">
+          <p>
+            oleh <strong className="font-semibold text-[#79543D]">{activeBook.author}</strong>
+          </p>
+          <p className="text-[11px] text-[#79543D]/60">
+            Peringkat #{activeIndex + 1} Terpopuler • {borrowCount}x dipinjam
+            {activeBook.publication_year ? ` • Terbit ${activeBook.publication_year}` : ''}
+          </p>
+        </div>
+
+        <div className="pt-2">
+          <Link
+            href={`/catalog/${activeBook.id}`}
+            className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-[#929D75] hover:bg-[#7A865E]
+                       text-white text-xs font-semibold shadow-sm hover:shadow-md hover:-translate-y-0.5
+                       transition-all duration-200 btn-bobo"
+          >
+            <span>Lihat Detail Buku</span>
+            <span aria-hidden="true">→</span>
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+}
