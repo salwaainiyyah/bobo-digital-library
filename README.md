@@ -343,12 +343,6 @@ Semua password akun demo awal telah di-hash secara aman menggunakan `bcryptjs`:
 - Seluruh query PostgreSQL menggunakan parameterized query (`$1`, `$2`, dst.) untuk mencegah SQL Injection.
 - Perubahan stok buku dan status transaksi peminjaman/pengembalian dibungkus dalam transaksi PostgreSQL agar data tetap konsisten.
 
-## 📚 Referensi Proyek
-
-- **TUGAS FINAL Praktikum Pemrograman Web 2026** — acuan fitur, role, alur transaksi, persyaratan teknologi, dan kriteria penilaian.
-- **BAB 10 — Next.js Route Handlers & Auth** — acuan pembelajaran Route Handlers, `pg`, PostgreSQL Raw SQL, register/login, serta Authentication dan Authorization.
-- **PRD Bo’bo Digital Library** — dokumen kebutuhan produk, rancangan basis data, struktur folder, pemetaan fungsi, keamanan, dan skenario pengujian.
-
 ---
 
 <div align="center">
