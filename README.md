@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="public/brand/bo-bo-logo.png" alt="Maskot Bo’bo, ayam pustakawan yang sedang membaca buku" width="260" />
+  <img src="public/brand/bo-bo-logo.png" alt="Maskot Bo’bo, ayam pustakawan yang sedang membaca buku" width="240" />
 
   <h1>Bo’bo (ᨅᨚᨅᨚ) — Digital Library</h1>
 
@@ -12,7 +12,7 @@
     <img src="https://img.shields.io/badge/JavaScript-JSX-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" alt="JavaScript JSX" />
     <img src="https://img.shields.io/badge/Tailwind_CSS-38BDF8?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="Tailwind CSS" />
     <img src="https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL" />
-    <img src="https://img.shields.io/badge/Project-In_Development-C96858?style=for-the-badge" alt="Project in development" />
+    <img src="https://img.shields.io/badge/Status-Completed-929D75?style=for-the-badge" alt="Status Completed" />
   </p>
 </div>
 
@@ -21,16 +21,18 @@
 ## 🧭 Navigasi
 
 - [Tentang Bo’bo](#-tentang-bobo)
-- [Fitur dan Ruang Lingkup](#-fitur-dan-ruang-lingkup-sistem)
+- [Fitur Utama Sistem](#-fitur-utama-sistem)
 - [Alur Sirkulasi](#-alur-sirkulasi-buku)
 - [Tingkat Pengguna](#-tingkat-pengguna)
 - [Teknologi](#️-teknologi-yang-digunakan)
 - [Identitas Visual](#-identitas-visual)
-- [Struktur Direktori](#️-struktur-direktori-rencana)
+- [Struktur Direktori](#️-struktur-direktori)
 - [Instalasi](#️-panduan-instalasi-dan-menjalankan-project)
+- [Akun Demo](#-akun-demo-untuk-pengujian)
 - [Pengujian](#-skenario-pengujian-utama)
-- [Rencana Pengembangan](#️-rencana-pengembangan)
+- [Status Pengembangan](#️-status-pengembangan)
 - [Catatan Keamanan](#-catatan-keamanan)
+- [Referensi Proyek](#-referensi-proyek)
 
 ## 🌿 Tentang Bo’bo
 
@@ -44,65 +46,61 @@ Bo’bo menggabungkan tiga unsur identitas:
 - **Identitas kampus** — maskot ayam yang terinspirasi dari identitas Universitas Hasanuddin.
 - **Literasi digital** — buku sebagai simbol pengetahuan, pembelajaran, dan pengembangan wawasan.
 
-Bo’bo dirancang sebagai sistem informasi perpustakaan digital kampus yang menghubungkan pengalaman menjelajahi katalog dengan pengelolaan koleksi dan layanan sirkulasi perpustakaan. Pengalaman visualnya mengusung suasana **cozy campus library**: hangat, tenang, ramah, dan tetap profesional.
+Bo’bo dirancang sebagai sistem informasi perpustakaan digital kampus yang menghubungkan pengalaman menjelajahi katalog interaktif dengan pengelolaan koleksi dan layanan sirkulasi perpustakaan dalam suasana **cozy campus library**: hangat, tenang, ramah, dan tetap profesional.
 
-## ✨ Fitur dan Ruang Lingkup Sistem
+## ✨ Fitur Utama Sistem
 
-Fitur berikut merupakan ruang lingkup yang ditargetkan dalam pengembangan Bo’bo. Status implementasi akan diperbarui seiring fitur selesai dibuat dan diuji.
+### 1. 📖 Katalog Interaktif dan Penjelajahan Buku
 
-### 1. 📖 Katalog dan Penjelajahan Buku
-
-- **Katalog publik:** pengunjung dapat menjelajahi koleksi buku tanpa harus masuk ke akun.
-- **Pencarian dan filter:** mencari buku berdasarkan judul atau penulis, menyaring berdasarkan kategori, serta mengurutkan berdasarkan tahun terbit atau rating.
-- **Detail buku:** menampilkan ISBN, judul, penulis, penerbit, tahun terbit, kategori, stok tersedia, durasi maksimal peminjaman, tarif denda harian, rating, dan ulasan.
-- **Lima buku terpopuler:** menampilkan lima buku dengan frekuensi peminjaman tertinggi berdasarkan data transaksi yang memenuhi ketentuan sistem.
+- **Katalog publik lemari rak interaktif:** pengunjung dapat menjelajahi koleksi buku berdasarkan kategori ilmu pengetahuan, sastra & fiksi, maupun pemikiran kritis tanpa harus masuk ke akun.
+- **Pencarian, filter, dan pengurutan:** mencari buku berdasarkan judul, penulis, atau ISBN; menyaring per kategori; serta mengurutkan berdasarkan popularitas, tahun terbit, rating, atau abjad judul.
+- **Detail buku:** menampilkan ISBN, judul, penulis, penerbit, tahun terbit, kategori, stok tersedia, durasi maksimal peminjaman, tarif denda harian, rata-rata rating, dan ulasan pembaca.
+- **Lima buku terpopuler:** menampilkan lima buku dengan frekuensi peminjaman tertinggi pada halaman beranda.
 
 ### 2. 🔐 Autentikasi dan Hak Akses
 
-- Login untuk Admin, Pegawai Perpustakaan, dan Mahasiswa.
-- Registrasi mandiri khusus Mahasiswa dengan validasi email kampus.
-- Akses Guest untuk menjelajahi halaman publik tanpa autentikasi.
-- Dashboard dan tindakan yang dibatasi berdasarkan peran pengguna (*Role-Based Access Control* atau RBAC).
-- Pengelolaan sesi login dan logout.
+- Login untuk **Admin**, **Pegawai Perpustakaan**, dan **Mahasiswa**.
+- Registrasi mandiri khusus **Mahasiswa** dengan validasi domain email kampus.
+- Akses **Guest** untuk menjelajahi halaman publik tanpa autentikasi.
+- Dashboard dan tindakan yang dibatasi berdasarkan peran pengguna (*Role-Based Access Control* / RBAC) di sisi server.
+- Pengelolaan sesi login dan logout berbasis cookie aman.
 
 ### 3. 🔄 Peminjaman, Pengembalian, dan Perpanjangan
 
-- Mahasiswa mengajukan peminjaman buku melalui sistem.
-- Pegawai memeriksa permohonan dan dapat menyetujui atau menolaknya dengan alasan.
-- Persetujuan peminjaman mengubah stok tersedia secara transaksional.
-- Pegawai mengonfirmasi pengembalian buku dan sistem memperbarui stok.
-- Mahasiswa dapat mengajukan perpanjangan masa pinjam; Pegawai memvalidasi permohonan tersebut.
-- Mahasiswa dapat memantau status peminjaman aktif dan riwayat transaksi.
+- Mahasiswa mengajukan peminjaman buku melalui halaman detail koleksi.
+- Pegawai memeriksa permohonan di meja sirkulasi dan dapat menyetujui atau menolaknya disertai alasan.
+- Persetujuan peminjaman mengurangi stok tersedia secara transaksional; konfirmasi pengembalian menambah stok kembali.
+- Mahasiswa dapat mengajukan perpanjangan masa pinjam untuk buku aktif yang belum melewati jatuh tempo; Pegawai memvalidasi permohonan tersebut.
+- Mahasiswa dapat memantau status peminjaman aktif dan riwayat transaksi secara real-time.
 
 ### 4. ⏰ Perhitungan dan Pengelolaan Denda
 
-- Sistem menghitung keterlambatan berdasarkan tanggal jatuh tempo dan tanggal pengembalian.
-- Nominal denda dihitung berdasarkan jumlah hari keterlambatan dikalikan tarif denda harian yang berlaku pada transaksi.
-- Pegawai mencatat pelunasan denda.
+- Sistem menghitung keterlambatan otomatis berdasarkan tanggal jatuh tempo dan tanggal pengembalian.
+- Nominal denda dihitung berdasarkan jumlah hari keterlambatan dikalikan tarif denda harian buku.
+- Pegawai mencatat pelunasan denda di meja sirkulasi.
 - Mahasiswa dengan denda berstatus tertunggak dibatasi untuk mengajukan peminjaman baru sampai kewajibannya diselesaikan.
 
 ### 5. ⭐ Rating dan Ulasan Buku
 
 - Mahasiswa dapat memberikan rating skala 1–5 dan komentar ulasan.
 - Ulasan hanya dapat diberikan untuk buku yang pernah dipinjam dan transaksinya telah selesai.
-- Katalog dan halaman detail buku menampilkan rata-rata rating serta ulasan yang tersedia.
+- Halaman katalog dan detail buku menampilkan rata-rata rating serta ulasan pembaca yang terverifikasi.
 
-### 6. 🗂️ Pengelolaan Data dan Pengumuman
+### 6. 🗂️ Pengelolaan Data, Unggah Sampul Lokal, dan Pengumuman
 
-- **Manajemen pengguna — Admin:** melihat, membuat, mengubah, dan mengelola status akun sesuai aturan sistem.
-- **Manajemen kategori — Admin:** mengelola nama kategori, kode klasifikasi, dan deskripsi.
-- **Manajemen buku — Pegawai dan Admin:** mengelola metadata buku serta stok koleksi.
-- **Manajemen pengumuman — Pegawai dan Admin:** membuat, mengubah, menerbitkan, dan menghapus pengumuman operasional perpustakaan.
-- **Pengumuman publik:** Guest dan pengguna terdaftar dapat membaca pengumuman yang telah dipublikasikan.
+- **Manajemen pengguna (Admin):** melihat, membuat, mengubah, dan mengelola status aktif/nonaktif akun.
+- **Manajemen kategori (Admin):** mengelola nama kategori, kode klasifikasi unik, dan deskripsi.
+- **Manajemen buku (Pegawai & Admin):** mengelola metadata buku, jumlah stok, pengarsipan/pengaktifan kembali (*unarsip*), serta **unggah berkas gambar sampul lokal** (`JPG`, `PNG`, `WEBP`, `GIF`) ke `public/uploads/books/` dengan pratinjau langsung.
+- **Manajemen pengumuman (Pegawai & Admin):** membuat, mengubah, menerbitkan, dan menghapus warta operasional perpustakaan.
 
 ### 7. 📊 Dashboard Berdasarkan Peran
 
-| Peran | Fokus dashboard |
+| Peran | Fokus Dashboard |
 |---|---|
 | **Admin** | Statistik koleksi, jumlah mahasiswa, transaksi aktif, ringkasan denda lunas, manajemen akun dan kategori, serta pemantauan riwayat transaksi. |
-| **Pegawai Perpustakaan** | Antrean permohonan pinjam, pengembalian buku, pengelolaan denda, data buku, dan pengumuman. |
-| **Mahasiswa** | Peminjaman aktif, tanggal jatuh tempo, pengajuan perpanjangan, riwayat transaksi, ulasan, dan status denda. |
-| **Guest** | Penjelajahan homepage, katalog, detail buku, dan pengumuman publik. |
+| **Pegawai Perpustakaan** | Antrean permohonan pinjam, pengembalian buku, persetujuan perpanjangan, pengelolaan denda, katalog buku, dan warta pengumuman. |
+| **Mahasiswa** | Peminjaman aktif, tanggal jatuh tempo, pengajuan perpanjangan, riwayat transaksi, ulasan buku, dan status denda. |
+| **Guest** | Penjelajahan homepage, katalog lemari buku, detail buku, dan pengumuman publik. |
 
 ## 🧭 Alur Sirkulasi Buku
 
@@ -132,14 +130,14 @@ Pegawai mengonfirmasi
 Perhitungan denda jika terlambat
 ```
 
-**Prinsip penting:** pengajuan yang masih menunggu konfirmasi belum mengurangi stok. Stok berkurang ketika Pegawai menyetujui peminjaman dan bertambah kembali ketika pengembalian dikonfirmasi. Kedua perubahan tersebut harus dilakukan secara aman melalui transaksi PostgreSQL.
+**Prinsip penting:** pengajuan yang masih menunggu konfirmasi belum mengurangi stok. Stok berkurang ketika Pegawai menyetujui peminjaman dan bertambah kembali ketika pengembalian dikonfirmasi melalui transaksi PostgreSQL.
 
 ## 👥 Tingkat Pengguna
 
-| Role | Hak akses utama |
+| Role | Hak Akses Utama |
 |---|---|
-| **Admin** | Mengelola akun dan kategori, memantau statistik, melihat riwayat transaksi, serta mengakses modul administrasi. |
-| **Pegawai Perpustakaan** | Mengelola buku dan pengumuman, memvalidasi peminjaman, memproses pengembalian, serta mencatat pelunasan denda. |
+| **Admin** | Mengelola akun dan kategori, memantau statistik, melihat riwayat transaksi, serta mengakses modul pengelolaan buku dan pengumuman. |
+| **Pegawai Perpustakaan** | Mengelola buku dan pengumuman, memvalidasi peminjaman dan perpanjangan, memproses pengembalian, serta mencatat pelunasan denda. |
 | **Mahasiswa** | Menjelajahi katalog, mengajukan peminjaman dan perpanjangan, memantau transaksi dan denda, serta memberikan ulasan setelah peminjaman selesai. |
 | **Guest** | Menjelajahi katalog, detail buku, dan pengumuman publik tanpa melakukan transaksi. |
 
@@ -151,52 +149,50 @@ Perhitungan denda jika terlambat
 |---|---|---|
 | Framework | **Next.js App Router** | Routing, halaman, Server Components, Route Handlers, dan Server Actions. |
 | Bahasa | **JavaScript (JSX)** | Logika aplikasi dan komponen antarmuka. |
-| Styling | **Tailwind CSS** | Sistem styling responsif dan konsistensi UI. |
-| Database | **PostgreSQL** | Penyimpanan data pengguna, koleksi, pengumuman, dan transaksi. |
-| Database driver | **node-postgres (`pg`)** | Koneksi PostgreSQL dan eksekusi Raw SQL. |
-| Password hashing | **bcryptjs** | Hash dan verifikasi password. |
+| Styling | **Tailwind CSS** | Sistem styling responsif dan konsistensi komponen UI. |
+| Database | **PostgreSQL** | Penyimpanan data pengguna, kategori, koleksi buku, pengumuman, dan transaksi. |
+| Database Driver | **node-postgres (`pg`)** | Koneksi PostgreSQL dan eksekusi parameterized Raw SQL. |
+| Password Hashing | **bcryptjs** | Hash dan verifikasi kata sandi pengguna. |
 
 ### Prinsip Implementasi Backend
 
-- Query database menggunakan **Raw SQL** dengan parameter (`$1`, `$2`, dan seterusnya) untuk mengurangi risiko SQL Injection.
+- Query database menggunakan **Raw SQL** dengan parameter (`$1`, `$2`, dan seterusnya) untuk mencegah SQL Injection.
 - Koneksi database menggunakan `pg` dan hanya dijalankan di sisi server.
-- **Route Handlers** digunakan untuk endpoint HTTP, seperti registrasi, login, logout, dan kebutuhan API lainnya.
-- **Server Actions** digunakan untuk mutasi data dari antarmuka ketika sesuai.
-- Validasi input dan pemeriksaan role selalu dilakukan di server.
-- Operasi penting seperti persetujuan peminjaman dan pengembalian menggunakan transaksi database.
-- Password disimpan sebagai hash bcrypt, bukan plaintext. Sesi menggunakan cookie yang aman; `localStorage` bukan sumber otorisasi.
+- **Route Handlers** digunakan untuk endpoint HTTP seperti registrasi, login, dan logout.
+- **Server Actions** digunakan untuk mutasi data sirkulasi, unggah sampul buku, kategori, pengguna, dan pengumuman.
+- Validasi input dan pemeriksaan role selalu dilakukan di sisi server.
+- Operasi penting seperti persetujuan peminjaman dan pengembalian menggunakan transaksi database (`BEGIN` / `COMMIT` / `ROLLBACK`).
+- Password disimpan sebagai hash `bcryptjs`, bukan plaintext, dan sesi menggunakan cookie HTTP-only yang aman.
 
 ## 🎨 Identitas Visual
 
-Bo’bo mengusung tema **Cozy Campus Library — Sage & Earth Tone**. Palet dipilih untuk menciptakan suasana lembut dan nyaman, tetapi tetap menjaga keterbacaan serta kesan profesional.
+Bo’bo mengusung tema **Cozy Campus Library — Sage & Earth Tone**. Palet dipilih untuk menciptakan suasana lembut dan hangat, tetapi tetap menjaga keterbacaan serta kesan profesional.
 
 | Warna | Kode | Penggunaan |
 |---|---|---|
-| 🟩 **Sage Green** | `#929D75` | Warna utama, tombol utama, dan navigasi aktif. |
-| 🥛 **Warm Cream** | `#F7EBD8` | Latar utama halaman. |
-| 🟫 **Oat Beige** | `#EBCFA9` | Panel, kartu sekunder, dan elemen pendukung. |
-| 🧱 **Terracotta** | `#C96858` | Aksen dan penanda perhatian seperlunya. |
-| 🟨 **Butter Yellow** | `#F5C875` | Highlight dan informasi pengingat. |
-| ☕ **Cocoa Brown** | `#79543D` | Warna teks, judul, dan ikon utama. |
+| 🟩 **Sage Green** | `#929D75` / `#7B9663` | Warna utama, tombol aksi utama, dan navigasi aktif. |
+| 🥛 **Warm Cream** | `#F7EBD8` / `#FFFDF9` | Latar utama halaman dan permukaan kartu perkamen. |
+| 🟫 **Oat Beige** | `#EBCFA9` / `#DFC19A` | Bingkai rak kayu, panel sekunder, dan garis pemisah. |
+| 🧱 **Terracotta** | `#C96858` | Penanda denda, keterlambatan, dan aksi pengarsipan. |
+| 🟨 **Butter Yellow** | `#F5C875` | Highlight status menunggu konfirmasi dan informasi pengingat. |
+| ☕ **Cocoa Brown** | `#79543D` / `#5A3E28` | Warna teks utama, judul editorial, dan ikon. |
 
-**Arah desain:** gunakan ruang kosong yang cukup, kartu dengan sudut lembut, bayangan ringan, tipografi yang mudah dibaca, ikon konsisten, serta tampilan *mobile-first*. Warna aksen digunakan secara terukur agar informasi penting tetap memiliki hierarki yang jelas.
+## 🗃️ Struktur Direktori
 
-## 🗃️ Struktur Direktori (Rencana)
-
-Struktur berikut menjadi panduan pengorganisasian kode. Susunan aktual dapat berkembang mengikuti implementasi, tetapi file SQL tetap disimpan di luar direktori `src/app` agar mudah dijalankan dan diperiksa.
+Seluruh file SQL disimpan di direktori `database/` di luar `src/app`, sedangkan berkas gambar sampul buku tersimpan di `public/uploads/books/` agar ikut terbawa saat repositori di-*clone*.
 
 ```text
 bo-bo/
 ├── database/
-│   ├── 01_schema.sql
-│   ├── 02_indexes.sql
-│   ├── 03_seed.sql
-│   └── README.md
+│   ├── bobo_library_db.sql      # Full backup PostgreSQL (skema, indeks, akun demo, & 35 buku)
+│   ├── 01_schema.sql            # Referensi DDL pembuatan 9 tabel dan constraint
+│   ├── 02_indexes.sql           # Referensi DDL pembuatan indeks performa query
+│   └── README.md                # Panduan teknis setup basis data
 ├── public/
 │   ├── brand/
 │   │   └── bo-bo-logo.png
-│   ├── covers/
-│   └── icons/
+│   └── uploads/
+│       └── books/               # Berkas gambar sampul buku lokal
 ├── scripts/
 │   └── create-admin.js
 ├── src/
@@ -219,6 +215,8 @@ bo-bo/
 │   │   └── dashboard/
 │   ├── lib/
 │   │   ├── db.js
+│   │   ├── upload.js            # Validasi & penyimpanan berkas sampul buku lokal
+│   │   ├── constants.js
 │   │   ├── auth/
 │   │   ├── queries/
 │   │   ├── services/
@@ -228,93 +226,91 @@ bo-bo/
 ├── .env.example
 ├── .gitignore
 ├── jsconfig.json
+├── next.config.mjs
 ├── package.json
 └── README.md
 ```
 
-> `proxy.js` mengikuti konvensi Next.js 16. Jika versi Next.js yang digunakan berbeda, periksa file convention pada dokumentasi versi tersebut. Proxy hanya melakukan pemeriksaan awal berbasis cookie; otorisasi tetap harus dilakukan di server dekat akses data.
-
 ## ⚙️ Panduan Instalasi dan Menjalankan Project
-
-Panduan ini merupakan alur setup yang ditargetkan. Nama database, file SQL, dan perintah dapat disesuaikan jika implementasi repository mengalami perubahan.
 
 ### 1. Clone Repository
 
 ```bash
-git clone https://github.com/USERNAME/bobo-digital-library.git
+git clone [https://github.com/salwaainiyyah/bobo-digital-library.git](https://github.com/salwaainiyyah/bobo-digital-library.git)
 cd bobo-digital-library
 ```
 
-Ganti `USERNAME` dengan username GitHub pemilik repository.
+*(Sesuaikan URL repositori dengan alamat repositori GitHub proyek ini.)*
 
 ### 2. Install Dependencies
 
-Pastikan Node.js, npm, dan PostgreSQL sudah terpasang.
+Pastikan **Node.js**, **npm**, dan **PostgreSQL** sudah terpasang di perangkat.
 
 ```bash
 npm install
 ```
 
-### 3. Buat Database PostgreSQL
+### 3. Buat dan Isi Database PostgreSQL
 
-Buat database baru, misalnya `bobo_library`, melalui pgAdmin atau PostgreSQL.
-
-```sql
-CREATE DATABASE bobo_library;
-```
-
-Setelah database dibuat, jalankan file SQL dari pgAdmin secara berurutan:
-
-1. `database/01_schema.sql` — membuat tabel, relasi, dan constraint.
-2. `database/02_indexes.sql` — membuat index yang diperlukan.
-3. `database/03_seed.sql` — memasukkan kategori dan data awal untuk pengujian.
-
-**Catatan:** seluruh query SQL disimpan di folder `database/`, di luar `src/app`, sesuai ketentuan tugas praktikum.
+1. Buka **pgAdmin 4**, klik kanan pada `Databases` → `Create` → `Database...`, lalu buat database baru bernama **`bobo_library`**:
+   ```sql
+   CREATE DATABASE bobo_library;
+   ```
+2. Klik kanan pada database **`bobo_library`** → pilih **Query Tool**.
+3. Klik ikon folder (**Open File**) pada toolbar Query Tool, pilih file **`database/bobo_library_db.sql`**, lalu tekan **Execute (F5)**.
+   - *Hasil:* Seluruh struktur 9 tabel (`users`, `sessions`, `categories`, `books`, `announcements`, `loans`, `renewal_requests`, `fines`, dan `reviews`), indeks, akun demo, pengumuman, 7 kategori, dan 35 koleksi buku beserta alamat sampul lokal (`/uploads/books/...`) langsung terpasang utuh.
+   - *(File `database/01_schema.sql` dan `database/02_indexes.sql` juga tersedia di folder `database/` sebagai referensi kode DDL murni.)*
 
 ### 4. Konfigurasi Environment
 
-Buat file `.env.local` di root project (sejajar dengan `package.json`). Isi `DATABASE_URL` sesuai konfigurasi PostgreSQL lokal.
+Salin file `.env.example` menjadi **`.env.local`** di root project (sejajar dengan `package.json`), lalu sesuaikan password PostgreSQL lokal Anda:
 
 ```env
 DATABASE_URL=postgresql://postgres:YOUR_PASSWORD@localhost:5432/bobo_library
+SESSION_SECRET=bobo_secret_library_key_2026_unhas_bugis_cozy
+ALLOWED_EMAIL_DOMAINS=student.unhas.ac.id,unhas.ac.id,mail.com
+TZ=Asia/Makassar
 ```
 
-Ganti `YOUR_PASSWORD` dengan password PostgreSQL milikmu. Jangan mengunggah `.env.local` ke GitHub dan pastikan file tersebut tercantum dalam `.gitignore`.
+Ganti `YOUR_PASSWORD` dengan password PostgreSQL milik Anda. Jangan mengunggah `.env.local` ke GitHub (file ini sudah dikecualikan di `.gitignore`).
 
-Jika nilai `.env.local` diubah ketika server sedang berjalan, hentikan server lalu jalankan kembali agar konfigurasi terbaca.
-
-### 5. Siapkan Akun Admin Awal
-
-Akun Admin dan Pegawai tidak dibuat melalui registrasi publik. Buat akun awal menggunakan mekanisme bootstrap yang disediakan project (misalnya script `scripts/create-admin.js`) agar password diproses dengan `bcryptjs`.
-
-Jangan menyimpan password asli di file SQL, README, atau repository publik. Kredensial demo hanya boleh dibagikan melalui cara yang aman dan khusus untuk pengujian.
-
-### 6. Jalankan Aplikasi
+### 5. Jalankan Aplikasi
 
 ```bash
 npm run dev
 ```
 
-Buka aplikasi melalui browser:
+Buka aplikasi melalui browser di alamat:
 
 ```text
 http://localhost:3000
 ```
 
-Untuk memeriksa build production setelah implementasi siap:
+Untuk memeriksa build production:
 
 ```bash
 npm run build
 npm run start
 ```
 
+## 🔑 Akun Demo untuk Pengujian
+
+Semua password akun demo awal telah di-hash secara aman menggunakan `bcryptjs`:
+
+| Role | Nama Pengguna | Email | Password | Identitas / NIM | Keterangan |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **Admin** | Administrator Bo'bo | `admin@unhas.ac.id` | `admin123` | `ADM-2026-001` | Akses penuh CMS, Users, Categories, Stats |
+| **Pegawai** | Pustakawan Hasan | `pegawai@unhas.ac.id` | `pegawai123` | `PEG-2026-010` | Verifikasi sirkulasi, Buku, Pengumuman, Denda |
+| **Mahasiswa** | Nurul Izzah | `mahasiswa@student.unhas.ac.id` | `mahasiswa123` | `D121221001` | Mahasiswa aktif (bebas denda, siap pinjam) |
+| **Mahasiswa** | Andi Tenri | `andi@student.unhas.ac.id` | `mahasiswa123` | `D121221002` | Contoh mahasiswa dengan denda Tertunggak |
+| **Mahasiswa** | Siti Rahma | `siti@student.unhas.ac.id` | `mahasiswa123` | `D121221003` | Mahasiswa dengan pinjaman aktif & permohonan |
+| **Guest** | - | - | - | - | Pengguna umum tanpa login (Katalog & Pengumuman) |
+
 ## 🧪 Skenario Pengujian Utama
 
-Skenario berikut dapat digunakan untuk memeriksa alur penting setelah fitur terkait selesai diimplementasikan.
-
-| No. | Skenario | Hasil yang diharapkan |
+| No. | Skenario | Hasil yang Diharapkan |
 |---|---|---|
-| 1 | Guest membuka homepage dan katalog. | Koleksi dan pengumuman Published dapat dibaca tanpa login. |
+| 1 | Guest membuka homepage dan katalog. | Koleksi lemari buku dan pengumuman terbit dapat dibaca tanpa login. |
 | 2 | Guest mencoba mengajukan peminjaman. | Sistem menolak tindakan dan meminta pengguna login sebagai Mahasiswa. |
 | 3 | Mahasiswa mendaftar dengan email di luar domain yang diizinkan. | Registrasi ditolak oleh validasi server. |
 | 4 | Mahasiswa mengajukan buku dengan stok tersedia. | Permohonan tercatat sebagai Menunggu Konfirmasi; stok belum berkurang. |
@@ -327,38 +323,25 @@ Skenario berikut dapat digunakan untuk memeriksa alur penting setelah fitur terk
 | 11 | Mahasiswa mencoba membuka halaman atau data milik role lain. | Server menolak akses tanpa mengubah data. |
 | 12 | Pegawai mencoba mengonfirmasi pengembalian transaksi yang sama dua kali. | Aksi kedua ditolak dan stok tidak bertambah ganda. |
 
-## 🛣️ Rencana Pengembangan
+## 🛣️ Status Pengembangan
 
-Pengembangan dilakukan dengan mendahulukan seluruh fitur wajib tugas praktikum. Fitur tambahan baru dipertimbangkan setelah alur inti stabil dan telah diuji.
-
-- [ ] Fondasi Next.js, Tailwind CSS, dan struktur project.
-- [ ] Skema PostgreSQL, relasi, constraint, dan data awal.
-- [ ] Autentikasi, session, dan RBAC empat tingkat pengguna.
-- [ ] Homepage, katalog, pencarian, filter, dan detail buku.
-- [ ] Manajemen pengguna, kategori, buku, dan pengumuman.
-- [ ] Transaksi peminjaman, persetujuan, dan pengembalian.
-- [ ] Perpanjangan, perhitungan denda, dan pelunasan.
-- [ ] Rating, ulasan, dan dashboard setiap role.
-- [ ] Pengujian menyeluruh, responsivitas, dan persiapan presentasi.
-
-### Pengembangan Opsional (P1)
-
-Fitur berikut merupakan pengembangan lanjutan, bukan syarat inti yang harus didahulukan:
-
-- Sistem reservasi atau antrean buku ketika stok habis.
-- Notification log untuk pengingat jatuh tempo, denda, dan keputusan transaksi.
-- Ekspor data transaksi dan rekap denda ke CSV.
-- Audit log untuk aktivitas administratif dan perubahan data penting.
+- [x] Fondasi Next.js App Router, Tailwind CSS, dan struktur project.
+- [x] Skema PostgreSQL, relasi, constraint, indeks, dan data koleksi lengkap.
+- [x] Autentikasi, session aman, dan RBAC empat tingkat pengguna.
+- [x] Homepage interaktif, katalog lemari rak buku, pencarian, filter, dan detail buku.
+- [x] Manajemen pengguna, kategori, buku (unggah sampul lokal & arsip/unarsip), dan pengumuman.
+- [x] Transaksi peminjaman, persetujuan, dan pengembalian berbasis transaksi database.
+- [x] Pengajuan perpanjangan masa pinjam, perhitungan denda harian, dan pelunasan.
+- [x] Sistem rating, ulasan terverifikasi, dan dashboard setiap role.
+- [x] Pengujian menyeluruh, konsistensi antarmuka, dan dokumentasi instalasi.
 
 ## 📌 Catatan Keamanan
 
-- Jangan pernah commit `.env.local`, password PostgreSQL, token, atau kredensial pribadi.
-- Jangan menyimpan password pengguna dalam bentuk plaintext.
-- Jangan mempercayai role atau identitas pengguna yang dikirim dari browser.
-- Terapkan pemeriksaan session dan role pada setiap operasi privat di server.
-- Gunakan parameterized query untuk seluruh nilai input SQL.
-- Jangan menempatkan koneksi PostgreSQL di browser maupun Proxy/Middleware.
-- Gunakan transaksi database untuk perubahan stok dan status transaksi yang saling berkaitan.
+- Jangan pernah commit `.env.local`, password PostgreSQL pribadi, atau token rahasia ke repositori publik.
+- Password pengguna disimpan menggunakan hash `bcryptjs`, bukan plaintext.
+- Otorisasi dan validasi role selalu dijalankan di server pada setiap Route Handler dan Server Action.
+- Seluruh query PostgreSQL menggunakan parameterized query (`$1`, `$2`, dst.) untuk mencegah SQL Injection.
+- Perubahan stok buku dan status transaksi peminjaman/pengembalian dibungkus dalam transaksi PostgreSQL agar data tetap konsisten.
 
 ## 📚 Referensi Proyek
 
