@@ -25,12 +25,10 @@
 - [Alur Sirkulasi](#-alur-sirkulasi-buku)
 - [Tingkat Pengguna](#-tingkat-pengguna)
 - [Teknologi](#️-teknologi-yang-digunakan)
-- [Identitas Visual](#-identitas-visual)
 - [Struktur Direktori](#️-struktur-direktori)
 - [Instalasi](#️-panduan-instalasi-dan-menjalankan-project)
 - [Akun Demo](#-akun-demo-untuk-pengujian)
 - [Pengujian](#-skenario-pengujian-utama)
-- [Status Pengembangan](#️-status-pengembangan)
 - [Catatan Keamanan](#-catatan-keamanan)
 
 ## 🌿 Tentang Bo’bo
@@ -170,19 +168,6 @@ Perhitungan denda jika terlambat
 - Validasi input dan pemeriksaan role selalu dilakukan di sisi server.
 - Operasi penting seperti persetujuan peminjaman dan pengembalian menggunakan transaksi database (`BEGIN` / `COMMIT` / `ROLLBACK`).
 - Password disimpan sebagai hash `bcryptjs`, bukan plaintext, dan sesi menggunakan cookie HTTP-only yang aman.
-
-## 🎨 Identitas Visual
-
-Bo’bo mengusung tema **Cozy Campus Library — Sage & Earth Tone**. Palet dipilih untuk menciptakan suasana lembut dan hangat, tetapi tetap menjaga keterbacaan serta kesan profesional.
-
-| Warna | Kode | Penggunaan |
-|---|---|---|
-| 🟩 **Sage Green** | `#929D75` / `#7B9663` | Warna utama, tombol aksi utama, dan navigasi aktif. |
-| 🥛 **Warm Cream** | `#F7EBD8` / `#FFFDF9` | Latar utama halaman dan permukaan kartu perkamen. |
-| 🟫 **Oat Beige** | `#EBCFA9` / `#DFC19A` | Bingkai rak kayu, panel sekunder, dan garis pemisah. |
-| 🧱 **Terracotta** | `#C96858` | Penanda denda, keterlambatan, dan aksi pengarsipan. |
-| 🟨 **Butter Yellow** | `#F5C875` | Highlight status menunggu konfirmasi dan informasi pengingat. |
-| ☕ **Cocoa Brown** | `#79543D` / `#5A3E28` | Warna teks utama, judul editorial, dan ikon. |
 
 ## 🗃️ Struktur Direktori
 
