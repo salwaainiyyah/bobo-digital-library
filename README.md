@@ -32,7 +32,6 @@
 - [Pengujian](#-skenario-pengujian-utama)
 - [Status Pengembangan](#️-status-pengembangan)
 - [Catatan Keamanan](#-catatan-keamanan)
-- [Referensi Proyek](#-referensi-proyek)
 
 ## 🌿 Tentang Bo’bo
 
@@ -52,15 +51,16 @@ Bo’bo dirancang sebagai sistem informasi perpustakaan digital kampus yang meng
 
 ### 1. 📖 Katalog Interaktif dan Penjelajahan Buku
 
+- **Beranda buku terbuka (*Storybook Hero*):** menampilkan ilustrasi buku terbuka dengan tab pembatas interaktif (*Buku Populer*, *Warta Terkini*, *Nilai Bo’bo*) dan pencarian cepat koleksi.
+- **Etalase lima buku terpopuler:** menampilkan lima buku dengan frekuensi peminjaman tertinggi pada halaman beranda.
 - **Katalog publik lemari rak interaktif:** pengunjung dapat menjelajahi koleksi buku berdasarkan kategori ilmu pengetahuan, sastra & fiksi, maupun pemikiran kritis tanpa harus masuk ke akun.
 - **Pencarian, filter, dan pengurutan:** mencari buku berdasarkan judul, penulis, atau ISBN; menyaring per kategori; serta mengurutkan berdasarkan popularitas, tahun terbit, rating, atau abjad judul.
 - **Detail buku:** menampilkan ISBN, judul, penulis, penerbit, tahun terbit, kategori, stok tersedia, durasi maksimal peminjaman, tarif denda harian, rata-rata rating, dan ulasan pembaca.
-- **Lima buku terpopuler:** menampilkan lima buku dengan frekuensi peminjaman tertinggi pada halaman beranda.
 
 ### 2. 🔐 Autentikasi dan Hak Akses
 
-- Login untuk **Admin**, **Pegawai Perpustakaan**, dan **Mahasiswa**.
-- Registrasi mandiri khusus **Mahasiswa** dengan validasi domain email kampus.
+- Login untuk **Admin**, **Pegawai Perpustakaan**, dan **Mahasiswa** dengan validasi kelengkapan format penulisan email sebelum diproses ke server.
+- Registrasi mandiri khusus **Mahasiswa** yang **wajib menggunakan email `@student.unhas.ac.id` atau `@gmail.com`** disertai notifikasi peringatan apabila mendaftar di luar kedua domain tersebut.
 - Akses **Guest** untuk menjelajahi halaman publik tanpa autentikasi.
 - Dashboard dan tindakan yang dibatasi berdasarkan peran pengguna (*Role-Based Access Control* / RBAC) di sisi server.
 - Pengelolaan sesi login dan logout berbasis cookie aman.
@@ -86,14 +86,21 @@ Bo’bo dirancang sebagai sistem informasi perpustakaan digital kampus yang meng
 - Ulasan hanya dapat diberikan untuk buku yang pernah dipinjam dan transaksinya telah selesai.
 - Halaman katalog dan detail buku menampilkan rata-rata rating serta ulasan pembaca yang terverifikasi.
 
-### 6. 🗂️ Pengelolaan Data, Unggah Sampul Lokal, dan Pengumuman
+### 6. 🔔 Lonceng Notifikasi Aktivitas Berbasis Peran
+
+- Ikon lonceng notifikasi pada bilah navigasi (*Navbar*) menampilkan ringkasan aktivitas terbaru yang disesuaikan dengan peran akun yang sedang masuk:
+  - **Admin:** menerima pemberitahuan pendaftaran akun mahasiswa baru dan aktivitas sirkulasi terkini.
+  - **Pegawai Perpustakaan:** menerima pemberitahuan pengajuan peminjaman baru, permohonan perpanjangan, pengembalian, serta status denda mahasiswa.
+  - **Mahasiswa:** menerima pemberitahuan status persetujuan/penolakan peminjaman, perpanjangan masa pinjam, pengembalian, dan catatan denda.
+
+### 7. 🗂️ Pengelolaan Data, Unggah Sampul Lokal, dan Pengumuman
 
 - **Manajemen pengguna (Admin):** melihat, membuat, mengubah, dan mengelola status aktif/nonaktif akun.
 - **Manajemen kategori (Admin):** mengelola nama kategori, kode klasifikasi unik, dan deskripsi.
 - **Manajemen buku (Pegawai & Admin):** mengelola metadata buku, jumlah stok, pengarsipan/pengaktifan kembali (*unarsip*), serta **unggah berkas gambar sampul lokal** (`JPG`, `PNG`, `WEBP`, `GIF`) ke `public/uploads/books/` dengan pratinjau langsung.
 - **Manajemen pengumuman (Pegawai & Admin):** membuat, mengubah, menerbitkan, dan menghapus warta operasional perpustakaan.
 
-### 7. 📊 Dashboard Berdasarkan Peran
+### 8. 📊 Dashboard Berdasarkan Peran
 
 | Peran | Fokus Dashboard |
 |---|---|
@@ -141,7 +148,7 @@ Perhitungan denda jika terlambat
 | **Mahasiswa** | Menjelajahi katalog, mengajukan peminjaman dan perpanjangan, memantau transaksi dan denda, serta memberikan ulasan setelah peminjaman selesai. |
 | **Guest** | Menjelajahi katalog, detail buku, dan pengumuman publik tanpa melakukan transaksi. |
 
-> Registrasi publik hanya ditujukan untuk Mahasiswa. Akun Admin dan Pegawai dibuat melalui mekanisme administratif yang aman, bukan dengan memilih role pada form registrasi publik.
+> **Kebijakan Pendaftaran Akun:** Registrasi publik hanya ditujukan untuk Mahasiswa dan **wajib menggunakan alamat email `@student.unhas.ac.id` atau `@gmail.com`**. Mahasiswa **tidak dapat** mendaftar mandiri menggunakan email `@unhas.ac.id`, karena domain `@unhas.ac.id` dikhususkan untuk akun internal **Admin** dan **Pegawai Perpustakaan** yang dibuat langsung oleh Admin.
 
 ## 🛠️ Teknologi yang Digunakan
 
@@ -158,7 +165,7 @@ Perhitungan denda jika terlambat
 
 - Query database menggunakan **Raw SQL** dengan parameter (`$1`, `$2`, dan seterusnya) untuk mencegah SQL Injection.
 - Koneksi database menggunakan `pg` dan hanya dijalankan di sisi server.
-- **Route Handlers** digunakan untuk endpoint HTTP seperti registrasi, login, dan logout.
+- **Route Handlers** digunakan untuk endpoint HTTP seperti registrasi, login, logout, dan ringkasan notifikasi aktivitas.
 - **Server Actions** digunakan untuk mutasi data sirkulasi, unggah sampul buku, kategori, pengguna, dan pengumuman.
 - Validasi input dan pemeriksaan role selalu dilakukan di sisi server.
 - Operasi penting seperti persetujuan peminjaman dan pengembalian menggunakan transaksi database (`BEGIN` / `COMMIT` / `ROLLBACK`).
@@ -207,10 +214,12 @@ bo-bo/
 │   │   ├── dashboard/
 │   │   ├── actions/
 │   │   └── api/
+│   │       ├── auth/
+│   │       └── notifications/
 │   ├── components/
-│   │   ├── layout/
+│   │   ├── layout/              # Navbar, NotificationBell, Footer, BoboIntro
 │   │   ├── ui/
-│   │   ├── books/
+│   │   ├── books/               # FeaturedCarousel (3D Hardcover), BookManager, dll.
 │   │   ├── forms/
 │   │   └── dashboard/
 │   ├── lib/
@@ -242,9 +251,9 @@ cd bobo-digital-library
 
 *(Sesuaikan URL repositori dengan alamat repositori GitHub proyek ini.)*
 
-### 2. Install Dependencies
+### 2. Install Dependencies (`npm install`)
 
-Pastikan **Node.js**, **npm**, dan **PostgreSQL** sudah terpasang di perangkat.
+Pastikan **Node.js**, **npm**, dan **PostgreSQL** sudah terpasang di perangkat. **Wajib menjalankan `npm install` terlebih dahulu** untuk mengunduh seluruh pustaka yang diperlukan proyek sebelum memulai server:
 
 ```bash
 npm install
@@ -258,8 +267,8 @@ npm install
    ```
 2. Klik kanan pada database **`bobo_library`** → pilih **Query Tool**.
 3. Klik ikon folder (**Open File**) pada toolbar Query Tool, pilih file **`database/bobo_library_db.sql`**, lalu tekan **Execute (F5)**.
-   - *Hasil:* Seluruh struktur 9 tabel (`users`, `sessions`, `categories`, `books`, `announcements`, `loans`, `renewal_requests`, `fines`, dan `reviews`), indeks, akun demo, pengumuman, 7 kategori, dan 35 koleksi buku beserta alamat sampul lokal (`/uploads/books/...`) langsung terpasang utuh.
-   - *(File `database/01_schema.sql` dan `database/02_indexes.sql` juga tersedia di folder `database/` sebagai referensi kode DDL murni.)*
+- *Hasil:* Seluruh struktur 9 tabel (`users`, `sessions`, `categories`, `books`, `announcements`, `loans`, `renewal_requests`, `fines`, dan `reviews`), indeks, akun demo, pengumuman, 7 kategori, dan 35 koleksi buku beserta alamat sampul lokal (`/uploads/books/...`) langsung terpasang utuh.
+  - *(File `database/01_schema.sql` dan `database/02_indexes.sql` juga tersedia di folder `database/` sebagai referensi kode DDL murni.)*
 
 ### 4. Konfigurasi Environment
 
@@ -268,7 +277,7 @@ Salin file `.env.example` menjadi **`.env.local`** di root project (sejajar deng
 ```env
 DATABASE_URL=postgresql://postgres:YOUR_PASSWORD@localhost:5432/bobo_library
 SESSION_SECRET=bobo_secret_library_key_2026_unhas_bugis_cozy
-ALLOWED_EMAIL_DOMAINS=student.unhas.ac.id,unhas.ac.id,mail.com
+ALLOWED_EMAIL_DOMAINS=student.unhas.ac.id,gmail.com
 TZ=Asia/Makassar
 ```
 
@@ -295,40 +304,47 @@ npm run start
 
 ## 🔑 Akun Demo untuk Pengujian
 
-Semua password akun demo awal telah di-hash secara aman menggunakan `bcryptjs`:
+Semua password akun demo awal telah di-hash secara aman menggunakan `bcryptjs`. Selain akun **Admin** dan **Pegawai**, basis data demo dilengkapi **6 akun mahasiswa** dengan riwayat transaksi yang beragam agar seluruh alur sirkulasi dapat langsung diuji.
 
-| Role | Nama Pengguna | Email | Password | Identitas / NIM | Keterangan |
+### Daftar Akun Pengelola & 6 Mahasiswa Demo
+
+| Role | Nama Pengguna | Email | Password | Identitas / NIM | Ilustrasi Kondisi & Aktivitas Demo |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **Admin** | Administrator Bo'bo | `admin@unhas.ac.id` | `admin123` | `ADM-2026-001` | Akses penuh CMS, Users, Categories, Stats |
-| **Pegawai** | Pustakawan Hasan | `pegawai@unhas.ac.id` | `pegawai123` | `PEG-2026-010` | Verifikasi sirkulasi, Buku, Pengumuman, Denda |
-| **Mahasiswa** | Nurul Izzah | `mahasiswa@student.unhas.ac.id` | `mahasiswa123` | `D121221001` | Mahasiswa aktif (bebas denda, siap pinjam) |
-| **Mahasiswa** | Andi Tenri | `andi@student.unhas.ac.id` | `mahasiswa123` | `D121221002` | Contoh mahasiswa dengan denda Tertunggak |
-| **Mahasiswa** | Siti Rahma | `siti@student.unhas.ac.id` | `mahasiswa123` | `D121221003` | Mahasiswa dengan pinjaman aktif & permohonan |
-| **Guest** | - | - | - | - | Pengguna umum tanpa login (Katalog & Pengumuman) |
+| **Admin** | Administrator Bo'bo | `admin@unhas.ac.id` | `admin123` | `ADM-2026-001` | Akses penuh manajemen akun, kategori, koleksi, warta, dan statistik sistem. |
+| **Pegawai** | Pustakawan Hasan | `pegawai@unhas.ac.id` | `pegawai123` | `PEG-2026-010` | Meja sirkulasi: verifikasi pinjam & perpanjangan, pengembalian, denda, dan buku. |
+| **Mahasiswa** | **Aliyah** | `aliyah@student.unhas.ac.id` | `mahasiswa123` | `D121221001` | Peminjam aktif yang telah menyelesaikan beberapa peminjaman dan menuliskan ulasan terverifikasi (*Laut Bercerita*, *The Hunger Games*). |
+| **Mahasiswa** | **Aura** | `aura@student.unhas.ac.id` | `mahasiswa123` | `D121221002` | Memiliki riwayat keterlambatan pengembalian (*The Kite Runner*) dengan status **denda Tertunggak (`UNPAID`)** untuk menguji pembatasan pinjam & pelunasan denda. |
+| **Mahasiswa** | **Talista** | `talista@student.unhas.ac.id` | `mahasiswa123` | `D121221003` | Sedang meminjam buku (*Bumi Manusia*) dan memiliki permohonan **perpanjangan masa pinjam** untuk diuji verifikasinya oleh Pegawai. |
+| **Mahasiswa** | **Nita** | `nita@student.unhas.ac.id` | `mahasiswa123` | `D121221004` | Baru mengajukan peminjaman (*Madilog*) berstatus **Menunggu Konfirmasi (`PENDING`)** yang siap disetujui/ditolak oleh Pegawai. |
+| **Mahasiswa** | **Addah** | `addah@student.unhas.ac.id` | `mahasiswa123` | `D121221005` | Telah menyelesaikan peminjaman & pengembalian (*Dari Dalam Kubur*) serta memberikan ulasan pembaca terverifikasi. |
+| **Mahasiswa** | **Pisya** | `pisya@student.unhas.ac.id` | `mahasiswa123` | `D121221006` | Anggota mahasiswa baru dengan kuota pinjam penuh (`0` pinjaman aktif), siap digunakan untuk simulasi pengajuan pinjaman baru dari awal. |
+| **Guest** | - | - | - | - | Pengunjung umum tanpa login (jelajah beranda, katalog lemari buku, & warta). |
 
 ## 🧪 Skenario Pengujian Utama
 
 | No. | Skenario | Hasil yang Diharapkan |
 |---|---|---|
-| 1 | Guest membuka homepage dan katalog. | Koleksi lemari buku dan pengumuman terbit dapat dibaca tanpa login. |
-| 2 | Guest mencoba mengajukan peminjaman. | Sistem menolak tindakan dan meminta pengguna login sebagai Mahasiswa. |
-| 3 | Mahasiswa mendaftar dengan email di luar domain yang diizinkan. | Registrasi ditolak oleh validasi server. |
-| 4 | Mahasiswa mengajukan buku dengan stok tersedia. | Permohonan tercatat sebagai Menunggu Konfirmasi; stok belum berkurang. |
-| 5 | Pegawai menyetujui permohonan. | Status menjadi Sedang Dipinjam dan stok berkurang tepat satu. |
-| 6 | Pegawai menolak permohonan. | Status menjadi Ditolak, alasan tersimpan, dan stok tidak berubah. |
-| 7 | Pegawai mengonfirmasi pengembalian. | Status menjadi Selesai dan stok bertambah tepat satu. |
-| 8 | Buku dikembalikan melewati tanggal jatuh tempo. | Sistem menghitung dan mencatat denda sesuai tarif dan lama keterlambatan. |
-| 9 | Mahasiswa memiliki denda tertunggak lalu mengajukan pinjaman baru. | Pengajuan ditolak hingga denda dilunasi. |
-| 10 | Mahasiswa memberi ulasan sebelum pinjaman selesai. | Sistem menolak ulasan; ulasan diizinkan setelah transaksi selesai. |
-| 11 | Mahasiswa mencoba membuka halaman atau data milik role lain. | Server menolak akses tanpa mengubah data. |
-| 12 | Pegawai mencoba mengonfirmasi pengembalian transaksi yang sama dua kali. | Aksi kedua ditolak dan stok tidak bertambah ganda. |
+| 1 | Guest membuka homepage dan katalog. | Koleksi lemari buku, Top 5 buku terpopuler, dan pengumuman terbit dapat dibaca tanpa login. |
+| 2 | Guest mencoba mengajukan peminjaman. | Guest tidak dapat melakukan peminjaman dan diminta untuk masuk sebagai mahasiswa unhas apabila ingin melakukan peminjaman. |
+| 3 | Pengguna login dengan penulisan email yang belum lengkap (misal `aliyah@` atau `nama@student`). | Sistem menahan pengiriman dan menampilkan notifikasi peringatan bahwa format penulisan email belum lengkap. |
+| 4 | Mahasiswa mendaftar dengan email di luar domain `@student.unhas.ac.id` atau `@gmail.com` (termasuk `@unhas.ac.id`). | Registrasi ditolak dengan notifikasi peringatan bahwa mahasiswa wajib mendaftar menggunakan email `@student.unhas.ac.id` atau `@gmail.com`. |
+| 5 | Mahasiswa mengajukan buku dengan stok tersedia. | Permohonan tercatat sebagai Menunggu Konfirmasi; stok belum berkurang. |
+| 6 | Pegawai menyetujui permohonan. | Status menjadi Sedang Dipinjam, stok berkurang tepat satu, dan notifikasi pembaruan muncul pada lonceng mahasiswa. |
+| 7 | Pegawai menolak permohonan. | Status menjadi Ditolak, alasan tersimpan, dan stok tidak berubah. |
+| 8 | Pegawai mengonfirmasi pengembalian. | Status menjadi Selesai dan stok bertambah tepat satu. |
+| 9 | Buku dikembalikan melewati tanggal jatuh tempo. | Sistem menghitung dan mencatat denda sesuai tarif dan lama keterlambatan. |
+| 10 | Mahasiswa memiliki denda tertunggak lalu mengajukan pinjaman baru. | Pengajuan ditolak hingga denda dilunasi. |
+| 11 | Mahasiswa memberi ulasan sebelum pinjaman selesai. | Sistem menolak ulasan; ulasan diizinkan setelah transaksi selesai. |
+| 12 | Mahasiswa mencoba membuka halaman atau data milik role lain. | Server menolak akses tanpa mengubah data. |
+| 13 | Pegawai mencoba mengonfirmasi pengembalian transaksi yang sama dua kali. | Aksi kedua ditolak dan stok tidak bertambah ganda. |
 
 ## 🛣️ Status Pengembangan
 
 - [x] Fondasi Next.js App Router, Tailwind CSS, dan struktur project.
 - [x] Skema PostgreSQL, relasi, constraint, indeks, dan data koleksi lengkap.
-- [x] Autentikasi, session aman, dan RBAC empat tingkat pengguna.
-- [x] Homepage interaktif, katalog lemari rak buku, pencarian, filter, dan detail buku.
+- [x] Autentikasi, session aman, validasi domain email mahasiswa, dan RBAC empat tingkat pengguna.
+- [x] Homepage interaktif buku terbuka, etalase Top 5 buku *hardcover* 3D gantung, katalog lemari rak buku, pencarian, filter, dan detail buku.
+- [x] Lonceng notifikasi aktivitas berbasis peran pada bilah navigasi (*Navbar*).
 - [x] Manajemen pengguna, kategori, buku (unggah sampul lokal & arsip/unarsip), dan pengumuman.
 - [x] Transaksi peminjaman, persetujuan, dan pengembalian berbasis transaksi database.
 - [x] Pengajuan perpanjangan masa pinjam, perhitungan denda harian, dan pelunasan.
@@ -346,7 +362,7 @@ Semua password akun demo awal telah di-hash secara aman menggunakan `bcryptjs`:
 ---
 
 <div align="center">
-  <sub>Bo’bo (ᨅᨚᨅᨚ) · A Cozy Campus Library Inspired by Bugis Culture</sub>
+  <sub>Bo’bo (ᨅᨚᨅᨚ)</sub>
   <br />
-  <sub>Project Praktikum Pemrograman Web 2026 · Universitas Hasanuddin</sub>
+  <sub>Project Praktikum Pemrograman Web 2026</sub>
 </div>
