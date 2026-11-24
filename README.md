@@ -338,19 +338,6 @@ Semua password akun demo awal telah di-hash secara aman menggunakan `bcryptjs`. 
 | 12 | Mahasiswa mencoba membuka halaman atau data milik role lain. | Server menolak akses tanpa mengubah data. |
 | 13 | Pegawai mencoba mengonfirmasi pengembalian transaksi yang sama dua kali. | Aksi kedua ditolak dan stok tidak bertambah ganda. |
 
-## 🛣️ Status Pengembangan
-
-- [x] Fondasi Next.js App Router, Tailwind CSS, dan struktur project.
-- [x] Skema PostgreSQL, relasi, constraint, indeks, dan data koleksi lengkap.
-- [x] Autentikasi, session aman, validasi domain email mahasiswa, dan RBAC empat tingkat pengguna.
-- [x] Homepage interaktif buku terbuka, etalase Top 5 buku *hardcover* 3D gantung, katalog lemari rak buku, pencarian, filter, dan detail buku.
-- [x] Lonceng notifikasi aktivitas berbasis peran pada bilah navigasi (*Navbar*).
-- [x] Manajemen pengguna, kategori, buku (unggah sampul lokal & arsip/unarsip), dan pengumuman.
-- [x] Transaksi peminjaman, persetujuan, dan pengembalian berbasis transaksi database.
-- [x] Pengajuan perpanjangan masa pinjam, perhitungan denda harian, dan pelunasan.
-- [x] Sistem rating, ulasan terverifikasi, dan dashboard setiap role.
-- [x] Pengujian menyeluruh, konsistensi antarmuka, dan dokumentasi instalasi.
-
 ## 📌 Catatan Keamanan
 
 - Jangan pernah commit `.env.local`, password PostgreSQL pribadi, atau token rahasia ke repositori publik.
