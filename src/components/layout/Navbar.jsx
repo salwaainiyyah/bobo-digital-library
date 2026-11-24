@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useRouter, usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import Badge from '../ui/Badge';
+import NotificationBell from './NotificationBell';
 
 export default function Navbar({ initialUser }) {
   const router = useRouter();
@@ -101,34 +102,38 @@ export default function Navbar({ initialUser }) {
             ))}
           </nav>
 
-          {/* Right Area (User Status / Auth Buttons) */}
+          {/* Right Area (Notification Bell + User Status / Auth Buttons) */}
           <div className="hidden md:flex items-center gap-3">
             {user ? (
-              <div className="flex items-center gap-3 bg-white/70 backdrop-blur-xs pl-3.5 pr-1.5 py-1.5 rounded-2xl border border-[#EBCFA9]/80 shadow-2xs">
-                <div className="flex flex-col text-right">
-                  <span className="text-xs font-semibold text-[#79543D] leading-tight truncate max-w-[140px]">
-                    {user.fullName}
-                  </span>
-                  <div className="mt-0.5">
-                    <Badge variant={currentRole?.variant}>{currentRole?.label}</Badge>
+              <div className="flex items-center gap-2.5">
+                <NotificationBell userId={user.id} />
+
+                <div className="flex items-center gap-3 bg-white/70 backdrop-blur-xs pl-3.5 pr-1.5 py-1.5 rounded-2xl border border-[#EBCFA9]/80 shadow-2xs">
+                  <div className="flex flex-col text-right">
+                    <span className="text-xs font-semibold text-[#79543D] leading-tight truncate max-w-[140px]">
+                      {user.fullName}
+                    </span>
+                    <div className="mt-0.5">
+                      <Badge variant={currentRole?.variant}>{currentRole?.label}</Badge>
+                    </div>
                   </div>
+
+                  <Link
+                    href="/dashboard"
+                    className="bg-[#929D75] hover:bg-[#7e8963] text-white text-xs font-medium px-3.5 py-2 rounded-xl transition-all duration-200 shadow-2xs hover:shadow-xs"
+                  >
+                    Dashboard
+                  </Link>
+
+                  <button
+                    onClick={handleLogout}
+                    disabled={isLoggingOut}
+                    className="text-xs text-[#C96858] hover:text-[#a54434] hover:bg-[#C96858]/10 px-2.5 py-2 rounded-xl transition-colors font-medium cursor-pointer"
+                    title="Keluar dari akun"
+                  >
+                    {isLoggingOut ? '...' : 'Keluar'}
+                  </button>
                 </div>
-
-                <Link
-                  href="/dashboard"
-                  className="bg-[#929D75] hover:bg-[#7e8963] text-white text-xs font-medium px-3.5 py-2 rounded-xl transition-all duration-200 shadow-2xs hover:shadow-xs"
-                >
-                  Dashboard
-                </Link>
-
-                <button
-                  onClick={handleLogout}
-                  disabled={isLoggingOut}
-                  className="text-xs text-[#C96858] hover:text-[#a54434] hover:bg-[#C96858]/10 px-2.5 py-2 rounded-xl transition-colors font-medium cursor-pointer"
-                  title="Keluar dari akun"
-                >
-                  {isLoggingOut ? '...' : 'Keluar'}
-                </button>
               </div>
             ) : (
               <div className="flex items-center gap-2">
@@ -148,8 +153,10 @@ export default function Navbar({ initialUser }) {
             )}
           </div>
 
-          {/* Mobile Menu Toggle Button */}
+          {/* Mobile Bell & Menu Toggle Button */}
           <div className="flex md:hidden items-center gap-2">
+            {user && <NotificationBell userId={user.id} />}
+
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="p-2.5 rounded-2xl bg-white/70 border border-[#EBCFA9] text-[#79543D] hover:bg-white transition-all shadow-2xs cursor-pointer"
