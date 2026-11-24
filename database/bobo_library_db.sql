@@ -2,12 +2,12 @@
 -- PostgreSQL database dump
 --
 
-\restrict bejZE4Ny9OAKlXaEQ1nbumlmULMIfmBMYJX79IidOM9I181rlY6mQTd6ERwaZdN
+\restrict KrQLfqd6bEW7CGvS09fkuS6v6htaFGUwYtfM7dSqr10Ky6PqT9xCv0wLWpAJwAq
 
 -- Dumped from database version 18.6
 -- Dumped by pg_dump version 18.6
 
--- Started on 2026-11-21 16:58:48
+-- Started on 2026-11-24 23:51:07
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -30,7 +30,7 @@ CREATE EXTENSION IF NOT EXISTS pgcrypto WITH SCHEMA public;
 
 
 --
--- TOC entry 5226 (class 0 OID 0)
+-- TOC entry 5228 (class 0 OID 0)
 -- Dependencies: 2
 -- Name: EXTENSION pgcrypto; Type: COMMENT; Schema: -; Owner: 
 --
@@ -43,7 +43,7 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- TOC entry 228 (class 1259 OID 19108)
+-- TOC entry 230 (class 1259 OID 19108)
 -- Name: announcements; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -66,7 +66,7 @@ CREATE TABLE public.announcements (
 ALTER TABLE public.announcements OWNER TO postgres;
 
 --
--- TOC entry 227 (class 1259 OID 19107)
+-- TOC entry 229 (class 1259 OID 19107)
 -- Name: announcements_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -82,8 +82,8 @@ CREATE SEQUENCE public.announcements_id_seq
 ALTER SEQUENCE public.announcements_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5227 (class 0 OID 0)
--- Dependencies: 227
+-- TOC entry 5229 (class 0 OID 0)
+-- Dependencies: 229
 -- Name: announcements_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -91,7 +91,7 @@ ALTER SEQUENCE public.announcements_id_seq OWNED BY public.announcements.id;
 
 
 --
--- TOC entry 226 (class 1259 OID 19070)
+-- TOC entry 228 (class 1259 OID 19070)
 -- Name: books; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -122,7 +122,7 @@ CREATE TABLE public.books (
 ALTER TABLE public.books OWNER TO postgres;
 
 --
--- TOC entry 225 (class 1259 OID 19069)
+-- TOC entry 227 (class 1259 OID 19069)
 -- Name: books_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -138,8 +138,8 @@ CREATE SEQUENCE public.books_id_seq
 ALTER SEQUENCE public.books_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5228 (class 0 OID 0)
--- Dependencies: 225
+-- TOC entry 5230 (class 0 OID 0)
+-- Dependencies: 227
 -- Name: books_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -147,7 +147,7 @@ ALTER SEQUENCE public.books_id_seq OWNED BY public.books.id;
 
 
 --
--- TOC entry 224 (class 1259 OID 19051)
+-- TOC entry 226 (class 1259 OID 19051)
 -- Name: categories; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -164,7 +164,7 @@ CREATE TABLE public.categories (
 ALTER TABLE public.categories OWNER TO postgres;
 
 --
--- TOC entry 223 (class 1259 OID 19050)
+-- TOC entry 225 (class 1259 OID 19050)
 -- Name: categories_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -180,8 +180,8 @@ CREATE SEQUENCE public.categories_id_seq
 ALTER SEQUENCE public.categories_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5229 (class 0 OID 0)
--- Dependencies: 223
+-- TOC entry 5231 (class 0 OID 0)
+-- Dependencies: 225
 -- Name: categories_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -189,7 +189,7 @@ ALTER SEQUENCE public.categories_id_seq OWNED BY public.categories.id;
 
 
 --
--- TOC entry 234 (class 1259 OID 19206)
+-- TOC entry 236 (class 1259 OID 19206)
 -- Name: fines; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -218,7 +218,7 @@ CREATE TABLE public.fines (
 ALTER TABLE public.fines OWNER TO postgres;
 
 --
--- TOC entry 233 (class 1259 OID 19205)
+-- TOC entry 235 (class 1259 OID 19205)
 -- Name: fines_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -234,8 +234,8 @@ CREATE SEQUENCE public.fines_id_seq
 ALTER SEQUENCE public.fines_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5230 (class 0 OID 0)
--- Dependencies: 233
+-- TOC entry 5232 (class 0 OID 0)
+-- Dependencies: 235
 -- Name: fines_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -243,7 +243,7 @@ ALTER SEQUENCE public.fines_id_seq OWNED BY public.fines.id;
 
 
 --
--- TOC entry 230 (class 1259 OID 19134)
+-- TOC entry 232 (class 1259 OID 19134)
 -- Name: loans; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -271,7 +271,7 @@ CREATE TABLE public.loans (
 ALTER TABLE public.loans OWNER TO postgres;
 
 --
--- TOC entry 229 (class 1259 OID 19133)
+-- TOC entry 231 (class 1259 OID 19133)
 -- Name: loans_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -287,8 +287,8 @@ CREATE SEQUENCE public.loans_id_seq
 ALTER SEQUENCE public.loans_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5231 (class 0 OID 0)
--- Dependencies: 229
+-- TOC entry 5233 (class 0 OID 0)
+-- Dependencies: 231
 -- Name: loans_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -296,7 +296,7 @@ ALTER SEQUENCE public.loans_id_seq OWNED BY public.loans.id;
 
 
 --
--- TOC entry 232 (class 1259 OID 19176)
+-- TOC entry 234 (class 1259 OID 19176)
 -- Name: renewal_requests; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -320,7 +320,7 @@ CREATE TABLE public.renewal_requests (
 ALTER TABLE public.renewal_requests OWNER TO postgres;
 
 --
--- TOC entry 231 (class 1259 OID 19175)
+-- TOC entry 233 (class 1259 OID 19175)
 -- Name: renewal_requests_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -336,8 +336,8 @@ CREATE SEQUENCE public.renewal_requests_id_seq
 ALTER SEQUENCE public.renewal_requests_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5232 (class 0 OID 0)
--- Dependencies: 231
+-- TOC entry 5234 (class 0 OID 0)
+-- Dependencies: 233
 -- Name: renewal_requests_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -345,7 +345,7 @@ ALTER SEQUENCE public.renewal_requests_id_seq OWNED BY public.renewal_requests.i
 
 
 --
--- TOC entry 236 (class 1259 OID 19250)
+-- TOC entry 238 (class 1259 OID 19250)
 -- Name: reviews; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -365,7 +365,7 @@ CREATE TABLE public.reviews (
 ALTER TABLE public.reviews OWNER TO postgres;
 
 --
--- TOC entry 235 (class 1259 OID 19249)
+-- TOC entry 237 (class 1259 OID 19249)
 -- Name: reviews_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -381,8 +381,8 @@ CREATE SEQUENCE public.reviews_id_seq
 ALTER SEQUENCE public.reviews_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5233 (class 0 OID 0)
--- Dependencies: 235
+-- TOC entry 5235 (class 0 OID 0)
+-- Dependencies: 237
 -- Name: reviews_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -390,7 +390,7 @@ ALTER SEQUENCE public.reviews_id_seq OWNED BY public.reviews.id;
 
 
 --
--- TOC entry 222 (class 1259 OID 19032)
+-- TOC entry 224 (class 1259 OID 19032)
 -- Name: sessions; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -407,7 +407,7 @@ CREATE TABLE public.sessions (
 ALTER TABLE public.sessions OWNER TO postgres;
 
 --
--- TOC entry 221 (class 1259 OID 19010)
+-- TOC entry 223 (class 1259 OID 19010)
 -- Name: users; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -428,7 +428,7 @@ CREATE TABLE public.users (
 ALTER TABLE public.users OWNER TO postgres;
 
 --
--- TOC entry 220 (class 1259 OID 19009)
+-- TOC entry 222 (class 1259 OID 19009)
 -- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -444,8 +444,8 @@ CREATE SEQUENCE public.users_id_seq
 ALTER SEQUENCE public.users_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5234 (class 0 OID 0)
--- Dependencies: 220
+-- TOC entry 5236 (class 0 OID 0)
+-- Dependencies: 222
 -- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -453,7 +453,7 @@ ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
 
 
 --
--- TOC entry 4948 (class 2604 OID 19111)
+-- TOC entry 4950 (class 2604 OID 19111)
 -- Name: announcements id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -461,7 +461,7 @@ ALTER TABLE ONLY public.announcements ALTER COLUMN id SET DEFAULT nextval('publi
 
 
 --
--- TOC entry 4942 (class 2604 OID 19073)
+-- TOC entry 4944 (class 2604 OID 19073)
 -- Name: books id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -469,7 +469,7 @@ ALTER TABLE ONLY public.books ALTER COLUMN id SET DEFAULT nextval('public.books_
 
 
 --
--- TOC entry 4939 (class 2604 OID 19054)
+-- TOC entry 4941 (class 2604 OID 19054)
 -- Name: categories id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -477,7 +477,7 @@ ALTER TABLE ONLY public.categories ALTER COLUMN id SET DEFAULT nextval('public.c
 
 
 --
--- TOC entry 4965 (class 2604 OID 19209)
+-- TOC entry 4967 (class 2604 OID 19209)
 -- Name: fines id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -485,7 +485,7 @@ ALTER TABLE ONLY public.fines ALTER COLUMN id SET DEFAULT nextval('public.fines_
 
 
 --
--- TOC entry 4953 (class 2604 OID 19137)
+-- TOC entry 4955 (class 2604 OID 19137)
 -- Name: loans id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -493,7 +493,7 @@ ALTER TABLE ONLY public.loans ALTER COLUMN id SET DEFAULT nextval('public.loans_
 
 
 --
--- TOC entry 4960 (class 2604 OID 19179)
+-- TOC entry 4962 (class 2604 OID 19179)
 -- Name: renewal_requests id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -501,7 +501,7 @@ ALTER TABLE ONLY public.renewal_requests ALTER COLUMN id SET DEFAULT nextval('pu
 
 
 --
--- TOC entry 4973 (class 2604 OID 19253)
+-- TOC entry 4975 (class 2604 OID 19253)
 -- Name: reviews id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -509,7 +509,7 @@ ALTER TABLE ONLY public.reviews ALTER COLUMN id SET DEFAULT nextval('public.revi
 
 
 --
--- TOC entry 4933 (class 2604 OID 19013)
+-- TOC entry 4935 (class 2604 OID 19013)
 -- Name: users id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -517,8 +517,8 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 
 
 --
--- TOC entry 5212 (class 0 OID 19108)
--- Dependencies: 228
+-- TOC entry 5214 (class 0 OID 19108)
+-- Dependencies: 230
 -- Data for Name: announcements; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -529,12 +529,11 @@ INSERT INTO public.announcements VALUES (3, 'Workshop Digitalisasi Naskah Kuno &
 
 
 --
--- TOC entry 5210 (class 0 OID 19070)
--- Dependencies: 226
+-- TOC entry 5212 (class 0 OID 19070)
+-- Dependencies: 228
 -- Data for Name: books; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO public.books VALUES (1, 'Sistem Basis Data', '978-602-62-3266-3', 'Fathansyah', 'Informatika Bandung', 2018, 1, 15, 15, 7, 1000.00, '/uploads/books/sistem-basis-data-fathansyah.jpg', true, '2026-11-21 15:57:47.669491+08', '2026-11-21 15:57:47.669491+08');
 INSERT INTO public.books VALUES (2, 'Algoritma dan Pemrograman dalam Bahasa Pascal, C, dan C++', '978-602-62-3211-3', 'Rinaldi Munir', 'Informatika Bandung', 2018, 1, 14, 14, 7, 1000.00, '/uploads/books/algoritma-pemrograman-rinaldi.jpg', true, '2026-11-21 15:57:47.669491+08', '2026-11-21 15:57:47.669491+08');
 INSERT INTO public.books VALUES (3, 'Rekayasa Perangkat Lunak Terstruktur dan Berorientasi Objek', '978-602-62-3265-6', 'Rosa A.S. & M. Shalahuddin', 'Informatika Bandung', 2018, 1, 12, 12, 7, 1000.00, '/uploads/books/rekayasa-perangkat-lunak-rosa.jpg', true, '2026-11-21 15:57:47.669491+08', '2026-11-21 15:57:47.669491+08');
 INSERT INTO public.books VALUES (4, 'Clean Code: A Handbook of Agile Software Craftsmanship', '978-013-23-5088-4', 'Robert C. Martin', 'Prentice Hall', 2008, 1, 10, 10, 7, 1500.00, '/uploads/books/clean-code.jpg', true, '2026-11-21 15:57:47.669491+08', '2026-11-21 15:57:47.669491+08');
@@ -547,7 +546,6 @@ INSERT INTO public.books VALUES (11, 'Dasar-Dasar Epidemiologi', '978-979-44-861
 INSERT INTO public.books VALUES (12, 'Pengantar Ilmu Ekonomi (Mikroekonomi & Makroekonomi)', '978-979-92-4265-5', 'Prathama Rahardja & Mandala Manurung', 'Lembaga Penerbit FEUI', 2008, 5, 14, 14, 7, 1000.00, '/uploads/books/pengantar-ilmu-ekonomi-prathama.jpg', true, '2026-11-21 15:57:47.669491+08', '2026-11-21 15:57:47.669491+08');
 INSERT INTO public.books VALUES (13, 'Manajemen (Edisi Ketiga Belas)', '978-602-29-8841-0', 'Stephen P. Robbins & Mary Coulter', 'Erlangga', 2016, 5, 12, 12, 7, 1000.00, '/uploads/books/manajemen-robbins-coulter.jpg', true, '2026-11-21 15:57:47.669491+08', '2026-11-21 15:57:47.669491+08');
 INSERT INTO public.books VALUES (14, 'Entrok', '978-979-22-5589-8', 'Okky Madasari', 'Gramedia Pustaka Utama', 2010, 6, 3, 3, 7, 1000.00, '/uploads/books/entrok.jpg', true, '2026-11-21 15:57:47.669491+08', '2026-11-21 15:57:47.669491+08');
-INSERT INTO public.books VALUES (15, 'Dari Dalam Kubur', '978-979-12-6071-8', 'Soe Tjen Marching', 'Marjin Kiri', 2020, 6, 2, 2, 7, 1000.00, '/uploads/books/dari-dalam-kubur.jpg', true, '2026-11-21 15:57:47.669491+08', '2026-11-21 15:57:47.669491+08');
 INSERT INTO public.books VALUES (16, 'Lebih Putih Dariku', '978-602-06-4412-7', 'Penulis Indonesia', 'Gramedia Pustaka Utama', 2021, 6, 2, 2, 7, 1000.00, '/uploads/books/lebih-putih-dariku.jpg', true, '2026-11-21 15:57:47.669491+08', '2026-11-21 15:57:47.669491+08');
 INSERT INTO public.books VALUES (17, 'Ronggeng Dukuh Paruk', '978-979-22-0196-3', 'Ahmad Tohari', 'Gramedia Pustaka Utama', 2003, 6, 3, 3, 7, 1000.00, '/uploads/books/ronggeng-dukuh-paruk.jpg', true, '2026-11-21 15:57:47.669491+08', '2026-11-21 15:57:47.669491+08');
 INSERT INTO public.books VALUES (18, 'The Kite Runner', '978-159-46-3193-1', 'Khaled Hosseini', 'Riverhead Books', 2003, 6, 3, 3, 7, 1000.00, '/uploads/books/the-kite-runner.jpg', true, '2026-11-21 15:57:47.669491+08', '2026-11-21 15:57:47.669491+08');
@@ -561,7 +559,6 @@ INSERT INTO public.books VALUES (25, 'The Hunger Games', '978-043-90-2348-1', 'S
 INSERT INTO public.books VALUES (26, 'The Hunger Games: Catching Fire', '978-043-90-2349-8', 'Suzanne Collins', 'Scholastic Press', 2009, 6, 3, 3, 7, 1000.00, '/uploads/books/the-hunger-games-2-catching-fire.jpg', true, '2026-11-21 15:57:47.669491+08', '2026-11-21 15:57:47.669491+08');
 INSERT INTO public.books VALUES (27, 'The Hunger Games: Mockingjay', '978-054-56-6326-7', 'Suzanne Collins', 'Scholastic Press', 2010, 6, 3, 3, 7, 1000.00, '/uploads/books/the-hunger-games-3-mockingjay.jpg', true, '2026-11-21 15:57:47.669491+08', '2026-11-21 15:57:47.669491+08');
 INSERT INTO public.books VALUES (28, 'The Ballad of Songbirds and Snakes', '978-133-86-3517-1', 'Suzanne Collins', 'Scholastic Press', 2020, 6, 2, 2, 7, 1000.00, '/uploads/books/the-hunger-games-4-ballad-songbirds-snakes.jpg', true, '2026-11-21 15:57:47.669491+08', '2026-11-21 15:57:47.669491+08');
-INSERT INTO public.books VALUES (29, 'Bumi Manusia', '978-979-97-3123-4', 'Pramoedya Ananta Toer', 'Lentera Dipantara', 2005, 6, 3, 3, 7, 1000.00, '/uploads/books/bumi-manusia.jpg', true, '2026-11-21 15:57:47.669491+08', '2026-11-21 15:57:47.669491+08');
 INSERT INTO public.books VALUES (30, 'Laut Bercerita', '978-602-42-4694-5', 'Leila S. Chudori', 'Kepustakaan Populer Gramedia', 2017, 6, 3, 3, 7, 1000.00, '/uploads/books/laut-bercerita.jpg', true, '2026-11-21 15:57:47.669491+08', '2026-11-21 15:57:47.669491+08');
 INSERT INTO public.books VALUES (31, 'Madilog: Materialisme, Dialektika, dan Logika', '978-602-66-8205-5', 'Tan Malaka', 'Narasi', 2016, 7, 3, 3, 7, 1000.00, '/uploads/books/madilog.jpg', true, '2026-11-21 15:57:47.669491+08', '2026-11-21 15:57:47.669491+08');
 INSERT INTO public.books VALUES (32, 'Pendidikan Kaum Tertindas (Pedagogy of the Oppressed)', '978-979-33-3074-7', 'Paulo Freire', 'LP3ES', 2008, 7, 2, 2, 7, 1000.00, '/uploads/books/pendidikan-kaum-tertindas.jpg', true, '2026-11-21 15:57:47.669491+08', '2026-11-21 15:57:47.669491+08');
@@ -570,11 +567,14 @@ INSERT INTO public.books VALUES (34, 'Di Bawah Bendera Revolusi (Jilid 1)', '978
 INSERT INTO public.books VALUES (35, 'Catatan Seorang Demonstran', '978-979-33-3041-9', 'Soe Hok Gie', 'LP3ES', 2011, 7, 3, 3, 7, 1000.00, '/uploads/books/catatan-seorang-demonstran.jpg', true, '2026-11-21 15:57:47.669491+08', '2026-11-21 15:57:47.669491+08');
 INSERT INTO public.books VALUES (36, 'Serikat Buruh 1945-1948: Menduduki Stasiun, Menguasai Perkebunan, Menjalankan Pabrik', '978-602-0788-57-9', 'Jafar Suryomenggolo', 'Marjin Kiri', 2014, 7, 5, 5, 7, 1000.00, '/uploads/books/1795250692785-53e6c8f3be5b.webp', true, '2026-11-21 16:44:52.792321+08', '2026-11-21 16:44:52.792321+08');
 INSERT INTO public.books VALUES (9, 'Hukum Laut Internasional', '978-979-41-4052-9', 'Prof. Dr. Mochtar Kusumaatmadja', 'Binacipta', 2003, 3, 12, 12, 7, 1000.00, '/uploads/books/hukum-laut-internasional-mochtar.jpg', true, '2026-11-21 15:57:47.669491+08', '2026-11-21 16:51:31.922151+08');
+INSERT INTO public.books VALUES (1, 'Sistem Basis Data', '978-602-62-3266-3', 'Fathansyah', 'Informatika Bandung', 2018, 1, 15, 14, 7, 1000.00, '/uploads/books/sistem-basis-data-fathansyah.jpg', true, '2026-11-21 15:57:47.669491+08', '2026-11-21 15:57:47.669491+08');
+INSERT INTO public.books VALUES (15, 'Dari Dalam Kubur', '978-979-12-6071-8', 'Soe Tjen Marching', 'Marjin Kiri', 2020, 6, 2, 1, 7, 1000.00, '/uploads/books/dari-dalam-kubur.jpg', true, '2026-11-21 15:57:47.669491+08', '2026-11-21 15:57:47.669491+08');
+INSERT INTO public.books VALUES (29, 'Bumi Manusia', '978-979-97-3123-4', 'Pramoedya Ananta Toer', 'Lentera Dipantara', 2005, 6, 3, 2, 7, 1000.00, '/uploads/books/bumi-manusia.jpg', true, '2026-11-21 15:57:47.669491+08', '2026-11-21 15:57:47.669491+08');
 
 
 --
--- TOC entry 5208 (class 0 OID 19051)
--- Dependencies: 224
+-- TOC entry 5210 (class 0 OID 19051)
+-- Dependencies: 226
 -- Data for Name: categories; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -588,40 +588,76 @@ INSERT INTO public.categories VALUES (7, 'Filsafat, Sosiologi & Pemikiran Kritis
 
 
 --
--- TOC entry 5218 (class 0 OID 19206)
--- Dependencies: 234
+-- TOC entry 5220 (class 0 OID 19206)
+-- Dependencies: 236
 -- Data for Name: fines; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
+INSERT INTO public.fines VALUES (1, 25, 17, 4, 1000.00, 4000.00, 'UNPAID', '2026-11-21 23:43:34.289794+08', NULL, NULL, 'Tunai', NULL, '2026-11-24 23:43:34.289794+08', '2026-11-24 23:43:34.289794+08');
+INSERT INTO public.fines VALUES (2, 22, 20, 2, 1000.00, 2000.00, 'PAID', '2026-11-16 23:43:34.289794+08', '2026-11-16 23:43:34.289794+08', 8, 'Tunai', 'Dilunasi langsung di meja layanan perpustakaan', '2026-11-24 23:43:34.289794+08', '2026-11-24 23:43:34.289794+08');
 
 
 --
--- TOC entry 5214 (class 0 OID 19134)
--- Dependencies: 230
+-- TOC entry 5216 (class 0 OID 19134)
+-- Dependencies: 232
 -- Data for Name: loans; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
+INSERT INTO public.loans VALUES (1, 16, 30, 'COMPLETED', '2026-09-25 23:43:34.289794+08', '2026-09-25 23:43:34.289794+08', '2026-09-25', '2026-10-02', '2026-10-01', 8, NULL, NULL, 7, 1000.00, '2026-11-24 23:43:34.289794+08', '2026-11-24 23:43:34.289794+08');
+INSERT INTO public.loans VALUES (2, 17, 30, 'COMPLETED', '2026-09-30 23:43:34.289794+08', '2026-09-30 23:43:34.289794+08', '2026-09-30', '2026-10-07', '2026-10-06', 8, NULL, NULL, 7, 1000.00, '2026-11-24 23:43:34.289794+08', '2026-11-24 23:43:34.289794+08');
+INSERT INTO public.loans VALUES (3, 18, 30, 'COMPLETED', '2026-10-05 23:43:34.289794+08', '2026-10-05 23:43:34.289794+08', '2026-10-05', '2026-10-12', '2026-10-11', 8, NULL, NULL, 7, 1000.00, '2026-11-24 23:43:34.289794+08', '2026-11-24 23:43:34.289794+08');
+INSERT INTO public.loans VALUES (4, 19, 30, 'COMPLETED', '2026-10-10 23:43:34.289794+08', '2026-10-10 23:43:34.289794+08', '2026-10-10', '2026-10-17', '2026-10-16', 8, NULL, NULL, 7, 1000.00, '2026-11-24 23:43:34.289794+08', '2026-11-24 23:43:34.289794+08');
+INSERT INTO public.loans VALUES (5, 20, 30, 'COMPLETED', '2026-10-15 23:43:34.289794+08', '2026-10-15 23:43:34.289794+08', '2026-10-15', '2026-10-22', '2026-10-21', 8, NULL, NULL, 7, 1000.00, '2026-11-24 23:43:34.289794+08', '2026-11-24 23:43:34.289794+08');
+INSERT INTO public.loans VALUES (6, 16, 30, 'COMPLETED', '2026-10-25 23:43:34.289794+08', '2026-10-25 23:43:34.289794+08', '2026-10-25', '2026-11-01', '2026-10-31', 8, NULL, NULL, 7, 1000.00, '2026-11-24 23:43:34.289794+08', '2026-11-24 23:43:34.289794+08');
+INSERT INTO public.loans VALUES (7, 18, 30, 'COMPLETED', '2026-11-02 23:43:34.289794+08', '2026-11-02 23:43:34.289794+08', '2026-11-02', '2026-11-09', '2026-11-08', 8, NULL, NULL, 7, 1000.00, '2026-11-24 23:43:34.289794+08', '2026-11-24 23:43:34.289794+08');
+INSERT INTO public.loans VALUES (8, 19, 30, 'COMPLETED', '2026-11-09 23:43:34.289794+08', '2026-11-09 23:43:34.289794+08', '2026-11-09', '2026-11-16', '2026-11-15', 8, NULL, NULL, 7, 1000.00, '2026-11-24 23:43:34.289794+08', '2026-11-24 23:43:34.289794+08');
+INSERT INTO public.loans VALUES (9, 16, 29, 'COMPLETED', '2026-10-03 23:43:34.289794+08', '2026-10-03 23:43:34.289794+08', '2026-10-03', '2026-10-10', '2026-10-09', 8, NULL, NULL, 7, 1000.00, '2026-11-24 23:43:34.289794+08', '2026-11-24 23:43:34.289794+08');
+INSERT INTO public.loans VALUES (10, 17, 29, 'COMPLETED', '2026-10-09 23:43:34.289794+08', '2026-10-09 23:43:34.289794+08', '2026-10-09', '2026-10-16', '2026-10-15', 8, NULL, NULL, 7, 1000.00, '2026-11-24 23:43:34.289794+08', '2026-11-24 23:43:34.289794+08');
+INSERT INTO public.loans VALUES (11, 18, 29, 'COMPLETED', '2026-10-17 23:43:34.289794+08', '2026-10-17 23:43:34.289794+08', '2026-10-17', '2026-10-24', '2026-10-23', 8, NULL, NULL, 7, 1000.00, '2026-11-24 23:43:34.289794+08', '2026-11-24 23:43:34.289794+08');
+INSERT INTO public.loans VALUES (12, 19, 29, 'COMPLETED', '2026-10-23 23:43:34.289794+08', '2026-10-23 23:43:34.289794+08', '2026-10-23', '2026-10-30', '2026-10-29', 8, NULL, NULL, 7, 1000.00, '2026-11-24 23:43:34.289794+08', '2026-11-24 23:43:34.289794+08');
+INSERT INTO public.loans VALUES (13, 20, 29, 'COMPLETED', '2026-10-30 23:43:34.289794+08', '2026-10-30 23:43:34.289794+08', '2026-10-30', '2026-11-06', '2026-11-05', 8, NULL, NULL, 7, 1000.00, '2026-11-24 23:43:34.289794+08', '2026-11-24 23:43:34.289794+08');
+INSERT INTO public.loans VALUES (14, 16, 29, 'COMPLETED', '2026-11-06 23:43:34.289794+08', '2026-11-06 23:43:34.289794+08', '2026-11-06', '2026-11-13', '2026-11-12', 8, NULL, NULL, 7, 1000.00, '2026-11-24 23:43:34.289794+08', '2026-11-24 23:43:34.289794+08');
+INSERT INTO public.loans VALUES (15, 18, 29, 'BORROWED', '2026-11-22 23:43:34.289794+08', '2026-11-22 23:43:34.289794+08', '2026-11-22', '2026-11-29', NULL, 8, NULL, NULL, 7, 1000.00, '2026-11-24 23:43:34.289794+08', '2026-11-24 23:43:34.289794+08');
+INSERT INTO public.loans VALUES (16, 16, 25, 'COMPLETED', '2026-10-07 23:43:34.289794+08', '2026-10-07 23:43:34.289794+08', '2026-10-07', '2026-10-14', '2026-10-13', 8, NULL, NULL, 7, 1000.00, '2026-11-24 23:43:34.289794+08', '2026-11-24 23:43:34.289794+08');
+INSERT INTO public.loans VALUES (17, 18, 25, 'COMPLETED', '2026-10-19 23:43:34.289794+08', '2026-10-19 23:43:34.289794+08', '2026-10-19', '2026-10-26', '2026-10-25', 8, NULL, NULL, 7, 1000.00, '2026-11-24 23:43:34.289794+08', '2026-11-24 23:43:34.289794+08');
+INSERT INTO public.loans VALUES (18, 19, 25, 'COMPLETED', '2026-10-27 23:43:34.289794+08', '2026-10-27 23:43:34.289794+08', '2026-10-27', '2026-11-03', '2026-11-02', 8, NULL, NULL, 7, 1000.00, '2026-11-24 23:43:34.289794+08', '2026-11-24 23:43:34.289794+08');
+INSERT INTO public.loans VALUES (19, 20, 25, 'COMPLETED', '2026-11-04 23:43:34.289794+08', '2026-11-04 23:43:34.289794+08', '2026-11-04', '2026-11-11', '2026-11-10', 8, NULL, NULL, 7, 1000.00, '2026-11-24 23:43:34.289794+08', '2026-11-24 23:43:34.289794+08');
+INSERT INTO public.loans VALUES (20, 17, 25, 'COMPLETED', '2026-11-10 23:43:34.289794+08', '2026-11-10 23:43:34.289794+08', '2026-11-10', '2026-11-17', '2026-11-16', 8, NULL, NULL, 7, 1000.00, '2026-11-24 23:43:34.289794+08', '2026-11-24 23:43:34.289794+08');
+INSERT INTO public.loans VALUES (21, 16, 15, 'COMPLETED', '2026-10-21 23:43:34.289794+08', '2026-10-21 23:43:34.289794+08', '2026-10-21', '2026-10-28', '2026-10-27', 8, NULL, NULL, 7, 1000.00, '2026-11-24 23:43:34.289794+08', '2026-11-24 23:43:34.289794+08');
+INSERT INTO public.loans VALUES (22, 20, 15, 'COMPLETED', '2026-11-07 23:43:34.289794+08', '2026-11-07 23:43:34.289794+08', '2026-11-07', '2026-11-14', '2026-11-16', 8, NULL, NULL, 7, 1000.00, '2026-11-24 23:43:34.289794+08', '2026-11-24 23:43:34.289794+08');
+INSERT INTO public.loans VALUES (23, 19, 15, 'COMPLETED', '2026-11-12 23:43:34.289794+08', '2026-11-12 23:43:34.289794+08', '2026-11-12', '2026-11-19', '2026-11-18', 8, NULL, NULL, 7, 1000.00, '2026-11-24 23:43:34.289794+08', '2026-11-24 23:43:34.289794+08');
+INSERT INTO public.loans VALUES (24, 18, 15, 'BORROWED', '2026-11-21 23:43:34.289794+08', '2026-11-21 23:43:34.289794+08', '2026-11-21', '2026-11-28', NULL, 8, NULL, NULL, 7, 1000.00, '2026-11-24 23:43:34.289794+08', '2026-11-24 23:43:34.289794+08');
+INSERT INTO public.loans VALUES (25, 17, 18, 'COMPLETED', '2026-11-10 23:43:34.289794+08', '2026-11-10 23:43:34.289794+08', '2026-11-10', '2026-11-17', '2026-11-21', 8, NULL, NULL, 7, 1000.00, '2026-11-24 23:43:34.289794+08', '2026-11-24 23:43:34.289794+08');
+INSERT INTO public.loans VALUES (26, 19, 18, 'COMPLETED', '2026-10-31 23:43:34.289794+08', '2026-10-31 23:43:34.289794+08', '2026-10-31', '2026-11-07', '2026-11-06', 8, NULL, NULL, 7, 1000.00, '2026-11-24 23:43:34.289794+08', '2026-11-24 23:43:34.289794+08');
+INSERT INTO public.loans VALUES (27, 18, 1, 'BORROWED', '2026-11-23 23:43:34.289794+08', '2026-11-23 23:43:34.289794+08', '2026-11-23', '2026-11-30', NULL, 8, NULL, NULL, 7, 1000.00, '2026-11-24 23:43:34.289794+08', '2026-11-24 23:43:34.289794+08');
+INSERT INTO public.loans VALUES (28, 19, 31, 'PENDING', '2026-11-24 23:43:34.289794+08', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 7, 1000.00, '2026-11-24 23:43:34.289794+08', '2026-11-24 23:43:34.289794+08');
 
 
 --
--- TOC entry 5216 (class 0 OID 19176)
--- Dependencies: 232
+-- TOC entry 5218 (class 0 OID 19176)
+-- Dependencies: 234
 -- Data for Name: renewal_requests; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 
 
 --
--- TOC entry 5220 (class 0 OID 19250)
--- Dependencies: 236
+-- TOC entry 5222 (class 0 OID 19250)
+-- Dependencies: 238
 -- Data for Name: reviews; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
+INSERT INTO public.reviews VALUES (1, 1, 16, 30, 5, 'Sangattt menyentuh huhuhu dan saya jadi memiliki pengetahuan terkait sejarah 1998. Alur ceritanya juga rapi dan emosional.', '2026-11-24 23:43:34.289794+08', '2026-11-24 23:43:34.289794+08');
+INSERT INTO public.reviews VALUES (2, 5, 20, 30, 5, 'gilaaa ini tuh salah satu novel terbaik yang ada di katalog!!. Wajib dibaca mahasiswa!', '2026-11-24 23:43:34.289794+08', '2026-11-24 23:43:34.289794+08');
+INSERT INTO public.reviews VALUES (3, 9, 16, 29, 5, 'Karya klasik Pramoedya yang memikat dari awal sampai akhir. Kondisi cetakan sangat rapi.', '2026-11-24 23:43:34.289794+08', '2026-11-24 23:43:34.289794+08');
+INSERT INTO public.reviews VALUES (4, 17, 18, 25, 4, 'Ketegangan ceritanya konsisten dari awal sampai akhir dan terjemahannya enak diikuti.', '2026-11-24 23:43:34.289794+08', '2026-11-24 23:43:34.289794+08');
+INSERT INTO public.reviews VALUES (5, 21, 16, 15, 5, 'Refleksi sejarah dan kemanusiaan yang kuat serta menggugah.', '2026-11-24 23:43:34.289794+08', '2026-11-24 23:43:34.289794+08');
+INSERT INTO public.reviews VALUES (6, 26, 19, 18, 5, 'Kisah persahabatan dan penebusan yang sangat berkesan.', '2026-11-24 23:43:34.289794+08', '2026-11-24 23:43:34.289794+08');
 
 
 --
--- TOC entry 5206 (class 0 OID 19032)
--- Dependencies: 222
+-- TOC entry 5208 (class 0 OID 19032)
+-- Dependencies: 224
 -- Data for Name: sessions; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -632,25 +668,30 @@ INSERT INTO public.sessions VALUES ('988d85c7-cf9f-4eda-af80-541ef2098446', 1, '
 INSERT INTO public.sessions VALUES ('c790f73b-8297-4eb1-9046-32e1d168c09c', 1, 'cfbffcff281a8d3b1bbad6cd935450c8e8702a779747153ac250f23768161159', '2026-11-28 01:12:05.884+08', '2026-11-21 01:13:39.176657+08', '2026-11-21 01:12:05.885227+08');
 INSERT INTO public.sessions VALUES ('d41e82ad-df5a-488c-90f9-78f45217beed', 1, 'f162055cea00b44ead7a2c0882518a069cd50c2d985b08be79bdbdb058fdd5d1', '2026-11-28 02:18:48.493+08', NULL, '2026-11-21 02:18:48.494336+08');
 INSERT INTO public.sessions VALUES ('ce06f123-7bcf-421f-80a2-9dfc97fa5dca', 1, '668eb53ccb526dc859226852e25787ca3b14ce164fe04d6fa579a1fd5d1466e8', '2026-11-28 16:29:46.584+08', '2026-11-21 16:33:39.331874+08', '2026-11-21 16:29:46.588034+08');
-INSERT INTO public.sessions VALUES ('6262fc4f-19d5-4bd5-8a46-d6aafa70327f', 7, 'cab4f1337bc099f09127ddd2880179d6a6f7fa09cee419165755ee5cfbdd78e0', '2026-11-28 16:33:53.955+08', '2026-11-21 16:34:05.828108+08', '2026-11-21 16:33:53.957057+08');
 INSERT INTO public.sessions VALUES ('b49b1dae-b85c-4cf2-9d5e-5668d88060e4', 1, '2bcc16515460d70eae1e0f960ac5199404d4b0f08cfee3a1e93a906aeacb67e4', '2026-11-28 16:34:42.17+08', NULL, '2026-11-21 16:34:42.171419+08');
+INSERT INTO public.sessions VALUES ('5a75c9e2-1e19-4212-8582-c7c35a870120', 8, '6cbf9500eb611eaf4a6ab1017a2ffa8e73651294af5966cbfe277f8a89cf361f', '2026-11-30 13:03:55.415+08', '2026-11-23 13:04:23.859343+08', '2026-11-23 13:03:55.416402+08');
+INSERT INTO public.sessions VALUES ('c2f79c82-9de6-42c5-84b6-57fe267de2ef', 1, '796ec20dfd17674248249f18b8e41c04db7637dea666b6cf899a1dce7e4d09ae', '2026-11-30 13:04:57.74+08', '2026-11-23 13:08:39.771752+08', '2026-11-23 13:04:57.740992+08');
 
 
 --
--- TOC entry 5205 (class 0 OID 19010)
--- Dependencies: 221
+-- TOC entry 5207 (class 0 OID 19010)
+-- Dependencies: 223
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 INSERT INTO public.users VALUES (1, 'Administrator Bo''bo', 'admin@unhas.ac.id', '$2b$10$65MruMyjarCXKCmlEvLdauOW1MvOocGZMy9MsznG.77Y8NTQ/6bfC', 'admin', 'ADM-2026-001', true, '2026-11-18 17:15:40.331895+08', '2026-11-18 17:15:40.331895+08');
-INSERT INTO public.users VALUES (6, 'Salwa Ainiyyah', 'salwa@student.unhas.ac.id', '$2b$12$mzD7DtXTs3KDC3v4Beoije84ZXwZmOkSyNiP32JMCrGan784yfPKa', 'mahasiswa', 'H071251032', true, '2026-11-21 16:32:19.901642+08', '2026-11-21 16:32:19.901642+08');
-INSERT INTO public.users VALUES (7, 'Mahasiswa', 'mahasiswa@student.unhas.ac.id', '$2b$12$vGGavtcEc5/Ghfqj/kVpN.Gq/Op8mmk0Pp2vYyPiKFKIc06DOsRpW', 'mahasiswa', 'H123456789', true, '2026-11-21 16:33:02.071001+08', '2026-11-21 16:33:02.071001+08');
 INSERT INTO public.users VALUES (8, 'pegawai 1', 'pegawai@unhas.ac.id', '$2b$12$./eRMLbd9/bX.0nqS6NPYuUncXruBOmgz1iloHPXzmJWtriwiWHNm', 'pegawai', 'P001', true, '2026-11-21 16:36:28.799307+08', '2026-11-21 16:36:28.799307+08');
+INSERT INTO public.users VALUES (16, 'Aliyah', 'aliyah@student.unhas.ac.id', '$2b$12$mzD7DtXTs3KDC3v4Beoije84ZXwZmOkSyNiP32JMCrGan784yfPKa', 'mahasiswa', 'D121241001', true, '2026-11-24 23:43:34.289794+08', '2026-11-24 23:43:34.289794+08');
+INSERT INTO public.users VALUES (17, 'Aura', 'aura@student.unhas.ac.id', '$2b$12$mzD7DtXTs3KDC3v4Beoije84ZXwZmOkSyNiP32JMCrGan784yfPKa', 'mahasiswa', 'D121241002', true, '2026-11-24 23:43:34.289794+08', '2026-11-24 23:43:34.289794+08');
+INSERT INTO public.users VALUES (18, 'Talista', 'talista@student.unhas.ac.id', '$2b$12$mzD7DtXTs3KDC3v4Beoije84ZXwZmOkSyNiP32JMCrGan784yfPKa', 'mahasiswa', 'D121241003', true, '2026-11-24 23:43:34.289794+08', '2026-11-24 23:43:34.289794+08');
+INSERT INTO public.users VALUES (19, 'Nita', 'nita@student.unhas.ac.id', '$2b$12$mzD7DtXTs3KDC3v4Beoije84ZXwZmOkSyNiP32JMCrGan784yfPKa', 'mahasiswa', 'D121241004', true, '2026-11-24 23:43:34.289794+08', '2026-11-24 23:43:34.289794+08');
+INSERT INTO public.users VALUES (20, 'Addah', 'addah@student.unhas.ac.id', '$2b$12$mzD7DtXTs3KDC3v4Beoije84ZXwZmOkSyNiP32JMCrGan784yfPKa', 'mahasiswa', 'D121241005', true, '2026-11-24 23:43:34.289794+08', '2026-11-24 23:43:34.289794+08');
+INSERT INTO public.users VALUES (21, 'Pisya', 'pisya@student.unhas.ac.id', '$2b$12$mzD7DtXTs3KDC3v4Beoije84ZXwZmOkSyNiP32JMCrGan784yfPKa', 'mahasiswa', 'D121241006', true, '2026-11-24 23:43:34.289794+08', '2026-11-24 23:43:34.289794+08');
 
 
 --
--- TOC entry 5235 (class 0 OID 0)
--- Dependencies: 227
+-- TOC entry 5237 (class 0 OID 0)
+-- Dependencies: 229
 -- Name: announcements_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -658,8 +699,8 @@ SELECT pg_catalog.setval('public.announcements_id_seq', 4, true);
 
 
 --
--- TOC entry 5236 (class 0 OID 0)
--- Dependencies: 225
+-- TOC entry 5238 (class 0 OID 0)
+-- Dependencies: 227
 -- Name: books_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -667,8 +708,8 @@ SELECT pg_catalog.setval('public.books_id_seq', 36, true);
 
 
 --
--- TOC entry 5237 (class 0 OID 0)
--- Dependencies: 223
+-- TOC entry 5239 (class 0 OID 0)
+-- Dependencies: 225
 -- Name: categories_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -676,26 +717,26 @@ SELECT pg_catalog.setval('public.categories_id_seq', 7, true);
 
 
 --
--- TOC entry 5238 (class 0 OID 0)
--- Dependencies: 233
+-- TOC entry 5240 (class 0 OID 0)
+-- Dependencies: 235
 -- Name: fines_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.fines_id_seq', 1, false);
+SELECT pg_catalog.setval('public.fines_id_seq', 2, true);
 
 
 --
--- TOC entry 5239 (class 0 OID 0)
--- Dependencies: 229
+-- TOC entry 5241 (class 0 OID 0)
+-- Dependencies: 231
 -- Name: loans_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.loans_id_seq', 1, false);
+SELECT pg_catalog.setval('public.loans_id_seq', 28, true);
 
 
 --
--- TOC entry 5240 (class 0 OID 0)
--- Dependencies: 231
+-- TOC entry 5242 (class 0 OID 0)
+-- Dependencies: 233
 -- Name: renewal_requests_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -703,25 +744,25 @@ SELECT pg_catalog.setval('public.renewal_requests_id_seq', 1, false);
 
 
 --
--- TOC entry 5241 (class 0 OID 0)
--- Dependencies: 235
+-- TOC entry 5243 (class 0 OID 0)
+-- Dependencies: 237
 -- Name: reviews_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.reviews_id_seq', 1, false);
+SELECT pg_catalog.setval('public.reviews_id_seq', 6, true);
 
 
 --
--- TOC entry 5242 (class 0 OID 0)
--- Dependencies: 220
+-- TOC entry 5244 (class 0 OID 0)
+-- Dependencies: 222
 -- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.users_id_seq', 8, true);
+SELECT pg_catalog.setval('public.users_id_seq', 21, true);
 
 
 --
--- TOC entry 5021 (class 2606 OID 19127)
+-- TOC entry 5023 (class 2606 OID 19127)
 -- Name: announcements announcements_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -730,7 +771,7 @@ ALTER TABLE ONLY public.announcements
 
 
 --
--- TOC entry 5013 (class 2606 OID 19101)
+-- TOC entry 5015 (class 2606 OID 19101)
 -- Name: books books_isbn_key; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -739,7 +780,7 @@ ALTER TABLE ONLY public.books
 
 
 --
--- TOC entry 5015 (class 2606 OID 19099)
+-- TOC entry 5017 (class 2606 OID 19099)
 -- Name: books books_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -748,7 +789,7 @@ ALTER TABLE ONLY public.books
 
 
 --
--- TOC entry 5007 (class 2606 OID 19068)
+-- TOC entry 5009 (class 2606 OID 19068)
 -- Name: categories categories_classification_code_key; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -757,7 +798,7 @@ ALTER TABLE ONLY public.categories
 
 
 --
--- TOC entry 5009 (class 2606 OID 19066)
+-- TOC entry 5011 (class 2606 OID 19066)
 -- Name: categories categories_name_key; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -766,7 +807,7 @@ ALTER TABLE ONLY public.categories
 
 
 --
--- TOC entry 5011 (class 2606 OID 19064)
+-- TOC entry 5013 (class 2606 OID 19064)
 -- Name: categories categories_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -775,7 +816,7 @@ ALTER TABLE ONLY public.categories
 
 
 --
--- TOC entry 5033 (class 2606 OID 19233)
+-- TOC entry 5035 (class 2606 OID 19233)
 -- Name: fines fines_loan_id_key; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -784,7 +825,7 @@ ALTER TABLE ONLY public.fines
 
 
 --
--- TOC entry 5035 (class 2606 OID 19231)
+-- TOC entry 5037 (class 2606 OID 19231)
 -- Name: fines fines_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -793,7 +834,7 @@ ALTER TABLE ONLY public.fines
 
 
 --
--- TOC entry 5028 (class 2606 OID 19154)
+-- TOC entry 5030 (class 2606 OID 19154)
 -- Name: loans loans_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -802,7 +843,7 @@ ALTER TABLE ONLY public.loans
 
 
 --
--- TOC entry 5031 (class 2606 OID 19194)
+-- TOC entry 5033 (class 2606 OID 19194)
 -- Name: renewal_requests renewal_requests_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -811,7 +852,7 @@ ALTER TABLE ONLY public.renewal_requests
 
 
 --
--- TOC entry 5039 (class 2606 OID 19267)
+-- TOC entry 5041 (class 2606 OID 19267)
 -- Name: reviews reviews_loan_id_key; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -820,7 +861,7 @@ ALTER TABLE ONLY public.reviews
 
 
 --
--- TOC entry 5041 (class 2606 OID 19265)
+-- TOC entry 5043 (class 2606 OID 19265)
 -- Name: reviews reviews_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -829,7 +870,7 @@ ALTER TABLE ONLY public.reviews
 
 
 --
--- TOC entry 5003 (class 2606 OID 19042)
+-- TOC entry 5005 (class 2606 OID 19042)
 -- Name: sessions sessions_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -838,7 +879,7 @@ ALTER TABLE ONLY public.sessions
 
 
 --
--- TOC entry 5005 (class 2606 OID 19044)
+-- TOC entry 5007 (class 2606 OID 19044)
 -- Name: sessions sessions_token_hash_key; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -847,7 +888,7 @@ ALTER TABLE ONLY public.sessions
 
 
 --
--- TOC entry 4995 (class 2606 OID 19029)
+-- TOC entry 4997 (class 2606 OID 19029)
 -- Name: users users_email_key; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -856,7 +897,7 @@ ALTER TABLE ONLY public.users
 
 
 --
--- TOC entry 4997 (class 2606 OID 19031)
+-- TOC entry 4999 (class 2606 OID 19031)
 -- Name: users users_identity_number_key; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -865,7 +906,7 @@ ALTER TABLE ONLY public.users
 
 
 --
--- TOC entry 4999 (class 2606 OID 19027)
+-- TOC entry 5001 (class 2606 OID 19027)
 -- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -874,7 +915,7 @@ ALTER TABLE ONLY public.users
 
 
 --
--- TOC entry 5022 (class 1259 OID 19291)
+-- TOC entry 5024 (class 1259 OID 19291)
 -- Name: idx_announcements_status_release; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -882,7 +923,7 @@ CREATE INDEX idx_announcements_status_release ON public.announcements USING btre
 
 
 --
--- TOC entry 5016 (class 1259 OID 19287)
+-- TOC entry 5018 (class 1259 OID 19287)
 -- Name: idx_books_category_id; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -890,7 +931,7 @@ CREATE INDEX idx_books_category_id ON public.books USING btree (category_id);
 
 
 --
--- TOC entry 5017 (class 1259 OID 19290)
+-- TOC entry 5019 (class 1259 OID 19290)
 -- Name: idx_books_is_active; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -898,7 +939,7 @@ CREATE INDEX idx_books_is_active ON public.books USING btree (is_active);
 
 
 --
--- TOC entry 5018 (class 1259 OID 19288)
+-- TOC entry 5020 (class 1259 OID 19288)
 -- Name: idx_books_isbn; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -906,7 +947,7 @@ CREATE INDEX idx_books_isbn ON public.books USING btree (isbn);
 
 
 --
--- TOC entry 5019 (class 1259 OID 19289)
+-- TOC entry 5021 (class 1259 OID 19289)
 -- Name: idx_books_title_trgm; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -914,7 +955,7 @@ CREATE INDEX idx_books_title_trgm ON public.books USING btree (title);
 
 
 --
--- TOC entry 5036 (class 1259 OID 19296)
+-- TOC entry 5038 (class 1259 OID 19296)
 -- Name: idx_fines_student_status; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -922,7 +963,7 @@ CREATE INDEX idx_fines_student_status ON public.fines USING btree (student_id, s
 
 
 --
--- TOC entry 5023 (class 1259 OID 19293)
+-- TOC entry 5025 (class 1259 OID 19293)
 -- Name: idx_loans_book_status; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -930,7 +971,7 @@ CREATE INDEX idx_loans_book_status ON public.loans USING btree (book_id, status)
 
 
 --
--- TOC entry 5024 (class 1259 OID 19295)
+-- TOC entry 5026 (class 1259 OID 19295)
 -- Name: idx_loans_due_date; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -938,7 +979,7 @@ CREATE INDEX idx_loans_due_date ON public.loans USING btree (due_date);
 
 
 --
--- TOC entry 5025 (class 1259 OID 19294)
+-- TOC entry 5027 (class 1259 OID 19294)
 -- Name: idx_loans_status; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -946,7 +987,7 @@ CREATE INDEX idx_loans_status ON public.loans USING btree (status);
 
 
 --
--- TOC entry 5026 (class 1259 OID 19292)
+-- TOC entry 5028 (class 1259 OID 19292)
 -- Name: idx_loans_student_status; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -954,7 +995,7 @@ CREATE INDEX idx_loans_student_status ON public.loans USING btree (student_id, s
 
 
 --
--- TOC entry 5029 (class 1259 OID 19298)
+-- TOC entry 5031 (class 1259 OID 19298)
 -- Name: idx_renewal_loan_status; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -962,7 +1003,7 @@ CREATE INDEX idx_renewal_loan_status ON public.renewal_requests USING btree (loa
 
 
 --
--- TOC entry 5037 (class 1259 OID 19297)
+-- TOC entry 5039 (class 1259 OID 19297)
 -- Name: idx_reviews_book_id; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -970,7 +1011,7 @@ CREATE INDEX idx_reviews_book_id ON public.reviews USING btree (book_id);
 
 
 --
--- TOC entry 5000 (class 1259 OID 19286)
+-- TOC entry 5002 (class 1259 OID 19286)
 -- Name: idx_sessions_expires_at; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -978,7 +1019,7 @@ CREATE INDEX idx_sessions_expires_at ON public.sessions USING btree (expires_at)
 
 
 --
--- TOC entry 5001 (class 1259 OID 19285)
+-- TOC entry 5003 (class 1259 OID 19285)
 -- Name: idx_sessions_user_id; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -986,7 +1027,7 @@ CREATE INDEX idx_sessions_user_id ON public.sessions USING btree (user_id);
 
 
 --
--- TOC entry 4992 (class 1259 OID 19283)
+-- TOC entry 4994 (class 1259 OID 19283)
 -- Name: idx_users_email; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -994,7 +1035,7 @@ CREATE INDEX idx_users_email ON public.users USING btree (email);
 
 
 --
--- TOC entry 4993 (class 1259 OID 19284)
+-- TOC entry 4995 (class 1259 OID 19284)
 -- Name: idx_users_role; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -1002,7 +1043,7 @@ CREATE INDEX idx_users_role ON public.users USING btree (role);
 
 
 --
--- TOC entry 5044 (class 2606 OID 19128)
+-- TOC entry 5046 (class 2606 OID 19128)
 -- Name: announcements announcements_created_by_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1011,7 +1052,7 @@ ALTER TABLE ONLY public.announcements
 
 
 --
--- TOC entry 5043 (class 2606 OID 19102)
+-- TOC entry 5045 (class 2606 OID 19102)
 -- Name: books books_category_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1020,7 +1061,7 @@ ALTER TABLE ONLY public.books
 
 
 --
--- TOC entry 5051 (class 2606 OID 19234)
+-- TOC entry 5053 (class 2606 OID 19234)
 -- Name: fines fines_loan_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1029,7 +1070,7 @@ ALTER TABLE ONLY public.fines
 
 
 --
--- TOC entry 5052 (class 2606 OID 19244)
+-- TOC entry 5054 (class 2606 OID 19244)
 -- Name: fines fines_paid_by_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1038,7 +1079,7 @@ ALTER TABLE ONLY public.fines
 
 
 --
--- TOC entry 5053 (class 2606 OID 19239)
+-- TOC entry 5055 (class 2606 OID 19239)
 -- Name: fines fines_student_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1047,7 +1088,7 @@ ALTER TABLE ONLY public.fines
 
 
 --
--- TOC entry 5045 (class 2606 OID 19165)
+-- TOC entry 5047 (class 2606 OID 19165)
 -- Name: loans loans_approved_by_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1056,7 +1097,7 @@ ALTER TABLE ONLY public.loans
 
 
 --
--- TOC entry 5046 (class 2606 OID 19160)
+-- TOC entry 5048 (class 2606 OID 19160)
 -- Name: loans loans_book_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1065,7 +1106,7 @@ ALTER TABLE ONLY public.loans
 
 
 --
--- TOC entry 5047 (class 2606 OID 19170)
+-- TOC entry 5049 (class 2606 OID 19170)
 -- Name: loans loans_rejected_by_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1074,7 +1115,7 @@ ALTER TABLE ONLY public.loans
 
 
 --
--- TOC entry 5048 (class 2606 OID 19155)
+-- TOC entry 5050 (class 2606 OID 19155)
 -- Name: loans loans_student_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1083,7 +1124,7 @@ ALTER TABLE ONLY public.loans
 
 
 --
--- TOC entry 5049 (class 2606 OID 19195)
+-- TOC entry 5051 (class 2606 OID 19195)
 -- Name: renewal_requests renewal_requests_loan_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1092,7 +1133,7 @@ ALTER TABLE ONLY public.renewal_requests
 
 
 --
--- TOC entry 5050 (class 2606 OID 19200)
+-- TOC entry 5052 (class 2606 OID 19200)
 -- Name: renewal_requests renewal_requests_reviewed_by_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1101,7 +1142,7 @@ ALTER TABLE ONLY public.renewal_requests
 
 
 --
--- TOC entry 5054 (class 2606 OID 19278)
+-- TOC entry 5056 (class 2606 OID 19278)
 -- Name: reviews reviews_book_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1110,7 +1151,7 @@ ALTER TABLE ONLY public.reviews
 
 
 --
--- TOC entry 5055 (class 2606 OID 19268)
+-- TOC entry 5057 (class 2606 OID 19268)
 -- Name: reviews reviews_loan_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1119,7 +1160,7 @@ ALTER TABLE ONLY public.reviews
 
 
 --
--- TOC entry 5056 (class 2606 OID 19273)
+-- TOC entry 5058 (class 2606 OID 19273)
 -- Name: reviews reviews_student_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1128,7 +1169,7 @@ ALTER TABLE ONLY public.reviews
 
 
 --
--- TOC entry 5042 (class 2606 OID 19045)
+-- TOC entry 5044 (class 2606 OID 19045)
 -- Name: sessions sessions_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1136,11 +1177,11 @@ ALTER TABLE ONLY public.sessions
     ADD CONSTRAINT sessions_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id) ON DELETE CASCADE;
 
 
--- Completed on 2026-11-21 16:58:48
+-- Completed on 2026-11-24 23:51:07
 
 --
 -- PostgreSQL database dump complete
 --
 
-\unrestrict bejZE4Ny9OAKlXaEQ1nbumlmULMIfmBMYJX79IidOM9I181rlY6mQTd6ERwaZdN
+\unrestrict KrQLfqd6bEW7CGvS09fkuS6v6htaFGUwYtfM7dSqr10Ky6PqT9xCv0wLWpAJwAq
 
