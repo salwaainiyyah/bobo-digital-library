@@ -11,13 +11,65 @@ const FALLBACK_THEMES = [
   'from-[#79543D] to-[#563928] text-[#FAF6EE]',
 ];
 
+// Palet warna cadangan berdasarkan urutan jika ada buku baru masuk Top 5
+const BOOK_BINDINGS = [
+  {
+    // Biru tua
+    shellBg: 'from-[#244866] via-[#2E5A7E] to-[#1A354D]',
+    ribbonBg: 'from-[#E2B15B] to-[#C6923B]',
+  },
+  {
+    // Hijau sage
+    shellBg: 'from-[#6C7852] via-[#7D8A60] to-[#556040]',
+    ribbonBg: 'from-[#E2B15B] to-[#C6923B]',
+  },
+  {
+    // Hitam arang
+    shellBg: 'from-[#262423] via-[#34312F] to-[#191817]',
+    ribbonBg: 'from-[#E2B15B] to-[#C6923B]',
+  },
+  {
+    // Cokelat kulit klasik
+    shellBg: 'from-[#6F4C37] via-[#79543D] to-[#5A3C2A]',
+    ribbonBg: 'from-[#C96858] to-[#A84D3E]',
+  },
+  {
+    // Cokelat okre hangat
+    shellBg: 'from-[#966A32] via-[#A9793B] to-[#7A5424]',
+    ribbonBg: 'from-[#C96858] to-[#A84D3E]',
+  },
+];
+
+// Pencocokan warna sampul berdasarkan judul buku agar selalu selaras dengan ilustrasi sampulnya
+function getBookBinding(book, index) {
+  const title = (book?.title || '').toLowerCase();
+
+  if (title.includes('laut bercerita')) {
+    return BOOK_BINDINGS[0]; // Biru tua
+  }
+  if (title.includes('bumi manusia')) {
+    return BOOK_BINDINGS[1]; // Hijau sage
+  }
+  if (title.includes('hunger games')) {
+    return BOOK_BINDINGS[2]; // Hitam
+  }
+  if (title.includes('dari dalam kubur')) {
+    return BOOK_BINDINGS[3]; // Cokelat
+  }
+  if (title.includes('kite runner')) {
+    return BOOK_BINDINGS[4]; // Cokelat okre hangat
+  }
+
+  return BOOK_BINDINGS[index % BOOK_BINDINGS.length];
+}
+
 function CarouselCover({ book, index }) {
   const [imgError, setImgError] = useState(false);
   const theme = FALLBACK_THEMES[index % FALLBACK_THEMES.length];
 
   if (!book.cover_url || imgError) {
     return (
-      <div className={`w-full h-full bg-gradient-to-br ${theme} p-3 pl-3.5 flex flex-col justify-between select-none`}>
+      <div className={`w-full h-full bg-gradient-to-br ${theme} p-3 pl-4 flex flex-col justify-between select-none`}>
         <div className="border border-white/25 rounded-xs h-full p-2 flex flex-col justify-between text-left">
           <div className="flex items-center justify-between text-[8px] font-bold uppercase tracking-[0.15em] opacity-80">
             <span>Bo&apos;bo</span>
@@ -42,6 +94,88 @@ function CarouselCover({ book, index }) {
       onError={() => setImgError(true)}
       className="w-full h-full object-cover select-none"
     />
+  );
+}
+
+// Komponen Buku Hardcover 3D dengan Tumpukan Halaman & Pita Pembatas
+function HardcoverBook3D({ book, index, isCenter }) {
+  const binding = getBookBinding(book, index);
+
+  return (
+    <div
+      className={`relative w-full select-none transition-transform duration-300 ${
+        isCenter ? 'group-hover:scale-[1.02]' : ''
+      }`}
+    >
+      {/* Bayangan lembut di belakang buku */}
+      <div
+        aria-hidden="true"
+        className={`pointer-events-none absolute inset-x-2 -bottom-1 top-2 rounded-2xl transition-opacity duration-300 ${
+          isCenter
+            ? 'shadow-[0_22px_34px_-8px_rgba(90,60,42,0.42)]'
+            : 'shadow-[0_14px_22px_-8px_rgba(90,60,42,0.24)]'
+        }`}
+      />
+
+      {/* Bagian Sampul Depan & Punggung Kiri */}
+      <div
+        className={`relative aspect-[3/4] w-full overflow-hidden rounded-tl-2xl rounded-tr-xl rounded-bl-xs bg-gradient-to-r ${binding.shellBg} pl-[5px] pt-[2px] pr-[2px]`}
+      >
+        <div className="relative h-full w-full overflow-hidden rounded-tl-xl rounded-tr-[10px] bg-[#EFE2CE]">
+          <CarouselCover book={book} index={index} />
+
+          {/* Efek lekukan engsel & pencahayaan 3D punggung buku di sisi kiri */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-y-0 left-0 w-3.5 bg-gradient-to-r from-black/30 via-white/20 to-transparent"
+          />
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-y-0 left-[7px] w-px bg-black/20"
+          />
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-y-0 left-[8px] w-px bg-white/30"
+          />
+
+          {/* Kilau halus tepi sampul */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 rounded-tl-xl rounded-tr-[10px] ring-1 ring-inset ring-black/10"
+          />
+        </div>
+      </div>
+
+      {/* Bagian Bawah: Sampul Belakang Melengkung & Tumpukan Halaman Kertas */}
+      <div
+        className={`relative -mt-[1px] rounded-bl-2xl rounded-br-xl bg-gradient-to-r ${binding.shellBg} pl-[5px] pr-[2px] pt-[1px] pb-[4px]`}
+      >
+        {/* Garis jahitan tipis khas sampul hardcover Bo'bo */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-2 bottom-[1.5px] h-px border-b border-dashed border-[#EBCFA9]/35"
+        />
+
+        {/* Blok Halaman Kertas Melengkung di Sisi Kiri */}
+        <div className="relative h-[12px] sm:h-[14px] w-full rounded-l-full rounded-r-[4px] border-y border-l border-[#C5A47C] bg-gradient-to-b from-[#E7D6BC] via-[#FDF9F3] to-[#E5CFAF] shadow-inner overflow-hidden">
+          <div
+            aria-hidden="true"
+            className="h-full w-full bg-[repeating-linear-gradient(to_bottom,transparent_0px,transparent_2px,rgba(121,84,61,0.14)_2px,rgba(121,84,61,0.14)_3px)]"
+          />
+        </div>
+
+        {/* Pita Pembatas Kecil di Sisi Kanan Bawah */}
+        <div
+          aria-hidden="true"
+          style={{
+            clipPath: 'polygon(0 0, 100% 0, 100% 100%, 50% 78%, 0 100%)',
+          }}
+          className={`pointer-events-none absolute right-4 sm:right-5 top-[2px] z-20 h-[19px] sm:h-[22px] w-3 sm:w-3.5 bg-gradient-to-b ${binding.ribbonBg} shadow-xs`}
+        >
+          <div className="mx-auto h-full w-px border-l border-dashed border-white/35" />
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -209,7 +343,7 @@ export default function FeaturedCarousel({ books = [] }) {
   };
 
   const isCompact = stageWidth < 640;
-  const baseSpacing = isCompact ? 132 : Math.min(198, stageWidth * 0.195);
+  const baseSpacing = isCompact ? 136 : Math.min(204, stageWidth * 0.2);
 
   return (
     <div className="w-full select-none">
@@ -221,7 +355,7 @@ export default function FeaturedCarousel({ books = [] }) {
         onPointerUp={finishDrag}
         onPointerCancel={finishDrag}
         onPointerLeave={finishDrag}
-        className={`relative mx-auto h-[340px] sm:h-[395px] max-w-5xl overflow-visible touch-pan-y ${
+        className={`relative mx-auto h-[335px] sm:h-[385px] max-w-5xl overflow-visible touch-pan-y ${
           isDragging ? 'cursor-grabbing' : 'cursor-grab'
         }`}
       >
@@ -270,7 +404,7 @@ export default function FeaturedCarousel({ books = [] }) {
           </button>
         )}
 
-        {/* Barisan 5 Buku Gantung yang Bisa Digeser */}
+        {/* Barisan 5 Buku Hardcover 3D Gantung */}
         <div className="relative w-full h-full">
           {topFiveBooks.map((book, idx) => {
             const rel = getRelativeOffset(idx);
@@ -281,13 +415,10 @@ export default function FeaturedCarousel({ books = [] }) {
             const isCenter = rel === 0;
             const translateX = rel * baseSpacing + dragOffset * 0.7;
             const translateY = getRopeDropY(translateX);
-            const scale = isCenter ? 1 : absRel === 1 ? 0.86 : 0.74;
+            const scale = isCenter ? 1 : absRel === 1 ? 0.85 : 0.73;
             const tilt = isCenter ? 0 : rel < 0 ? -1.8 : 1.8;
-            const opacity = isCenter ? 1 : absRel === 1 ? 0.92 : 0.72;
+            const opacity = isCenter ? 1 : absRel === 1 ? 0.94 : 0.76;
             const zIndex = 30 - absRel * 5;
-
-            const itemBorrowCount =
-              book.borrow_count ?? book.total_borrows ?? book.loan_count ?? 0;
 
             return (
               <div
@@ -302,7 +433,7 @@ export default function FeaturedCarousel({ books = [] }) {
                   opacity,
                   zIndex,
                 }}
-                className={`absolute top-0 left-1/2 -ml-[80px] sm:-ml-[96px] w-[160px] sm:w-[192px] origin-top
+                className={`absolute top-0 left-1/2 -ml-[76px] sm:-ml-[92px] w-[152px] sm:w-[184px] origin-top
                             ${
                               isDragging
                                 ? 'transition-none'
@@ -320,34 +451,12 @@ export default function FeaturedCarousel({ books = [] }) {
                     onClick={(e) => {
                       if (hasDraggedRef.current) e.preventDefault();
                     }}
-                    className="block relative w-full aspect-[3/4.2] rounded-r-xl rounded-l-sm overflow-hidden bg-[#EFE2CE]
-                               border border-[#929D75] ring-3 ring-[#FFFDF9]/95
-                               shadow-[0_22px_36px_-10px_rgba(92,59,40,0.40)]
-                               transition-transform duration-300 hover:scale-[1.02]"
+                    className="group block focus:outline-hidden"
                   >
-                    <CarouselCover book={book} index={idx} />
-                    <div
-                      aria-hidden="true"
-                      className="pointer-events-none absolute inset-y-0 left-0 w-3 bg-gradient-to-r from-black/25 via-white/15 to-transparent"
-                    />
-                    <div className="absolute bottom-2 inset-x-2 z-20 flex items-center justify-between px-2.5 py-1 rounded-full bg-[#FFFCF7]/92 backdrop-blur-md border border-[#EBCFA9]/80 text-[10px] font-semibold text-[#79543D]">
-                      <span className="text-[#C96858]">🔥 {itemBorrowCount}x</span>
-                      <span className="text-[#855B10] font-bold">
-                        ★ {book.avg_rating > 0 ? book.avg_rating : 'Baru'}
-                      </span>
-                    </div>
+                    <HardcoverBook3D book={book} index={idx} isCenter={true} />
                   </Link>
                 ) : (
-                  <div
-                    className="relative w-full aspect-[3/4.2] rounded-r-xl rounded-l-sm overflow-hidden bg-[#EFE2CE]
-                               border border-[#79543D]/15 shadow-[0_14px_24px_-8px_rgba(92,59,40,0.24)]"
-                  >
-                    <CarouselCover book={book} index={idx} />
-                    <div
-                      aria-hidden="true"
-                      className="pointer-events-none absolute inset-y-0 left-0 w-2.5 bg-gradient-to-r from-black/20 to-transparent"
-                    />
-                  </div>
+                  <HardcoverBook3D book={book} index={idx} isCenter={false} />
                 )}
               </div>
             );
@@ -370,7 +479,7 @@ export default function FeaturedCarousel({ books = [] }) {
         )}
       </div>
 
-      {/* Informasi Buku Aktif di Bawah Tali (Tanpa Bar Aktif di Bawah) */}
+      {/* Informasi Buku Aktif di Bawah Tali */}
       <div className="mt-2 text-center max-w-xl mx-auto px-4 space-y-2.5">
         {activeBook.category_name && (
           <span className="inline-block px-3.5 py-1 rounded-full bg-[#FFFDF9]/85 border border-[#EBCFA9]/70 text-[#68774E] text-[10px] font-bold uppercase tracking-[0.16em]">
@@ -386,8 +495,11 @@ export default function FeaturedCarousel({ books = [] }) {
           <p>
             oleh <strong className="font-semibold text-[#79543D]">{activeBook.author}</strong>
           </p>
-          <p className="text-[11px] text-[#79543D]/60">
-            Peringkat #{activeIndex + 1} Terpopuler • {borrowCount}x dipinjam
+          <p className="text-[11px] text-[#79543D]/65">
+            Peringkat #{activeIndex + 1} Terpopuler • {borrowCount}x dipinjam •{' '}
+            <span className="font-semibold text-[#855B10]">
+              ★ {activeBook.avg_rating > 0 ? activeBook.avg_rating : 'Baru'}
+            </span>
             {activeBook.publication_year ? ` • Terbit ${activeBook.publication_year}` : ''}
           </p>
         </div>
