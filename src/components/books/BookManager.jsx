@@ -569,7 +569,7 @@ export default function BookManager({ books, categories }) {
                     </span>
                   </div>
 
-                  <div className="flex items-start gap-4">
+                  <div className="flex items-center gap-4">
                     {/* Kotak Pratinjau Sampul */}
                     <div className="w-16 h-22 shrink-0 overflow-hidden rounded-xl border-2 border-[#DFC7A2] bg-[#FFFDF9] flex items-center justify-center shadow-2xs">
                       {coverPreview ? (
@@ -614,14 +614,9 @@ export default function BookManager({ books, categories }) {
                         )}
                       </div>
 
-                      {coverFile ? (
+                      {coverFile && (
                         <p className="text-[11px] text-[#556B43] font-semibold truncate">
                           Berkas terpilih: {coverFile.name} ({(coverFile.size / 1024).toFixed(0)} KB)
-                        </p>
-                      ) : (
-                        <p className="text-[11px] text-[#6E5038]/75 leading-relaxed">
-                          Berkas akan otomatis disimpan ke{' '}
-                          <code className="font-mono text-[#5A3E28]">/uploads/books/</code> agar tetap muncul saat proyek dijalankan di komputer lain.
                         </p>
                       )}
                     </div>
