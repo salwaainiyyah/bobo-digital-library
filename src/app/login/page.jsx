@@ -130,33 +130,6 @@ export default function LoginPage() {
             </div>
           </div>
         </div>
-
-        {/* Demo Credentials Helper (Membantu Penguji/Penilai) */}
-        {/* Kotak Akun Demo Praktikum */}
-        <div className="mt-6 rounded-2xl border border-[#DFC39D] bg-[#F3E3C8]/80 p-4 sm:p-5 text-xs text-[#79543D]">
-          <p className="mb-3 font-bold text-[#79543D]">Akun Demo Praktikum:</p>
-
-          {/* Kolom ke-3 dibuat lebih lebar (1.45fr) mengikuti panjang email mahasiswa */}
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-[1fr_1.1fr_1.45fr] sm:gap-2">
-            <div className="min-w-0">
-              <p className="font-bold">Admin:</p>
-              <p className="break-all text-[11px] text-[#79543D]/85">admin@unhas.ac.id</p>
-              <p className="text-[11px] text-[#79543D]/65">admin123</p>
-            </div>
-
-            <div className="min-w-0">
-              <p className="font-bold">Pegawai:</p>
-              <p className="break-all text-[11px] text-[#79543D]/85">pegawai@unhas.ac.id</p>
-              <p className="text-[11px] text-[#79543D]/65">pegawai123</p>
-            </div>
-
-            <div className="min-w-0">
-              <p className="font-bold">Mahasiswa:</p>
-              <p className="break-all text-[11px] text-[#79543D]/85">mahasiswa@student.unhas.ac.id</p>
-              <p className="text-[11px] text-[#79543D]/65">mahasiswa123</p>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   );
