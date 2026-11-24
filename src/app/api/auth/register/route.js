@@ -12,7 +12,7 @@ export async function POST(request) {
     // Validasi Keberadaan Field
     if (!fullName || !email || !password || !identityNumber) {
       return NextResponse.json(
-        { message: 'Semua field (Nama Lengkap, Email Kampus, NIM, dan Password) wajib diisi.' },
+        { message: 'Semua field (Nama Lengkap, Alamat Email, NIM, dan Password) wajib diisi.' },
         { status: 400 }
       );
     }
@@ -29,6 +29,17 @@ export async function POST(request) {
       );
     }
 
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+    if (!emailPattern.test(cleanEmail)) {
+      return NextResponse.json(
+        {
+          message:
+            'Format email belum lengkap. Pastikan penulisan alamat email sudah benar (contoh: nama@student.unhas.ac.id atau nama@gmail.com).',
+        },
+        { status: 400 }
+      );
+    }
+
     if (password.length < 6) {
       return NextResponse.json(
         { message: 'Password minimal 6 karakter demi keamanan akun Anda.' },
@@ -36,10 +47,13 @@ export async function POST(request) {
       );
     }
 
-    // Validasi Domain Email Kampus
+    // Validasi Domain Email
     if (!isAllowedEmailDomain(cleanEmail)) {
       return NextResponse.json(
-        { message: 'Registrasi mahasiswa wajib menggunakan email resmi kampus (contoh: @student.unhas.ac.id).' },
+        {
+          message:
+            'Pendaftaran mahasiswa wajib menggunakan email @student.unhas.ac.id atau @gmail.com.',
+        },
         { status: 400 }
       );
     }

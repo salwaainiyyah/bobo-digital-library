@@ -15,13 +15,35 @@ export default function LoginPage() {
   async function handleSubmit(e) {
     e.preventDefault();
     setErrorMessage('');
+
+    const trimmedEmail = email.trim();
+
+    if (!trimmedEmail) {
+      setErrorMessage('Alamat email wajib diisi.');
+      return;
+    }
+
+    // Validasi kelengkapan email
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+    if (!emailPattern.test(trimmedEmail)) {
+      setErrorMessage(
+        'Format email belum lengkap. Pastikan penulisan alamat email sudah benar (contoh: nama@student.unhas.ac.id atau nama@gmail.com).'
+      );
+      return;
+    }
+
+    if (!password) {
+      setErrorMessage('Password wajib diisi.');
+      return;
+    }
+
     setIsLoading(true);
 
     try {
       const res = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email: trimmedEmail, password }),
       });
 
       const data = await res.json();
@@ -67,7 +89,7 @@ export default function LoginPage() {
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white/80 backdrop-blur-sm py-8 px-6 sm:px-10 shadow-sm rounded-3xl border border-[#EBCFA9]">
-          <form className="space-y-5" onSubmit={handleSubmit}>
+          <form className="space-y-5" onSubmit={handleSubmit} noValidate>
             {errorMessage && (
               <div className="p-3.5 rounded-2xl bg-[#C96858]/15 border border-[#C96858]/30 text-xs text-[#8A3729] font-medium leading-relaxed">
                 {errorMessage}
@@ -83,7 +105,7 @@ export default function LoginPage() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="nama@unhas.ac.id / nama@student.unhas.ac.id"
+                placeholder="nama@student.unhas.ac.id / nama@gmail.com"
                 className="w-full px-4 py-2.5 rounded-2xl border border-[#EBCFA9] bg-white text-sm text-[#79543D] placeholder:text-[#79543D]/40 focus:outline-hidden focus:ring-2 focus:ring-[#929D75] transition-all"
               />
             </div>

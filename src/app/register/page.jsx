@@ -22,6 +22,32 @@ export default function RegisterPage() {
     setErrorMessage('');
     setSuccessMessage('');
 
+    const trimmedName = fullName.trim();
+    const trimmedIdentity = identityNumber.trim();
+    const trimmedEmail = email.trim().toLowerCase();
+
+    if (!trimmedName || !trimmedIdentity || !trimmedEmail || !password || !confirmPassword) {
+      setErrorMessage('Semua kolom pendaftaran wajib diisi.');
+      return;
+    }
+
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+    if (!emailPattern.test(trimmedEmail)) {
+      setErrorMessage(
+        'Format email belum lengkap. Pastikan penulisan alamat email sudah benar (contoh: nama@student.unhas.ac.id atau nama@gmail.com).'
+      );
+      return;
+    }
+
+    const allowedDomains = ['student.unhas.ac.id', 'gmail.com'];
+    const emailDomain = trimmedEmail.split('@')[1];
+    if (!allowedDomains.includes(emailDomain)) {
+      setErrorMessage(
+        'Pendaftaran mahasiswa wajib menggunakan email @student.unhas.ac.id atau @gmail.com.'
+      );
+      return;
+    }
+
     if (password !== confirmPassword) {
       setErrorMessage('Konfirmasi password tidak cocok dengan password yang dimasukkan.');
       return;
@@ -39,9 +65,9 @@ export default function RegisterPage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          fullName,
-          email,
-          identityNumber,
+          fullName: trimmedName,
+          email: trimmedEmail,
+          identityNumber: trimmedIdentity,
           password,
         }),
       });
@@ -90,7 +116,7 @@ export default function RegisterPage() {
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-lg">
         <div className="bg-white/80 backdrop-blur-sm py-8 px-6 sm:px-10 shadow-sm rounded-3xl border border-[#EBCFA9]">
-          <form className="space-y-4" onSubmit={handleSubmit}>
+          <form className="space-y-4" onSubmit={handleSubmit} noValidate>
             {errorMessage && (
               <div className="p-3.5 rounded-2xl bg-[#C96858]/15 border border-[#C96858]/30 text-xs text-[#8A3729] font-medium leading-relaxed">
                 {errorMessage}
@@ -134,7 +160,7 @@ export default function RegisterPage() {
 
               <div>
                 <label className="block text-xs font-semibold text-[#79543D] uppercase tracking-wider mb-1">
-                  Email Kampus
+                  Alamat Email
                 </label>
                 <input
                   type="email"
@@ -144,6 +170,11 @@ export default function RegisterPage() {
                   placeholder="nama@student.unhas.ac.id"
                   className="w-full px-4 py-2.5 rounded-2xl border border-[#EBCFA9] bg-white text-sm text-[#79543D] placeholder:text-[#79543D]/40 focus:outline-hidden focus:ring-2 focus:ring-[#929D75] transition-all"
                 />
+                <p className="mt-1.5 text-[11px] text-[#79543D]/70 leading-snug">
+                  Pendaftaran mahasiswa wajib menggunakan email{' '}
+                  <span className="font-semibold text-[#79543D]">@student.unhas.ac.id</span> atau{' '}
+                  <span className="font-semibold text-[#79543D]">@gmail.com</span>.
+                </p>
               </div>
             </div>
 
