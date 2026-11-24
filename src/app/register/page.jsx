@@ -114,21 +114,22 @@ export default function RegisterPage() {
         </h2>
       </div>
 
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-lg">
+      <div className="mt-6 sm:mx-auto sm:w-full sm:max-w-lg">
+        {/* Notifikasi berada di luar card agar susunan form tetap rapi */}
+        {errorMessage && (
+          <div className="mb-4 p-3.5 rounded-2xl bg-[#FDF2F0] border border-[#C96858]/40 shadow-xs text-xs text-[#8A3729] font-medium leading-relaxed text-center">
+            {errorMessage}
+          </div>
+        )}
+
+        {successMessage && (
+          <div className="mb-4 p-3.5 rounded-2xl bg-[#F2F5EC] border border-[#929D75]/50 shadow-xs text-xs text-[#54603B] font-medium leading-relaxed text-center">
+            {successMessage}
+          </div>
+        )}
+
         <div className="bg-white/80 backdrop-blur-sm py-8 px-6 sm:px-10 shadow-sm rounded-3xl border border-[#EBCFA9]">
-          <form className="space-y-4" onSubmit={handleSubmit} noValidate>
-            {errorMessage && (
-              <div className="p-3.5 rounded-2xl bg-[#C96858]/15 border border-[#C96858]/30 text-xs text-[#8A3729] font-medium leading-relaxed">
-                {errorMessage}
-              </div>
-            )}
-
-            {successMessage && (
-              <div className="p-3.5 rounded-2xl bg-[#929D75]/20 border border-[#929D75]/40 text-xs text-[#54603B] font-medium leading-relaxed">
-                {successMessage}
-              </div>
-            )}
-
+          <form className="space-y-4" onSubmit={handleSubmit} noValidate autoComplete="off">
             <div>
               <label className="block text-xs font-semibold text-[#79543D] uppercase tracking-wider mb-1">
                 Nama Lengkap
@@ -143,7 +144,7 @@ export default function RegisterPage() {
               />
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-end">
               <div>
                 <label className="block text-xs font-semibold text-[#79543D] uppercase tracking-wider mb-1">
                   Nomor Induk Mahasiswa (NIM)
@@ -165,20 +166,16 @@ export default function RegisterPage() {
                 <input
                   type="email"
                   required
+                  autoComplete="off"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="nama@student.unhas.ac.id"
                   className="w-full px-4 py-2.5 rounded-2xl border border-[#EBCFA9] bg-white text-sm text-[#79543D] placeholder:text-[#79543D]/40 focus:outline-hidden focus:ring-2 focus:ring-[#929D75] transition-all"
                 />
-                <p className="mt-1.5 text-[11px] text-[#79543D]/70 leading-snug">
-                  Pendaftaran mahasiswa wajib menggunakan email{' '}
-                  <span className="font-semibold text-[#79543D]">@student.unhas.ac.id</span> atau{' '}
-                  <span className="font-semibold text-[#79543D]">@gmail.com</span>.
-                </p>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-end">
               <div>
                 <label className="block text-xs font-semibold text-[#79543D] uppercase tracking-wider mb-1">
                   Password
@@ -186,6 +183,7 @@ export default function RegisterPage() {
                 <input
                   type="password"
                   required
+                  autoComplete="new-password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Minimal 6 karakter"
@@ -200,6 +198,7 @@ export default function RegisterPage() {
                 <input
                   type="password"
                   required
+                  autoComplete="new-password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   placeholder="Ketik ulang password"
