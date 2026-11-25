@@ -16,13 +16,11 @@ export default function UserManager({ initialUsers, currentAdminId }) {
   const [isLoading, setIsLoading] = useState(false);
   const [feedback, setFeedback] = useState(null);
 
-  // Modal Konfirmasi Hapus Pengguna (Pengganti window.confirm)
   const [deleteModal, setDeleteModal] = useState({
     isOpen: false,
     targetUser: null,
   });
 
-  // Modal Peringatan Akun Sendiri (Pengganti window.alert)
   const [selfNoticeOpen, setSelfNoticeOpen] = useState(false);
 
   const [form, setForm] = useState({
@@ -37,6 +35,14 @@ export default function UserManager({ initialUsers, currentAdminId }) {
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  useEffect(() => {
+    if (!feedback) return;
+    const timer = setTimeout(() => {
+      setFeedback(null);
+    }, 4500);
+    return () => clearTimeout(timer);
+  }, [feedback]);
 
   function openCreateModal() {
     setEditingUser(null);
@@ -134,39 +140,46 @@ export default function UserManager({ initialUsers, currentAdminId }) {
     return matchRole && matchSearch;
   });
 
+  const isEditingAdmin = editingUser?.role === 'admin';
+  const isEditingSelf = editingUser?.id === currentAdminId;
+
   return (
     <div className="space-y-6">
-      {/* Feedback Banner */}
-      {feedback && (
-        <div
-          className={`rounded-[22px] border-2 px-5 py-3.5 text-xs sm:text-sm font-semibold flex items-center justify-between gap-3 shadow-2xs ${
-            feedback.type === 'success'
-              ? 'bg-[#EEF4E6] border-[#929D75] text-[#425732]'
-              : 'bg-[#FDF1EE] border-[#C96858] text-[#8A3729]'
-          }`}
-        >
-          <div className="flex items-center gap-2.5">
-            <span
-              className={`h-2.5 w-2.5 shrink-0 rounded-full ${
-                feedback.type === 'success' ? 'bg-[#6F8859]' : 'bg-[#C96858]'
+      {mounted &&
+        feedback &&
+        createPortal(
+          <div className="fixed top-5 right-5 z-[60] w-[calc(100%-2.5rem)] max-w-md animate-fade-in-down">
+            <div
+              role="alert"
+              className={`rounded-[22px] border-2 px-4 py-3.5 text-xs sm:text-sm font-semibold flex items-center justify-between gap-3 shadow-[0_12px_28px_rgba(46,33,22,0.22)] ${
+                feedback.type === 'success'
+                  ? 'bg-[#EEF4E6] border-[#929D75] text-[#425732]'
+                  : 'bg-[#FDF1EE] border-[#C96858] text-[#8A3729]'
               }`}
-            />
-            <span>{feedback.text}</span>
-          </div>
-          <button
-            type="button"
-            onClick={() => setFeedback(null)}
-            aria-label="Tutup pemberitahuan"
-            className="rounded-lg p-1 hover:bg-black/5 transition-colors cursor-pointer"
-          >
-            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        </div>
-      )}
+            >
+              <div className="flex items-center gap-2.5">
+                <span
+                  className={`h-2.5 w-2.5 shrink-0 rounded-full ${
+                    feedback.type === 'success' ? 'bg-[#6F8859]' : 'bg-[#C96858]'
+                  }`}
+                />
+                <span>{feedback.text}</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setFeedback(null)}
+                aria-label="Tutup pemberitahuan"
+                className="rounded-lg p-1 hover:bg-black/5 transition-colors cursor-pointer shrink-0"
+              >
+                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+          </div>,
+          document.body
+        )}
 
-      {/* Toolbar Filter & Tambah User */}
       <div className="rounded-[26px] border-2 border-[#E4CEAD] bg-[#FFFDF9] p-5 shadow-[0_6px_0_#EAD5B5]/60 flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
           <input
@@ -198,7 +211,6 @@ export default function UserManager({ initialUsers, currentAdminId }) {
         </button>
       </div>
 
-      {/* Tabel Pengguna */}
       <section className="rounded-[26px] border-2 border-[#E4CEAD] bg-[#FFFDF9] p-6 shadow-[0_6px_0_#EAD5B5]/60 space-y-4">
         <div className="flex items-center justify-between text-xs text-[#6E5038]/80">
           <span>
@@ -210,12 +222,12 @@ export default function UserManager({ initialUsers, currentAdminId }) {
           <table className="w-full text-left text-xs">
             <thead className="bg-[#F8F1E3]">
               <tr className="border-b border-[#EAD5B5] text-[#5A3E28]/70 uppercase text-[10px] font-bold tracking-wider">
-                <th className="py-3 px-4">Nama Pengguna &amp; Email</th>
-                <th className="py-3 px-4">Peran (Role)</th>
-                <th className="py-3 px-4">No. Identitas / NIM</th>
-                <th className="py-3 px-4">Aktivitas Pinjam</th>
-                <th className="py-3 px-4">Status Akun</th>
-                <th className="py-3 px-4 text-right">Aksi</th>
+                <th className="py-3 px-4 min-w-[220px]">Nama Pengguna &amp; Email</th>
+                <th className="py-3 px-4 w-[120px] whitespace-nowrap">Peran (Role)</th>
+                <th className="py-3 px-4 w-[145px] whitespace-nowrap">No. Identitas / NIM</th>
+                <th className="py-3 px-4 w-[165px] whitespace-nowrap">Aktivitas Pinjam</th>
+                <th className="py-3 px-4 w-[108px] whitespace-nowrap">Status Akun</th>
+                <th className="py-3 px-4 w-[166px] whitespace-nowrap text-right">Aksi</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-[#EAD5B5]/60 bg-[#FFFDF9]">
@@ -233,23 +245,25 @@ export default function UserManager({ initialUsers, currentAdminId }) {
                         </span>
                       )}
                     </td>
-                    <td className="py-3.5 px-4">
-                      <Badge
-                        variant={
-                          u.role === 'admin'
-                            ? 'terracotta'
-                            : u.role === 'pegawai'
-                            ? 'yellow'
-                            : 'sage'
-                        }
-                      >
-                        {u.role}
-                      </Badge>
+                    <td className="py-3.5 px-4 w-[120px] whitespace-nowrap">
+                      <span className="inline-flex w-[92px]">
+                        <Badge
+                          variant={
+                            u.role === 'admin'
+                              ? 'terracotta'
+                              : u.role === 'pegawai'
+                              ? 'yellow'
+                              : 'sage'
+                          }
+                        >
+                          {u.role}
+                        </Badge>
+                      </span>
                     </td>
-                    <td className="py-3.5 px-4 font-mono text-[11px] text-[#5A3E28]">
+                    <td className="py-3.5 px-4 w-[145px] font-mono text-[11px] text-[#5A3E28] whitespace-nowrap">
                       {u.identity_number || '-'}
                     </td>
-                    <td className="py-3.5 px-4 text-[11px] text-[#6E5038]">
+                    <td className="py-3.5 px-4 w-[165px] text-[11px] text-[#6E5038]">
                       <div>Total: {u.total_loans || 0} pinjaman</div>
                       {parseInt(u.active_loans, 10) > 0 && (
                         <span className="text-[#9A6B19] font-semibold">
@@ -262,31 +276,35 @@ export default function UserManager({ initialUsers, currentAdminId }) {
                         </span>
                       )}
                     </td>
-                    <td className="py-3.5 px-4">
-                      {u.is_active ? (
-                        <Badge variant="sage">Aktif</Badge>
-                      ) : (
-                        <Badge variant="terracotta">Nonaktif</Badge>
-                      )}
+                    <td className="py-3.5 px-4 w-[108px] whitespace-nowrap">
+                      <span className="inline-flex w-[84px]">
+                        {u.is_active ? (
+                          <Badge variant="sage">Aktif</Badge>
+                        ) : (
+                          <Badge variant="terracotta">Nonaktif</Badge>
+                        )}
+                      </span>
                     </td>
-                    <td className="py-3.5 px-4 text-right">
-                      <div className="flex items-center justify-end gap-2">
+                    <td className="py-3.5 px-4 w-[166px] whitespace-nowrap text-right">
+                      <div className="inline-flex items-center justify-end gap-2">
                         <button
                           type="button"
                           onClick={() => openEditModal(u)}
-                          className="px-3 py-1.5 rounded-xl border border-[#DFC7A2] bg-[#FAF4E8] hover:bg-[#F1E4CD] text-[#5A3E28] font-bold text-[11px] transition-colors cursor-pointer"
+                          className="w-[62px] py-1.5 rounded-xl border border-[#DFC7A2] bg-[#FAF4E8] hover:bg-[#F1E4CD] text-[#5A3E28] font-bold text-[11px] text-center transition-colors cursor-pointer"
                         >
                           Edit
                         </button>
-                        {!isSelf && (
+                        {!isSelf ? (
                           <button
                             type="button"
                             onClick={() => handleDeleteClick(u)}
-                            className="px-3 py-1.5 rounded-xl border border-[#C96858]/35 bg-[#FBECE9] hover:bg-[#F6DCD6] text-[#8A3729] font-bold text-[11px] transition-colors cursor-pointer"
+                            className="w-[68px] py-1.5 rounded-xl border border-[#C96858]/35 bg-[#FBECE9] hover:bg-[#F6DCD6] text-[#8A3729] font-bold text-[11px] text-center transition-colors cursor-pointer"
                             title="Hapus / Nonaktifkan Akun"
                           >
                             Hapus
                           </button>
+                        ) : (
+                          <span aria-hidden="true" className="inline-block w-[68px]" />
                         )}
                       </div>
                     </td>
@@ -298,7 +316,6 @@ export default function UserManager({ initialUsers, currentAdminId }) {
         </div>
       </section>
 
-      {/* MODAL FORM CREATE / EDIT PENGGUNA */}
       {mounted &&
         modalOpen &&
         createPortal(
@@ -366,8 +383,9 @@ export default function UserManager({ initialUsers, currentAdminId }) {
                     </label>
                     <select
                       value={form.role}
+                      disabled={isEditingAdmin}
                       onChange={(e) => setForm({ ...form, role: e.target.value })}
-                      className="w-full px-3.5 py-2.5 rounded-2xl bg-[#FAF4E8] border border-[#DFC7A2] text-xs text-[#5A3E28] focus:outline-hidden focus:ring-2 focus:ring-[#7B9663]"
+                      className="w-full px-3.5 py-2.5 rounded-2xl bg-[#FAF4E8] border border-[#DFC7A2] text-xs text-[#5A3E28] focus:outline-hidden focus:ring-2 focus:ring-[#7B9663] disabled:bg-[#F2E7D5] disabled:text-[#79543D]/75 disabled:cursor-not-allowed"
                     >
                       <option value="mahasiswa">Mahasiswa</option>
                       <option value="pegawai">Pegawai</option>
@@ -390,15 +408,21 @@ export default function UserManager({ initialUsers, currentAdminId }) {
                 </div>
 
                 {editingUser && (
-                  <div className="pt-2 flex items-center gap-2">
+                  <div className="pt-1 flex items-center gap-2">
                     <input
                       type="checkbox"
                       id="userActive"
                       checked={form.isActive}
+                      disabled={isEditingSelf}
                       onChange={(e) => setForm({ ...form, isActive: e.target.checked })}
-                      className="rounded text-[#7B9663]"
+                      className="rounded text-[#7B9663] disabled:opacity-60 disabled:cursor-not-allowed"
                     />
-                    <label htmlFor="userActive" className="text-xs font-semibold text-[#5A3E28]">
+                    <label
+                      htmlFor="userActive"
+                      className={`text-xs font-semibold ${
+                        isEditingSelf ? 'text-[#5A3E28]/60' : 'text-[#5A3E28]'
+                      }`}
+                    >
                       Status Akun Aktif (Dapat Login ke Sistem)
                     </label>
                   </div>
@@ -426,7 +450,6 @@ export default function UserManager({ initialUsers, currentAdminId }) {
           document.body
         )}
 
-      {/* MODAL KONFIRMASI HAPUS AKUN PENGGUNA (PENGGANTI BROWSER CONFIRM) */}
       {mounted &&
         deleteModal.isOpen &&
         deleteModal.targetUser &&
@@ -497,7 +520,6 @@ export default function UserManager({ initialUsers, currentAdminId }) {
           document.body
         )}
 
-      {/* MODAL PERINGATAN AKUN SENDIRI (PENGGANTI BROWSER ALERT) */}
       {mounted &&
         selfNoticeOpen &&
         createPortal(

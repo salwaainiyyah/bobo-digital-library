@@ -45,7 +45,6 @@ export async function createBookAction(formData) {
       };
     }
 
-    // Cek ISBN unik sebelum menyimpan berkas
     const isbnCheck = await pool.query('SELECT id FROM books WHERE isbn = $1', [isbn]);
     if (isbnCheck.rows.length > 0) {
       return { success: false, error: 'Nomor ISBN ini sudah terdaftar dalam sistem perpustakaan.' };
@@ -114,7 +113,6 @@ export async function updateBookAction(id, formData) {
     const coverFile = formData.get('coverFile');
     const isActive = formData.get('isActive') !== 'false';
 
-    // Ambil data buku saat ini untuk menjaga konsistensi stok dan sampul lama
     const currentBookRes = await pool.query(
       'SELECT stock_total, stock_available, cover_url FROM books WHERE id = $1',
       [bookId]
@@ -193,7 +191,12 @@ export async function deleteBookAction(id) {
     await requireRole([ROLES.PEGAWAI, ROLES.ADMIN]);
     const bookId = parseInt(id, 10);
 
-    // Periksa apakah buku sedang aktif dipinjam
+    const bookRes = await pool.query('SELECT id, title, cover_url FROM books WHERE id = $1', [bookId]);
+    if (bookRes.rows.length === 0) {
+      return { success: false, error: 'Buku tidak ditemukan.' };
+    }
+    const book = bookRes.rows[0];
+
     const activeLoanCheck = await pool.query(
       "SELECT COUNT(*) AS count FROM loans WHERE book_id = $1 AND status IN ('PENDING', 'BORROWED')",
       [bookId]
@@ -202,20 +205,79 @@ export async function deleteBookAction(id) {
     if (parseInt(activeLoanCheck.rows[0].count, 10) > 0) {
       return {
         success: false,
-        error: 'Buku tidak dapat dihapus atau diarsipkan karena sedang dalam proses peminjaman aktif.',
+        error: 'Buku tidak dapat dihapus karena sedang dalam proses peminjaman aktif.',
       };
     }
 
-    // Soft delete (arsip)
-    await pool.query('UPDATE books SET is_active = FALSE, updated_at = CURRENT_TIMESTAMP WHERE id = $1', [
-      bookId,
-    ]);
+    const historyCheck = await pool.query(
+      `SELECT 
+        (SELECT COUNT(*) FROM loans WHERE book_id = $1) AS loan_count,
+        (SELECT COUNT(*) FROM reviews WHERE book_id = $1) AS review_count`,
+      [bookId]
+    );
+
+    const hasHistory =
+      parseInt(historyCheck.rows[0].loan_count, 10) > 0 ||
+      parseInt(historyCheck.rows[0].review_count, 10) > 0;
+
+    if (hasHistory) {
+      await pool.query(
+        'UPDATE books SET is_active = FALSE, updated_at = CURRENT_TIMESTAMP WHERE id = $1',
+        [bookId]
+      );
+
+      revalidatePath('/');
+      revalidatePath('/catalog');
+      revalidatePath('/dashboard/pegawai/books');
+
+      return {
+        success: true,
+        message: `Buku "${book.title}" dinonaktifkan karena memiliki riwayat peminjaman atau ulasan.`,
+      };
+    }
+
+    await pool.query('DELETE FROM books WHERE id = $1', [bookId]);
+
+    if (book.cover_url) {
+      await deleteUploadedBookCover(book.cover_url, pool);
+    }
 
     revalidatePath('/');
     revalidatePath('/catalog');
     revalidatePath('/dashboard/pegawai/books');
 
-    return { success: true, message: 'Buku berhasil diarsipkan dari katalog aktif.' };
+    return {
+      success: true,
+      message: `Buku "${book.title}" berhasil dihapus permanen.`,
+    };
+  } catch (error) {
+    return { success: false, error: error.message };
+  }
+}
+
+export async function restoreBookAction(id) {
+  try {
+    await requireRole([ROLES.PEGAWAI, ROLES.ADMIN]);
+    const bookId = parseInt(id, 10);
+
+    const result = await pool.query(
+      'UPDATE books SET is_active = TRUE, updated_at = CURRENT_TIMESTAMP WHERE id = $1 RETURNING id, title',
+      [bookId]
+    );
+
+    if (result.rows.length === 0) {
+      return { success: false, error: 'Buku tidak ditemukan.' };
+    }
+
+    revalidatePath('/');
+    revalidatePath('/catalog');
+    revalidatePath(`/catalog/${bookId}`);
+    revalidatePath('/dashboard/pegawai/books');
+
+    return {
+      success: true,
+      message: `Buku "${result.rows[0].title}" berhasil dipulihkan ke katalog.`,
+    };
   } catch (error) {
     return { success: false, error: error.message };
   }

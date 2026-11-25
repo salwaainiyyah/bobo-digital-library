@@ -41,11 +41,12 @@ export async function updateUserAction(id, formData) {
     const fullName = formData.get('fullName')?.trim();
     const email = formData.get('email')?.trim();
     const role = formData.get('role')?.trim();
+    const identityNumber = formData.get('identityNumber')?.trim();
     const isActive = formData.get('isActive') === 'true' || formData.get('isActive') === 'on';
 
     const result = await updateUser(
       parseInt(id, 10),
-      { fullName, email, role, isActive },
+      { fullName, email, role, identityNumber, isActive },
       admin.id
     );
 

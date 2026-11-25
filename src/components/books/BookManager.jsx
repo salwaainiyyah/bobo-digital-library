@@ -4,7 +4,12 @@ import { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { useRouter } from 'next/navigation';
 import Badge from '@/components/ui/Badge';
-import { createBookAction, updateBookAction, deleteBookAction } from '@/app/actions/books';
+import {
+  createBookAction,
+  updateBookAction,
+  deleteBookAction,
+  restoreBookAction,
+} from '@/app/actions/books';
 
 export default function BookManager({ books, categories }) {
   const router = useRouter();
@@ -18,17 +23,14 @@ export default function BookManager({ books, categories }) {
   const [isLoading, setIsLoading] = useState(false);
   const [feedback, setFeedback] = useState(null);
 
-  // State berkas gambar sampul yang dipilih dari perangkat
   const [coverFile, setCoverFile] = useState(null);
   const [coverPreview, setCoverPreview] = useState('');
 
-  // Modal Konfirmasi Arsipkan Buku
-  const [archiveModal, setArchiveModal] = useState({
+  const [deleteModal, setDeleteModal] = useState({
     isOpen: false,
     book: null,
   });
 
-  // Form State
   const [form, setForm] = useState({
     title: '',
     isbn: '',
@@ -47,7 +49,14 @@ export default function BookManager({ books, categories }) {
     setMounted(true);
   }, []);
 
-  // Bersihkan object URL saat preview berubah atau komponen dilepas
+  useEffect(() => {
+    if (!feedback) return;
+    const timer = setTimeout(() => {
+      setFeedback(null);
+    }, 4500);
+    return () => clearTimeout(timer);
+  }, [feedback]);
+
   useEffect(() => {
     return () => {
       if (coverPreview && coverPreview.startsWith('blob:')) {
@@ -148,14 +157,9 @@ export default function BookManager({ books, categories }) {
       setModalOpen(false);
       resetCoverSelection('');
 
-      let successMessage = 'Buku baru berhasil ditambahkan.';
-      if (editingBook) {
-        successMessage = 'Data buku berhasil diperbarui.';
-      }
-
       setFeedback({
         type: 'success',
-        text: successMessage,
+        text: editingBook ? 'Data buku berhasil diperbarui.' : 'Buku baru berhasil ditambahkan.',
       });
       router.refresh();
     } else {
@@ -163,23 +167,23 @@ export default function BookManager({ books, categories }) {
     }
   }
 
-  async function handleConfirmArchive() {
-    if (!archiveModal.book) {
+  async function handleConfirmDelete() {
+    if (!deleteModal.book) {
       return;
     }
 
     setIsLoading(true);
     setFeedback(null);
 
-    const res = await deleteBookAction(archiveModal.book.id);
+    const res = await deleteBookAction(deleteModal.book.id);
     setIsLoading(false);
-    setArchiveModal({ isOpen: false, book: null });
+    setDeleteModal({ isOpen: false, book: null });
 
     if (res.success) {
-      setFeedback({ type: 'success', text: res.message || 'Buku berhasil diarsipkan.' });
+      setFeedback({ type: 'success', text: res.message || 'Buku berhasil dihapus.' });
       router.refresh();
     } else {
-      setFeedback({ type: 'error', text: res.error || 'Gagal mengarsipkan buku.' });
+      setFeedback({ type: 'error', text: res.error || 'Gagal menghapus buku.' });
     }
   }
 
@@ -187,30 +191,17 @@ export default function BookManager({ books, categories }) {
     setIsLoading(true);
     setFeedback(null);
 
-    const formData = new FormData();
-    formData.append('title', book.title);
-    formData.append('isbn', book.isbn);
-    formData.append('author', book.author);
-    formData.append('publisher', book.publisher);
-    formData.append('publicationYear', book.publication_year);
-    formData.append('categoryId', book.category_id);
-    formData.append('stockTotal', book.stock_total);
-    formData.append('loanDurationDays', book.loan_duration_days);
-    formData.append('finePerDay', parseFloat(book.fine_per_day));
-    formData.append('coverUrl', book.cover_url || '');
-    formData.append('isActive', 'true');
-
-    const res = await updateBookAction(book.id, formData);
+    const res = await restoreBookAction(book.id);
     setIsLoading(false);
 
     if (res.success) {
       setFeedback({
         type: 'success',
-        text: `Buku "${book.title}" berhasil diaktifkan kembali ke katalog.`,
+        text: res.message || `Buku "${book.title}" berhasil dipulihkan ke katalog.`,
       });
       router.refresh();
     } else {
-      setFeedback({ type: 'error', text: res.error || 'Gagal mengaktifkan kembali buku.' });
+      setFeedback({ type: 'error', text: res.error || 'Gagal memulihkan buku.' });
     }
   }
 
@@ -227,37 +218,41 @@ export default function BookManager({ books, categories }) {
 
   return (
     <div className="space-y-6">
-      {/* Feedback Banner */}
-      {feedback && (
-        <div
-          className={`rounded-[22px] border-2 px-5 py-3.5 text-xs sm:text-sm font-semibold flex items-center justify-between gap-3 shadow-2xs ${
-            feedback.type === 'success'
-              ? 'bg-[#EEF4E6] border-[#929D75] text-[#425732]'
-              : 'bg-[#FDF1EE] border-[#C96858] text-[#8A3729]'
-          }`}
-        >
-          <div className="flex items-center gap-2.5">
-            <span
-              className={`h-2.5 w-2.5 shrink-0 rounded-full ${
-                feedback.type === 'success' ? 'bg-[#6F8859]' : 'bg-[#C96858]'
+      {mounted &&
+        feedback &&
+        createPortal(
+          <div className="fixed top-5 right-5 z-[60] w-[calc(100%-2.5rem)] max-w-md animate-fade-in-down">
+            <div
+              role="alert"
+              className={`rounded-[22px] border-2 px-4 py-3.5 text-xs sm:text-sm font-semibold flex items-center justify-between gap-3 shadow-[0_12px_28px_rgba(46,33,22,0.22)] ${
+                feedback.type === 'success'
+                  ? 'bg-[#EEF4E6] border-[#929D75] text-[#425732]'
+                  : 'bg-[#FDF1EE] border-[#C96858] text-[#8A3729]'
               }`}
-            />
-            <span>{feedback.text}</span>
-          </div>
-          <button
-            type="button"
-            onClick={() => setFeedback(null)}
-            aria-label="Tutup pemberitahuan"
-            className="rounded-lg p-1 hover:bg-black/5 transition-colors cursor-pointer"
-          >
-            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        </div>
-      )}
+            >
+              <div className="flex items-center gap-2.5">
+                <span
+                  className={`h-2.5 w-2.5 shrink-0 rounded-full ${
+                    feedback.type === 'success' ? 'bg-[#6F8859]' : 'bg-[#C96858]'
+                  }`}
+                />
+                <span>{feedback.text}</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setFeedback(null)}
+                aria-label="Tutup pemberitahuan"
+                className="rounded-lg p-1 hover:bg-black/5 transition-colors cursor-pointer shrink-0"
+              >
+                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+          </div>,
+          document.body
+        )}
 
-      {/* Toolbar Pencarian & Tambah Buku */}
       <div className="rounded-[26px] border-2 border-[#E4CEAD] bg-[#FFFDF9] p-5 shadow-[0_6px_0_#EAD5B5]/60 flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
           <input
@@ -291,7 +286,6 @@ export default function BookManager({ books, categories }) {
         </button>
       </div>
 
-      {/* Tabel Buku */}
       <section className="rounded-[26px] border-2 border-[#E4CEAD] bg-[#FFFDF9] p-6 shadow-[0_6px_0_#EAD5B5]/60 space-y-4">
         <div className="flex items-center justify-between text-xs text-[#6E5038]/80">
           <span>
@@ -303,13 +297,13 @@ export default function BookManager({ books, categories }) {
           <table className="w-full text-left text-xs">
             <thead className="bg-[#F8F1E3]">
               <tr className="border-b border-[#EAD5B5] text-[#5A3E28]/70 uppercase text-[10px] font-bold tracking-wider">
-                <th className="py-3 px-4">Sampul &amp; Judul Buku</th>
-                <th className="py-3 px-4">Kategori</th>
-                <th className="py-3 px-4">ISBN</th>
-                <th className="py-3 px-4">Stok (Tersedia / Total)</th>
-                <th className="py-3 px-4">Durasi &amp; Tarif Denda</th>
-                <th className="py-3 px-4">Status</th>
-                <th className="py-3 px-4 text-right">Aksi</th>
+                <th className="py-3 px-4 min-w-[230px]">Sampul &amp; Judul Buku</th>
+                <th className="py-3 px-4 w-[160px] whitespace-nowrap">Kategori</th>
+                <th className="py-3 px-4 w-[155px] whitespace-nowrap">ISBN</th>
+                <th className="py-3 px-4 w-[125px] whitespace-nowrap">Stok (Tersedia / Total)</th>
+                <th className="py-3 px-4 w-[130px] whitespace-nowrap">Durasi &amp; Tarif Denda</th>
+                <th className="py-3 px-4 w-[108px] whitespace-nowrap">Status</th>
+                <th className="py-3 px-4 w-[184px] whitespace-nowrap text-right">Aksi</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-[#EAD5B5]/60 bg-[#FFFDF9]">
@@ -338,35 +332,37 @@ export default function BookManager({ books, categories }) {
                       </div>
                     </div>
                   </td>
-                  <td className="py-3.5 px-4">
+                  <td className="py-3.5 px-4 w-[160px]">
                     <span className="font-semibold text-[#556B43]">{book.category_name}</span>
                   </td>
-                  <td className="py-3.5 px-4 font-mono text-[11px] text-[#6E5038]/75">
+                  <td className="py-3.5 px-4 w-[155px] font-mono text-[11px] text-[#6E5038]/75 whitespace-nowrap">
                     {book.isbn}
                   </td>
-                  <td className="py-3.5 px-4">
+                  <td className="py-3.5 px-4 w-[125px] whitespace-nowrap">
                     <span className="font-bold text-sm text-[#5A3E28]">{book.stock_available}</span>
                     <span className="text-[#6E5038]/55 text-xs"> / {book.stock_total}</span>
                   </td>
-                  <td className="py-3.5 px-4 text-[11px]">
+                  <td className="py-3.5 px-4 w-[130px] text-[11px] whitespace-nowrap">
                     <div className="text-[#5A3E28] font-medium">{book.loan_duration_days} hari</div>
                     <div className="text-[#C96858]">
                       Rp {parseFloat(book.fine_per_day).toLocaleString('id-ID')}/hr
                     </div>
                   </td>
-                  <td className="py-3.5 px-4">
-                    {book.is_active ? (
-                      <Badge variant="sage">Aktif</Badge>
-                    ) : (
-                      <Badge variant="terracotta">Diarsipkan</Badge>
-                    )}
+                  <td className="py-3.5 px-4 w-[108px] whitespace-nowrap">
+                    <span className="inline-flex w-[84px]">
+                      {book.is_active ? (
+                        <Badge variant="sage">Aktif</Badge>
+                      ) : (
+                        <Badge variant="terracotta">Nonaktif</Badge>
+                      )}
+                    </span>
                   </td>
-                  <td className="py-3.5 px-4 text-right">
-                    <div className="flex items-center justify-end gap-2">
+                  <td className="py-3.5 px-4 w-[184px] whitespace-nowrap text-right">
+                    <div className="inline-flex items-center justify-end gap-2">
                       <button
                         type="button"
                         onClick={() => openEditModal(book)}
-                        className="px-3 py-1.5 rounded-xl border border-[#DFC7A2] bg-[#FAF4E8] hover:bg-[#F1E4CD] text-[#5A3E28] font-bold text-[11px] transition-colors cursor-pointer"
+                        className="w-[62px] py-1.5 rounded-xl border border-[#DFC7A2] bg-[#FAF4E8] hover:bg-[#F1E4CD] text-[#5A3E28] font-bold text-[11px] text-center transition-colors cursor-pointer"
                       >
                         Edit
                       </button>
@@ -374,19 +370,19 @@ export default function BookManager({ books, categories }) {
                       {book.is_active ? (
                         <button
                           type="button"
-                          onClick={() => setArchiveModal({ isOpen: true, book })}
-                          className="px-3 py-1.5 rounded-xl border border-[#C96858]/35 bg-[#FBECE9] hover:bg-[#F6DCD6] text-[#8A3729] font-bold text-[11px] transition-colors cursor-pointer"
+                          onClick={() => setDeleteModal({ isOpen: true, book })}
+                          className="w-[84px] py-1.5 rounded-xl border border-[#C96858]/35 bg-[#FBECE9] hover:bg-[#F6DCD6] text-[#8A3729] font-bold text-[11px] text-center transition-colors cursor-pointer"
                         >
-                          Arsipkan
+                          Hapus
                         </button>
                       ) : (
                         <button
                           type="button"
                           onClick={() => handleRestoreBook(book)}
                           disabled={isLoading}
-                          className="px-3 py-1.5 rounded-xl border border-[#8BA372]/45 bg-[#EEF4E6] hover:bg-[#E1ECD4] text-[#425732] font-bold text-[11px] transition-colors cursor-pointer disabled:opacity-50"
+                          className="w-[84px] py-1.5 rounded-xl border border-[#8BA372]/45 bg-[#EEF4E6] hover:bg-[#E1ECD4] text-[#425732] font-bold text-[11px] text-center transition-colors cursor-pointer disabled:opacity-50"
                         >
-                          Aktifkan
+                          Pulihkan
                         </button>
                       )}
                     </div>
@@ -398,7 +394,6 @@ export default function BookManager({ books, categories }) {
         </div>
       </section>
 
-      {/* MODAL FORM CREATE / EDIT BUKU */}
       {mounted &&
         modalOpen &&
         createPortal(
@@ -558,7 +553,6 @@ export default function BookManager({ books, categories }) {
                   />
                 </div>
 
-                {/* Unggah Berkas Sampul dari Perangkat + Pratinjau */}
                 <div className="rounded-2xl border border-[#DFC7A2] bg-[#FAF4E8] p-4 space-y-3">
                   <div className="flex items-center justify-between">
                     <label className="block text-[11px] font-bold text-[#5A3E28] uppercase tracking-wider">
@@ -570,7 +564,6 @@ export default function BookManager({ books, categories }) {
                   </div>
 
                   <div className="flex items-center gap-4">
-                    {/* Kotak Pratinjau Sampul */}
                     <div className="w-16 h-22 shrink-0 overflow-hidden rounded-xl border-2 border-[#DFC7A2] bg-[#FFFDF9] flex items-center justify-center shadow-2xs">
                       {coverPreview ? (
                         <img
@@ -633,7 +626,7 @@ export default function BookManager({ books, categories }) {
                       className="rounded text-[#7B9663]"
                     />
                     <label htmlFor="isActive" className="text-xs font-semibold text-[#5A3E28]">
-                      Status Buku Aktif (Dapat Ditemukan di Katalog Publik)
+                      Status Buku Aktif (Tampil di Katalog Publik)
                     </label>
                   </div>
                 )}
@@ -660,25 +653,24 @@ export default function BookManager({ books, categories }) {
           document.body
         )}
 
-      {/* MODAL KONFIRMASI ARSIPKAN BUKU */}
       {mounted &&
-        archiveModal.isOpen &&
-        archiveModal.book &&
+        deleteModal.isOpen &&
+        deleteModal.book &&
         createPortal(
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#2E2116]/45 backdrop-blur-xs">
             <div className="w-full max-w-md rounded-[28px] border-2 border-[#E4CEAD] bg-[#FFFDF9] p-6 sm:p-7 shadow-[0_14px_34px_rgba(46,33,22,0.28)] space-y-5">
               <div>
                 <div className="inline-flex items-center gap-2 rounded-full border border-[#C96858]/35 bg-[#FBECE9] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-[#A84A3B]">
                   <span className="h-1.5 w-1.5 rounded-full bg-[#C96858]" />
-                  <span>Pengarsipan Koleksi</span>
+                  <span>Penghapusan Koleksi</span>
                 </div>
 
                 <h3 className="font-editorial text-xl font-bold text-[#5A3E28] mt-2.5">
-                  Arsipkan Koleksi Buku Ini?
+                  Hapus Koleksi Buku Ini?
                 </h3>
 
                 <p className="text-xs sm:text-sm text-[#6E5038]/85 mt-1.5 leading-relaxed">
-                  Koleksi yang diarsipkan akan disembunyikan dari katalog peminjaman mahasiswa tanpa menghapus riwayat transaksi sebelumnya.
+                  Buku yang belum memiliki riwayat peminjaman akan dihapus permanen. Jika sudah pernah dipinjam atau diulas, buku akan dinonaktifkan agar riwayat transaksi tetap terjaga.
                 </p>
               </div>
 
@@ -687,7 +679,7 @@ export default function BookManager({ books, categories }) {
                   <span className="block text-[10px] font-bold uppercase tracking-wider text-[#79543D]/60">
                     Judul Buku
                   </span>
-                  <p className="font-bold text-[#5A3E28] mt-0.5">{archiveModal.book.title}</p>
+                  <p className="font-bold text-[#5A3E28] mt-0.5">{deleteModal.book.title}</p>
                 </div>
 
                 <div className="border-t border-[#EAD5B5]/70 pt-2">
@@ -695,9 +687,9 @@ export default function BookManager({ books, categories }) {
                     Penulis &amp; ISBN
                   </span>
                   <p className="text-[#5A3E28] mt-0.5">
-                    {archiveModal.book.author}{' '}
+                    {deleteModal.book.author}{' '}
                     <span className="font-mono text-[11px] text-[#79543D]/70">
-                      ({archiveModal.book.isbn})
+                      ({deleteModal.book.isbn})
                     </span>
                   </p>
                 </div>
@@ -706,7 +698,7 @@ export default function BookManager({ books, categories }) {
               <div className="flex gap-2.5">
                 <button
                   type="button"
-                  onClick={() => setArchiveModal({ isOpen: false, book: null })}
+                  onClick={() => setDeleteModal({ isOpen: false, book: null })}
                   disabled={isLoading}
                   className="flex-1 py-2.5 px-4 rounded-2xl border-2 border-[#E4CEAD] bg-[#FFFDF9] hover:bg-[#F8F1E3] text-xs font-bold text-[#5A3E28] cursor-pointer disabled:opacity-50"
                 >
@@ -714,11 +706,11 @@ export default function BookManager({ books, categories }) {
                 </button>
                 <button
                   type="button"
-                  onClick={handleConfirmArchive}
+                  onClick={handleConfirmDelete}
                   disabled={isLoading}
                   className="flex-1 py-2.5 px-4 rounded-2xl bg-[#C96858] hover:bg-[#b25546] text-white text-xs font-bold shadow-[0_3px_0_#944134] transition-all active:translate-y-0.5 cursor-pointer disabled:opacity-60"
                 >
-                  {isLoading ? 'Mengarsipkan...' : 'Ya, Arsipkan Buku'}
+                  {isLoading ? 'Menghapus...' : 'Ya, Hapus Buku'}
                 </button>
               </div>
             </div>

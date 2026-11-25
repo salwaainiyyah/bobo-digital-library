@@ -59,7 +59,6 @@ export async function createUser({ fullName, email, password, role, identityNumb
     throw new Error('Peran akun yang dipilih tidak valid.');
   }
 
-  // Cek duplikasi
   const dupCheck = await pool.query(
     'SELECT email, identity_number FROM users WHERE email = $1 OR (identity_number = $2 AND identity_number IS NOT NULL)',
     [cleanEmail, cleanIdentity]
@@ -85,23 +84,60 @@ export async function createUser({ fullName, email, password, role, identityNumb
   return result.rows[0];
 }
 
-export async function updateUser(id, { fullName, email, role, isActive }, currentAdminId) {
+export async function updateUser(id, { fullName, email, role, identityNumber, isActive }, currentAdminId) {
+  const targetId = parseInt(id, 10);
   const cleanEmail = email.trim().toLowerCase();
   const cleanFullName = fullName.trim();
   const cleanRole = role.trim().toLowerCase();
+  const cleanIdentity = identityNumber?.trim() || null;
 
-  // Admin tidak boleh menonaktifkan dirinya sendiri
-  if (parseInt(id, 10) === parseInt(currentAdminId, 10) && isActive === false) {
+  if (![ROLES.ADMIN, ROLES.PEGAWAI, ROLES.MAHASISWA].includes(cleanRole)) {
+    throw new Error('Peran akun yang dipilih tidak valid.');
+  }
+
+  const existingRes = await pool.query('SELECT id, role FROM users WHERE id = $1', [targetId]);
+  const existingUser = existingRes.rows[0];
+
+  if (!existingUser) {
+    throw new Error('Akun pengguna tidak ditemukan.');
+  }
+
+  if (existingUser.role === ROLES.ADMIN && cleanRole !== ROLES.ADMIN) {
+    throw new Error('Peran akun Administrator tidak dapat diubah menjadi Pegawai atau Mahasiswa.');
+  }
+
+  if (targetId === parseInt(currentAdminId, 10) && isActive === false) {
     throw new Error('Anda tidak dapat menonaktifkan akun Anda sendiri saat sedang login.');
+  }
+
+  const dupCheck = await pool.query(
+    'SELECT id, email, identity_number FROM users WHERE id <> $1 AND (email = $2 OR (identity_number = $3 AND identity_number IS NOT NULL))',
+    [targetId, cleanEmail, cleanIdentity]
+  );
+
+  if (dupCheck.rows.length > 0) {
+    if (dupCheck.rows[0].email === cleanEmail) {
+      throw new Error('Alamat email sudah digunakan oleh akun lain.');
+    }
+    if (cleanIdentity && dupCheck.rows[0].identity_number === cleanIdentity) {
+      throw new Error('Nomor identitas / NIM sudah digunakan oleh akun lain.');
+    }
   }
 
   const query = `
     UPDATE users
-    SET full_name = $1, email = $2, role = $3, is_active = $4, updated_at = CURRENT_TIMESTAMP
-    WHERE id = $5
+    SET full_name = $1, email = $2, role = $3, identity_number = $4, is_active = $5, updated_at = CURRENT_TIMESTAMP
+    WHERE id = $6
     RETURNING id, full_name, email, role, identity_number, is_active;
   `;
-  const result = await pool.query(query, [cleanFullName, cleanEmail, cleanRole, isActive ?? true, id]);
+  const result = await pool.query(query, [
+    cleanFullName,
+    cleanEmail,
+    cleanRole,
+    cleanIdentity,
+    isActive ?? true,
+    targetId,
+  ]);
   return result.rows[0];
 }
 
@@ -111,7 +147,6 @@ export async function deleteUser(id, currentAdminId) {
     throw new Error('Anda tidak dapat menghapus akun Anda sendiri.');
   }
 
-  // Periksa apakah user memiliki pinjaman aktif
   const activeLoans = await pool.query(
     "SELECT COUNT(*) AS count FROM loans WHERE student_id = $1 AND status IN ('PENDING', 'BORROWED')",
     [targetId]
@@ -120,7 +155,6 @@ export async function deleteUser(id, currentAdminId) {
     throw new Error('Akun ini tidak dapat dihapus karena masih memiliki transaksi peminjaman yang aktif.');
   }
 
-  // Periksa apakah user memiliki denda tertunggak
   const unpaidFines = await pool.query(
     "SELECT COUNT(*) AS count FROM fines WHERE student_id = $1 AND status = 'UNPAID'",
     [targetId]
@@ -129,7 +163,6 @@ export async function deleteUser(id, currentAdminId) {
     throw new Error('Akun ini tidak dapat dihapus karena masih memiliki catatan denda yang belum dilunasi.');
   }
 
-  // Jika memiliki riwayat masa lalu (COMPLETED/REJECTED), nonaktifkan (soft delete) untuk melindungi relasi data
   const historyCheck = await pool.query(
     'SELECT COUNT(*) AS count FROM loans WHERE student_id = $1',
     [targetId]
@@ -140,7 +173,6 @@ export async function deleteUser(id, currentAdminId) {
     return { id: targetId, softDeleted: true, message: 'Akun telah dinonaktifkan untuk melindungi data historis sirkulasi.' };
   }
 
-  // Jika benar-benar bersih tanpa relasi, lakukan hard delete
   await pool.query('DELETE FROM users WHERE id = $1', [targetId]);
   return { id: targetId, softDeleted: false, message: 'Akun berhasil dihapus permanen.' };
 }
