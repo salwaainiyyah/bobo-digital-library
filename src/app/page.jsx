@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { redirect } from 'next/navigation';
 import BoboIntro from '@/components/layout/BoboIntro';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
@@ -8,7 +7,7 @@ import Badge from '@/components/ui/Badge';
 import ScrollReveal from '@/components/ui/ScrollReveal';
 import StaggerChildren from '@/components/ui/StaggerChildren';
 import FeaturedCarousel from '@/components/books/FeaturedCarousel';
-import { getCurrentUser } from '@/lib/auth/permissions';
+import { restrictStaffFromPublicPages } from '@/lib/auth/permissions';
 import { getTopBooks } from '@/lib/queries/books';
 import { getPublishedAnnouncements } from '@/lib/queries/announcements';
 
@@ -42,12 +41,7 @@ const BOOKMARK_TABS = [
 ];
 
 export default async function HomePage() {
-  const user = await getCurrentUser();
-
-  if (user && (user.role === 'admin' || user.role === 'pegawai')) {
-    redirect('/dashboard');
-  }
-
+  const user = await restrictStaffFromPublicPages();
   const topBooks = await getTopBooks(5);
   const announcements = await getPublishedAnnouncements(3);
 

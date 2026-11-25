@@ -47,11 +47,13 @@ export default function Navbar({ initialUser }) {
   const isStaffOrAdmin = user?.role === 'admin' || user?.role === 'pegawai';
   const homeHref = isStaffOrAdmin ? '/dashboard' : '/';
 
-  const navLinks = [
-    ...(!isStaffOrAdmin ? [{ href: '/', label: 'Beranda', active: pathname === '/' }] : []),
-    { href: '/catalog', label: 'Katalog Buku', active: pathname.startsWith('/catalog') },
-    { href: '/announcements', label: 'Warta Sirkulasi', active: pathname.startsWith('/announcements') },
-  ];
+  const navLinks = isStaffOrAdmin
+    ? []
+    : [
+        { href: '/', label: 'Beranda', active: pathname === '/' },
+        { href: '/catalog', label: 'Katalog Buku', active: pathname.startsWith('/catalog') },
+        { href: '/announcements', label: 'Warta Sirkulasi', active: pathname.startsWith('/announcements') },
+      ];
 
   return (
     <header
@@ -85,21 +87,23 @@ export default function Navbar({ initialUser }) {
             </div>
           </Link>
 
-          <nav className="hidden md:flex items-center gap-1 bg-white/50 backdrop-blur-xs p-1.5 rounded-2xl border border-[#EBCFA9]/60">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={`relative px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-300 ${
-                  link.active
-                    ? 'text-white bg-[#929D75] shadow-2xs'
-                    : 'text-[#79543D]/75 hover:text-[#79543D] hover:bg-white/60'
-                }`}
-              >
-                {link.label}
-              </Link>
-            ))}
-          </nav>
+          {navLinks.length > 0 && (
+            <nav className="hidden md:flex items-center gap-1 bg-white/50 backdrop-blur-xs p-1.5 rounded-2xl border border-[#EBCFA9]/60">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={`relative px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-300 ${
+                    link.active
+                      ? 'text-white bg-[#929D75] shadow-2xs'
+                      : 'text-[#79543D]/75 hover:text-[#79543D] hover:bg-white/60'
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </nav>
+          )}
 
           <div className="hidden md:flex items-center gap-3">
             {user ? (
@@ -172,22 +176,24 @@ export default function Navbar({ initialUser }) {
 
         {mobileMenuOpen && (
           <div className="md:hidden py-4 border-t border-[#EBCFA9]/60 space-y-3 animate-fade-in-down">
-            <div className="flex flex-col gap-1.5">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={`px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors ${
-                    link.active ? 'bg-[#929D75] text-white' : 'text-[#79543D] hover:bg-white/50'
-                  }`}
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </div>
+            {navLinks.length > 0 && (
+              <div className="flex flex-col gap-1.5">
+                {navLinks.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors ${
+                      link.active ? 'bg-[#929D75] text-white' : 'text-[#79543D] hover:bg-white/50'
+                    }`}
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+              </div>
+            )}
 
-            <div className="pt-3 border-t border-[#EBCFA9]/60">
+            <div className={navLinks.length > 0 ? 'pt-3 border-t border-[#EBCFA9]/60' : ''}>
               {user ? (
                 <div className="space-y-3 px-1">
                   <div className="flex items-center justify-between">

@@ -20,11 +20,20 @@ export async function requireRole(allowedRoles = []) {
   const rolesArray = Array.isArray(allowedRoles) ? allowedRoles : [allowedRoles];
 
   if (!rolesArray.includes(user.role)) {
-    // Arahkan ke dashboard miliknya jika role tidak cocok
     if (user.role === ROLES.ADMIN) redirect('/dashboard/admin');
     if (user.role === ROLES.PEGAWAI) redirect('/dashboard/pegawai');
     if (user.role === ROLES.MAHASISWA) redirect('/dashboard/mahasiswa');
     redirect('/login');
+  }
+
+  return user;
+}
+
+export async function restrictStaffFromPublicPages() {
+  const user = await getCurrentUser();
+
+  if (user && (user.role === ROLES.ADMIN || user.role === ROLES.PEGAWAI)) {
+    redirect('/dashboard');
   }
 
   return user;

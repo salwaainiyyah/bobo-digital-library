@@ -168,12 +168,13 @@ export default function DashboardShell({ user, children }) {
   };
 
   const config = roleConfigs[user.role] || roleConfigs[ROLES.MAHASISWA];
+  const isStaffOrAdmin = user.role === ROLES.ADMIN || user.role === ROLES.PEGAWAI;
+  const homeHref = isStaffOrAdmin ? '/dashboard' : '/';
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row bg-[#F3EAD8]">
-      {/* Mobile Header Bar */}
       <div className="md:hidden flex items-center justify-between px-4 py-3 bg-[#3E4D36] text-[#F7EBD8] border-b border-[#55684B] sticky top-0 z-30 shadow-sm">
-        <Link href="/" className="flex items-center gap-2.5">
+        <Link href={homeHref} className="flex items-center gap-2.5">
           <div className="w-8 h-8 relative rounded-xl bg-[#FDF9F3] p-1">
             <Image src="/brand/bo-bo-logo.png" alt="Logo Bo'bo" fill className="object-contain" />
           </div>
@@ -195,13 +196,11 @@ export default function DashboardShell({ user, children }) {
         </button>
       </div>
 
-      {/* ═══════════ COZY FOREST SIDEBAR (SCROLL TERSEMBUNYI + INDIKATOR FADE) ═══════════ */}
       <div
         className={`${
           sidebarOpen ? 'flex' : 'hidden'
         } md:flex relative w-full md:w-64 lg:w-[268px] bg-gradient-to-b from-[#44543B] via-[#3C4B34] to-[#323F2B] text-[#F4ECDC] border-r border-[#2B3725] flex-col shrink-0 z-20 md:sticky md:top-0 md:h-screen`}
       >
-        {/* Indikator Fade Atas saat Sudah Di-scroll */}
         <div
           aria-hidden="true"
           className={`pointer-events-none absolute top-0 inset-x-0 h-6 bg-gradient-to-b from-[#44543B]/90 to-transparent z-10 transition-opacity duration-200 ${
@@ -215,9 +214,8 @@ export default function DashboardShell({ user, children }) {
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           className="[&::-webkit-scrollbar]:hidden flex-1 flex flex-col overflow-y-auto"
         >
-          {/* Top Wooden/Parchment Sign Plaque */}
           <div className="p-5 pb-3.5">
-            <Link href="/" className="block group">
+            <Link href={homeHref} className="block group">
               <div className="relative rounded-2xl border-2 border-[#7E5730] bg-gradient-to-b from-[#C79A63] to-[#B0824C] p-1 shadow-[0_6px_14px_rgba(24,32,20,0.28)] transition-transform duration-300 group-hover:-translate-y-0.5">
                 <svg
                   aria-hidden="true"
@@ -248,7 +246,6 @@ export default function DashboardShell({ user, children }) {
               </div>
             </Link>
 
-            {/* Compact User Identity Pill */}
             <div className="mt-3 flex items-center justify-between gap-2 rounded-2xl border border-white/10 bg-black/15 px-3 py-2">
               <div className="min-w-0">
                 <p className="truncate text-xs font-bold text-[#FFFDF9]">{user.fullName}</p>
@@ -262,7 +259,6 @@ export default function DashboardShell({ user, children }) {
             </div>
           </div>
 
-          {/* Navigation Menu */}
           <nav className="px-4 py-1 space-y-1 flex-1">
             <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#CBE0B8]/60 px-3 py-1">
               Menu Utama
@@ -287,30 +283,33 @@ export default function DashboardShell({ user, children }) {
               );
             })}
 
-            <div className="pt-3 mt-2.5 border-t border-white/10 text-[10px] font-bold uppercase tracking-[0.18em] text-[#CBE0B8]/60 px-3 py-1">
-              Pintasan Publik
-            </div>
+            {user.role === ROLES.MAHASISWA && (
+              <>
+                <div className="pt-3 mt-2.5 border-t border-white/10 text-[10px] font-bold uppercase tracking-[0.18em] text-[#CBE0B8]/60 px-3 py-1">
+                  Pintasan Publik
+                </div>
 
-            <Link
-              href="/catalog"
-              onClick={() => setSidebarOpen(false)}
-              className="group flex items-center gap-3 px-3.5 py-2 rounded-2xl text-xs font-medium text-[#EDE6D6]/85 hover:bg-white/10 hover:text-white transition-colors"
-            >
-              <SidebarNavIcon name="books" active={false} />
-              <span>Jelajahi Katalog Buku</span>
-            </Link>
+                <Link
+                  href="/catalog"
+                  onClick={() => setSidebarOpen(false)}
+                  className="group flex items-center gap-3 px-3.5 py-2 rounded-2xl text-xs font-medium text-[#EDE6D6]/85 hover:bg-white/10 hover:text-white transition-colors"
+                >
+                  <SidebarNavIcon name="books" active={false} />
+                  <span>Jelajahi Katalog Buku</span>
+                </Link>
 
-            <Link
-              href="/"
-              onClick={() => setSidebarOpen(false)}
-              className="group flex items-center gap-3 px-3.5 py-2 rounded-2xl text-xs font-medium text-[#EDE6D6]/85 hover:bg-white/10 hover:text-white transition-colors"
-            >
-              <SidebarNavIcon name="home" active={false} />
-              <span>Halaman Depan</span>
-            </Link>
+                <Link
+                  href="/"
+                  onClick={() => setSidebarOpen(false)}
+                  className="group flex items-center gap-3 px-3.5 py-2 rounded-2xl text-xs font-medium text-[#EDE6D6]/85 hover:bg-white/10 hover:text-white transition-colors"
+                >
+                  <SidebarNavIcon name="home" active={false} />
+                  <span>Halaman Depan</span>
+                </Link>
+              </>
+            )}
           </nav>
 
-          {/* Bottom Cozy Mascot + Daily Library Tip Card + Logout */}
           <div className="p-4 pt-6 mt-auto">
             <div className="relative pt-10">
               <div className="pointer-events-none select-none absolute -top-1 left-4 z-10 w-16 h-16 drop-shadow-[0_6px_10px_rgba(20,28,16,0.35)]">
@@ -351,7 +350,6 @@ export default function DashboardShell({ user, children }) {
           </div>
         </aside>
 
-        {/* Indikator Fade Bawah saat Masih Ada Konten yang Bisa Di-scroll */}
         <div
           aria-hidden="true"
           className={`pointer-events-none absolute bottom-0 inset-x-0 h-8 bg-gradient-to-t from-[#323F2B] via-[#323F2B]/60 to-transparent z-10 transition-opacity duration-200 flex items-end justify-center pb-1.5 ${
@@ -367,7 +365,6 @@ export default function DashboardShell({ user, children }) {
         </div>
       </div>
 
-      {/* Main Dashboard Content Area */}
       <div className="flex-1 flex flex-col min-w-0">
         <main className="flex-1 p-4 sm:p-6 lg:p-7 max-w-7xl mx-auto w-full">{children}</main>
       </div>
