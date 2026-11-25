@@ -161,7 +161,6 @@ export default function DashboardShell({ user, children }) {
         { href: '/dashboard/admin/users', label: 'Manajemen Akun', icon: 'users' },
         { href: '/dashboard/admin/categories', label: 'Master Kategori', icon: 'categories' },
         { href: '/dashboard/admin/transactions', label: 'Log Transaksi', icon: 'logs' },
-        { href: '/dashboard/pegawai/circulation', label: 'Akses Sirkulasi', icon: 'circulation' },
         { href: '/dashboard/pegawai/books', label: 'Akses Katalog Buku', icon: 'books' },
       ],
     },
