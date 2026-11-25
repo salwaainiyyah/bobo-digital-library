@@ -44,26 +44,26 @@ export default function Navbar({ initialUser }) {
   };
 
   const currentRole = user ? roleLabels[user.role] || { label: user.role, variant: 'beige' } : null;
+  const isStaffOrAdmin = user?.role === 'admin' || user?.role === 'pegawai';
+  const homeHref = isStaffOrAdmin ? '/dashboard' : '/';
 
   const navLinks = [
-    { href: '/', label: 'Beranda', active: pathname === '/' },
+    ...(!isStaffOrAdmin ? [{ href: '/', label: 'Beranda', active: pathname === '/' }] : []),
     { href: '/catalog', label: 'Katalog Buku', active: pathname.startsWith('/catalog') },
     { href: '/announcements', label: 'Warta Sirkulasi', active: pathname.startsWith('/announcements') },
   ];
 
   return (
-    <header 
+    <header
       className={`sticky top-0 z-50 transition-all duration-300 ${
-        scrolled 
-          ? 'bg-[#F7EBD8]/90 backdrop-blur-md shadow-sm border-b border-[#EBCFA9]/80 py-2' 
+        scrolled
+          ? 'bg-[#F7EBD8]/90 backdrop-blur-md shadow-sm border-b border-[#EBCFA9]/80 py-2'
           : 'bg-[#F7EBD8]/70 backdrop-blur-xs border-b border-[#EBCFA9]/50 py-3'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-14 sm:h-16">
-          
-          {/* Logo & Brand Identity */}
-          <Link href="/" className="flex items-center gap-3 group">
+          <Link href={homeHref} className="flex items-center gap-3 group">
             <div className="relative w-10 h-10 sm:w-11 sm:h-11 bg-white/90 rounded-2xl p-1 shadow-2xs border border-[#EBCFA9] flex items-center justify-center transition-all duration-300 group-hover:scale-105 group-hover:shadow-xs">
               <Image
                 src="/brand/bo-bo-logo.png"
@@ -85,7 +85,6 @@ export default function Navbar({ initialUser }) {
             </div>
           </Link>
 
-          {/* Desktop Navigation Links with animated indicators */}
           <nav className="hidden md:flex items-center gap-1 bg-white/50 backdrop-blur-xs p-1.5 rounded-2xl border border-[#EBCFA9]/60">
             {navLinks.map((link) => (
               <Link
@@ -102,7 +101,6 @@ export default function Navbar({ initialUser }) {
             ))}
           </nav>
 
-          {/* Right Area (Notification Bell + User Status / Auth Buttons) */}
           <div className="hidden md:flex items-center gap-3">
             {user ? (
               <div className="flex items-center gap-2.5">
@@ -153,7 +151,6 @@ export default function Navbar({ initialUser }) {
             )}
           </div>
 
-          {/* Mobile Bell & Menu Toggle Button */}
           <div className="flex md:hidden items-center gap-2">
             {user && <NotificationBell userId={user.id} />}
 
@@ -173,39 +170,21 @@ export default function Navbar({ initialUser }) {
           </div>
         </div>
 
-        {/* Mobile Dropdown Menu with slide down animation */}
         {mobileMenuOpen && (
           <div className="md:hidden py-4 border-t border-[#EBCFA9]/60 space-y-3 animate-fade-in-down">
             <div className="flex flex-col gap-1.5">
-              <Link
-                href="/"
-                onClick={() => setMobileMenuOpen(false)}
-                className={`px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors ${
-                  pathname === '/' ? 'bg-[#929D75] text-white' : 'text-[#79543D] hover:bg-white/50'
-                }`}
-              >
-                Beranda
-              </Link>
-              <Link
-                href="/catalog"
-                onClick={() => setMobileMenuOpen(false)}
-                className={`px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors ${
-                  pathname.startsWith('/catalog') ? 'bg-[#929D75] text-white' : 'text-[#79543D] hover:bg-white/50'
-                }`}
-              >
-                Katalog Buku
-              </Link>
-              <Link
-                href="/announcements"
-                onClick={() => setMobileMenuOpen(false)}
-                className={`px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors ${
-                  pathname.startsWith('/announcements')
-                    ? 'bg-[#929D75] text-white'
-                    : 'text-[#79543D] hover:bg-white/50'
-                }`}
-              >
-                Warta Sirkulasi
-              </Link>
+              {navLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors ${
+                    link.active ? 'bg-[#929D75] text-white' : 'text-[#79543D] hover:bg-white/50'
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              ))}
             </div>
 
             <div className="pt-3 border-t border-[#EBCFA9]/60">
