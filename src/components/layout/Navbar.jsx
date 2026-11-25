@@ -6,6 +6,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import Badge from '../ui/Badge';
 import NotificationBell from './NotificationBell';
+import { ROLE_META } from '@/lib/constants';
 
 export default function Navbar({ initialUser }) {
   const router = useRouter();
@@ -37,13 +38,7 @@ export default function Navbar({ initialUser }) {
     }
   }
 
-  const roleLabels = {
-    admin: { label: 'Admin', variant: 'terracotta' },
-    pegawai: { label: 'Pegawai', variant: 'yellow' },
-    mahasiswa: { label: 'Mahasiswa', variant: 'sage' },
-  };
-
-  const currentRole = user ? roleLabels[user.role] || { label: user.role, variant: 'beige' } : null;
+  const currentRole = user ? ROLE_META[user.role] || { label: user.role, variant: 'beige' } : null;
   const isStaffOrAdmin = user?.role === 'admin' || user?.role === 'pegawai';
   const homeHref = isStaffOrAdmin ? '/dashboard' : '/';
 

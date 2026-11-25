@@ -1,9 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { createPortal } from 'react-dom';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Badge from '@/components/ui/Badge';
+import Portal from '@/components/ui/Portal';
+import { FeedbackBanner } from '@/components/ui/FeedbackBanner';
+import { getAnnouncementCategoryBadge } from '@/lib/constants';
 import {
   createAnnouncementAction,
   updateAnnouncementAction,
@@ -12,7 +14,6 @@ import {
 
 export default function AnnouncementManager({ announcements }) {
   const router = useRouter();
-  const [mounted, setMounted] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [editingItem, setEditingItem] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -31,10 +32,6 @@ export default function AnnouncementManager({ announcements }) {
     releaseAt: new Date().toISOString().split('T')[0],
     status: 'PUBLISHED',
   });
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   function openCreateModal() {
     setEditingItem(null);
@@ -113,35 +110,7 @@ export default function AnnouncementManager({ announcements }) {
 
   return (
     <div className="space-y-6">
-      {/* Feedback */}
-      {feedback && (
-        <div
-          className={`rounded-[22px] border-2 px-5 py-3.5 text-xs sm:text-sm font-semibold flex items-center justify-between gap-3 shadow-2xs ${
-            feedback.type === 'success'
-              ? 'bg-[#EEF4E6] border-[#929D75] text-[#425732]'
-              : 'bg-[#FDF1EE] border-[#C96858] text-[#8A3729]'
-          }`}
-        >
-          <div className="flex items-center gap-2.5">
-            <span
-              className={`h-2.5 w-2.5 shrink-0 rounded-full ${
-                feedback.type === 'success' ? 'bg-[#6F8859]' : 'bg-[#C96858]'
-              }`}
-            />
-            <span>{feedback.text}</span>
-          </div>
-          <button
-            type="button"
-            onClick={() => setFeedback(null)}
-            aria-label="Tutup pemberitahuan"
-            className="rounded-lg p-1 hover:bg-black/5 transition-colors cursor-pointer"
-          >
-            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        </div>
-      )}
+      <FeedbackBanner feedback={feedback} onClose={() => setFeedback(null)} />
 
       {/* Top Action */}
       <div className="flex flex-wrap justify-between items-center gap-3">
@@ -192,15 +161,7 @@ export default function AnnouncementManager({ announcements }) {
                       </p>
                     </td>
                     <td className="py-3.5 px-4">
-                      <Badge
-                        variant={
-                          item.category === 'ACARA'
-                            ? 'yellow'
-                            : item.category === 'OPERASIONAL'
-                            ? 'terracotta'
-                            : 'sage'
-                        }
-                      >
+                      <Badge variant={getAnnouncementCategoryBadge(item.category)}>
                         {item.category}
                       </Badge>
                     </td>
@@ -246,9 +207,8 @@ export default function AnnouncementManager({ announcements }) {
       </section>
 
       {/* MODAL FORM CREATE / EDIT PENGUMUMAN */}
-      {mounted &&
-        modalOpen &&
-        createPortal(
+      {modalOpen && (
+        <Portal>
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#2E2116]/45 backdrop-blur-xs">
             <div className="w-full max-w-lg rounded-[28px] border-2 border-[#E4CEAD] bg-[#FFFDF9] p-6 sm:p-7 shadow-[0_14px_34px_rgba(46,33,22,0.28)] space-y-4">
               <div>
@@ -352,15 +312,14 @@ export default function AnnouncementManager({ announcements }) {
                 </div>
               </form>
             </div>
-          </div>,
-          document.body
-        )}
+          </div>
+        </Portal>
+      )}
 
       {/* MODAL KONFIRMASI HAPUS PENGUMUMAN (PENGGANTI BROWSER CONFIRM) */}
-      {mounted &&
-        deleteModal.isOpen &&
-        deleteModal.item &&
-        createPortal(
+      {deleteModal.isOpen &&
+        deleteModal.item && (
+        <Portal>
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#2E2116]/45 backdrop-blur-xs">
             <div className="w-full max-w-md rounded-[28px] border-2 border-[#E4CEAD] bg-[#FFFDF9] p-6 sm:p-7 shadow-[0_14px_34px_rgba(46,33,22,0.28)] space-y-5">
               <div>
@@ -407,9 +366,9 @@ export default function AnnouncementManager({ announcements }) {
                 </button>
               </div>
             </div>
-          </div>,
-          document.body
-        )}
+          </div>
+        </Portal>
+      )}
     </div>
   );
 }

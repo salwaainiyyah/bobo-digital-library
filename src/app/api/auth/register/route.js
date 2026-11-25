@@ -3,6 +3,7 @@ import pool from '@/lib/db';
 import { hashPassword } from '@/lib/auth/password';
 import { isAllowedEmailDomain } from '@/lib/auth/permissions';
 import { ROLES } from '@/lib/constants';
+import { isValidEmailFormat } from '@/lib/validation';
 
 export async function POST(request) {
   try {
@@ -29,8 +30,7 @@ export async function POST(request) {
       );
     }
 
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-    if (!emailPattern.test(cleanEmail)) {
+    if (!isValidEmailFormat(cleanEmail)) {
       return NextResponse.json(
         {
           message:

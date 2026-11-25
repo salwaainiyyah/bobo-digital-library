@@ -98,45 +98,6 @@ export async function getBooksCatalog({
   };
 }
 
-export async function getBooksByCategory(limit = 10) {
-  const query = `
-    SELECT 
-      c.id AS category_id, c.name AS category_name,
-      json_agg(
-        json_build_object(
-          'id', b.id,
-          'title', b.title,
-          'author', b.author,
-          'cover_url', b.cover_url,
-          'publication_year', b.publication_year,
-          'stock_available', b.stock_available,
-          'avg_rating', COALESCE(sub.avg_rating, 0),
-          'borrow_count', COALESCE(sub.borrow_count, 0),
-          'category_name', c.name
-        ) ORDER BY COALESCE(sub.borrow_count, 0) DESC, b.title ASC
-      ) AS books
-    FROM categories c
-    JOIN books b ON b.category_id = c.id AND b.is_active = TRUE
-    LEFT JOIN (
-      SELECT 
-        b2.id AS book_id,
-        COUNT(l.id) AS borrow_count,
-        COALESCE(AVG(r.rating), 0)::numeric(3,1) AS avg_rating
-      FROM books b2
-      LEFT JOIN loans l ON b2.id = l.book_id AND l.status IN ('BORROWED', 'COMPLETED')
-      LEFT JOIN reviews r ON b2.id = r.book_id
-      WHERE b2.is_active = TRUE
-      GROUP BY b2.id
-    ) sub ON sub.book_id = b.id
-    WHERE c.is_active = TRUE
-    GROUP BY c.id, c.name
-    HAVING COUNT(b.id) > 0
-    ORDER BY c.name ASC;
-  `;
-  const result = await pool.query(query);
-  return result.rows;
-}
-
 export async function getBookById(id) {
   const bookQuery = `
     SELECT 

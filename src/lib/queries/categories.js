@@ -15,14 +15,6 @@ export async function getAllCategories(includeInactive = false) {
   return result.rows;
 }
 
-export async function getCategoryById(id) {
-  const result = await pool.query(
-    'SELECT id, name, classification_code, description, is_active FROM categories WHERE id = $1',
-    [id]
-  );
-  return result.rows[0] || null;
-}
-
 export async function createCategory({ name, classificationCode, description }) {
   const result = await pool.query(
     `INSERT INTO categories (name, classification_code, description)

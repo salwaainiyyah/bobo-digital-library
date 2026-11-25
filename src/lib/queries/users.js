@@ -39,16 +39,6 @@ export async function getAllUsers({ role = 'ALL', search = '' } = {}) {
   return result.rows;
 }
 
-export async function getUserById(id) {
-  const query = `
-    SELECT id, full_name, email, role, identity_number, is_active, created_at
-    FROM users
-    WHERE id = $1;
-  `;
-  const result = await pool.query(query, [id]);
-  return result.rows[0] || null;
-}
-
 export async function createUser({ fullName, email, password, role, identityNumber }) {
   const cleanEmail = email.trim().toLowerCase();
   const cleanFullName = fullName.trim();

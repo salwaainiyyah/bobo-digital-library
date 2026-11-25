@@ -1,9 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { createPortal } from 'react-dom';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Badge from '@/components/ui/Badge';
+import Portal from '@/components/ui/Portal';
+import { FeedbackBanner } from '@/components/ui/FeedbackBanner';
 import { approveLoanAction, rejectLoanAction, returnLoanAction } from '@/app/actions/loans';
 import { decideRenewalAction } from '@/app/actions/renewals';
 import { payFineAction } from '@/app/actions/fines';
@@ -15,7 +16,6 @@ export default function CirculationDesk({
   unpaidFines,
 }) {
   const router = useRouter();
-  const [mounted, setMounted] = useState(false);
   const [activeTab, setActiveTab] = useState('queue'); // 'queue' | 'returns' | 'renewals' | 'fines'
   const [returnSearch, setReturnSearch] = useState('');
   const [loadingAction, setLoadingAction] = useState(null);
@@ -63,10 +63,6 @@ export default function CirculationDesk({
     method: 'Tunai',
     note: '',
   });
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   function closeConfirmModal() {
     if (loadingAction) return;
@@ -308,41 +304,7 @@ export default function CirculationDesk({
 
   return (
     <div className="space-y-6">
-      {/* Feedback Banner */}
-      {feedback && (
-        <div
-          className={`rounded-[22px] border-2 px-5 py-3.5 text-xs sm:text-sm font-semibold flex items-center justify-between gap-3 shadow-2xs ${
-            feedback.type === 'success'
-              ? 'bg-[#EEF4E6] border-[#929D75] text-[#425732]'
-              : feedback.type === 'warning'
-              ? 'bg-[#FFF6DF] border-[#E2B15B] text-[#7D530E]'
-              : 'bg-[#FDF1EE] border-[#C96858] text-[#8A3729]'
-          }`}
-        >
-          <div className="flex items-center gap-2.5">
-            <span
-              className={`h-2.5 w-2.5 shrink-0 rounded-full ${
-                feedback.type === 'success'
-                  ? 'bg-[#6F8859]'
-                  : feedback.type === 'warning'
-                  ? 'bg-[#D99B26]'
-                  : 'bg-[#C96858]'
-              }`}
-            />
-            <span>{feedback.text}</span>
-          </div>
-          <button
-            type="button"
-            onClick={() => setFeedback(null)}
-            aria-label="Tutup pemberitahuan"
-            className="rounded-lg p-1 hover:bg-black/5 transition-colors cursor-pointer"
-          >
-            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        </div>
-      )}
+      <FeedbackBanner feedback={feedback} onClose={() => setFeedback(null)} />
 
       {/* Tabs Navigation */}
       <div className="flex flex-wrap gap-2.5 border-b border-[#E4CEAD] pb-4">
@@ -748,9 +710,8 @@ export default function CirculationDesk({
       )}
 
       {/* ═══════════ PORTAL MODALS (PENGGANTI BROWSER CONFIRM / ALERT) ═══════════ */}
-      {mounted &&
-        confirmModal.isOpen &&
-        createPortal(
+      {confirmModal.isOpen && (
+        <Portal>
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#2E2116]/45 backdrop-blur-xs">
             <div className="w-full max-w-md rounded-[28px] border-2 border-[#E4CEAD] bg-[#FFFDF9] p-6 sm:p-7 shadow-[0_14px_34px_rgba(46,33,22,0.28)] space-y-5">
               <div>
@@ -822,14 +783,13 @@ export default function CirculationDesk({
                 </button>
               </div>
             </div>
-          </div>,
-          document.body
-        )}
+          </div>
+        </Portal>
+      )}
 
       {/* MODAL TOLAK PEMINJAMAN (ALASAN WAJIB) */}
-      {mounted &&
-        rejectModal.isOpen &&
-        createPortal(
+      {rejectModal.isOpen && (
+        <Portal>
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#2E2116]/45 backdrop-blur-xs">
             <div className="w-full max-w-md rounded-[28px] border-2 border-[#E4CEAD] bg-[#FFFDF9] p-6 sm:p-7 shadow-[0_14px_34px_rgba(46,33,22,0.28)] space-y-4">
               <div>
@@ -896,14 +856,13 @@ export default function CirculationDesk({
                 </div>
               </form>
             </div>
-          </div>,
-          document.body
-        )}
+          </div>
+        </Portal>
+      )}
 
       {/* MODAL TOLAK PERPANJANGAN */}
-      {mounted &&
-        rejectRenewalModal.isOpen &&
-        createPortal(
+      {rejectRenewalModal.isOpen && (
+        <Portal>
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#2E2116]/45 backdrop-blur-xs">
             <div className="w-full max-w-md rounded-[28px] border-2 border-[#E4CEAD] bg-[#FFFDF9] p-6 sm:p-7 shadow-[0_14px_34px_rgba(46,33,22,0.28)] space-y-4">
               <div>
@@ -965,15 +924,14 @@ export default function CirculationDesk({
                 </div>
               </form>
             </div>
-          </div>,
-          document.body
-        )}
+          </div>
+        </Portal>
+      )}
 
       {/* MODAL CATAT PELUNASAN DENDA */}
-      {mounted &&
-        fineModal.isOpen &&
-        fineModal.fine &&
-        createPortal(
+      {fineModal.isOpen &&
+        fineModal.fine && (
+        <Portal>
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#2E2116]/45 backdrop-blur-xs">
             <div className="w-full max-w-md rounded-[28px] border-2 border-[#E4CEAD] bg-[#FFFDF9] p-6 sm:p-7 shadow-[0_14px_34px_rgba(46,33,22,0.28)] space-y-4">
               <div>
@@ -1048,9 +1006,9 @@ export default function CirculationDesk({
                 </div>
               </form>
             </div>
-          </div>,
-          document.body
-        )}
+          </div>
+        </Portal>
+      )}
     </div>
   );
 }

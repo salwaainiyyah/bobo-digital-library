@@ -1,20 +1,15 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { createPortal } from 'react-dom';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Portal from '@/components/ui/Portal';
 import { requestRenewalAction } from '@/app/actions/renewals';
 
 export default function RenewalButton({ loanId, isEligible, disabledReason }) {
   const router = useRouter();
-  const [mounted, setMounted] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [msg, setMsg] = useState(null);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   async function handleConfirmRenewal() {
     setIsLoading(true);
@@ -71,9 +66,8 @@ export default function RenewalButton({ loanId, isEligible, disabledReason }) {
         {isLoading ? 'Memproses...' : 'Ajukan Perpanjangan'}
       </button>
 
-      {mounted &&
-        confirmOpen &&
-        createPortal(
+      {confirmOpen && (
+        <Portal>
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#2E2116]/45 backdrop-blur-xs">
             <div className="w-full max-w-md rounded-[28px] border-2 border-[#E4CEAD] bg-[#FFFDF9] p-6 sm:p-7 shadow-[0_14px_34px_rgba(46,33,22,0.28)] space-y-5">
               <div>
@@ -117,9 +111,9 @@ export default function RenewalButton({ loanId, isEligible, disabledReason }) {
                 </button>
               </div>
             </div>
-          </div>,
-          document.body
-        )}
+          </div>
+        </Portal>
+      )}
     </div>
   );
 }

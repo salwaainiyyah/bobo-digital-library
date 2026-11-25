@@ -1,9 +1,10 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { createPortal } from 'react-dom';
 import { useRouter } from 'next/navigation';
 import Badge from '@/components/ui/Badge';
+import Portal from '@/components/ui/Portal';
+import { FeedbackToast } from '@/components/ui/FeedbackBanner';
 import {
   createBookAction,
   updateBookAction,
@@ -15,7 +16,6 @@ export default function BookManager({ books, categories }) {
   const router = useRouter();
   const fileInputRef = useRef(null);
 
-  const [mounted, setMounted] = useState(false);
   const [search, setSearch] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [modalOpen, setModalOpen] = useState(false);
@@ -44,10 +44,6 @@ export default function BookManager({ books, categories }) {
     coverUrl: '',
     isActive: true,
   });
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   useEffect(() => {
     if (!feedback) return;
@@ -218,40 +214,7 @@ export default function BookManager({ books, categories }) {
 
   return (
     <div className="space-y-6">
-      {mounted &&
-        feedback &&
-        createPortal(
-          <div className="fixed top-5 right-5 z-[60] w-[calc(100%-2.5rem)] max-w-md animate-fade-in-down">
-            <div
-              role="alert"
-              className={`rounded-[22px] border-2 px-4 py-3.5 text-xs sm:text-sm font-semibold flex items-center justify-between gap-3 shadow-[0_12px_28px_rgba(46,33,22,0.22)] ${
-                feedback.type === 'success'
-                  ? 'bg-[#EEF4E6] border-[#929D75] text-[#425732]'
-                  : 'bg-[#FDF1EE] border-[#C96858] text-[#8A3729]'
-              }`}
-            >
-              <div className="flex items-center gap-2.5">
-                <span
-                  className={`h-2.5 w-2.5 shrink-0 rounded-full ${
-                    feedback.type === 'success' ? 'bg-[#6F8859]' : 'bg-[#C96858]'
-                  }`}
-                />
-                <span>{feedback.text}</span>
-              </div>
-              <button
-                type="button"
-                onClick={() => setFeedback(null)}
-                aria-label="Tutup pemberitahuan"
-                className="rounded-lg p-1 hover:bg-black/5 transition-colors cursor-pointer shrink-0"
-              >
-                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
-          </div>,
-          document.body
-        )}
+      <FeedbackToast feedback={feedback} onClose={() => setFeedback(null)} />
 
       <div className="rounded-[26px] border-2 border-[#E4CEAD] bg-[#FFFDF9] p-5 shadow-[0_6px_0_#EAD5B5]/60 flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
@@ -394,9 +357,8 @@ export default function BookManager({ books, categories }) {
         </div>
       </section>
 
-      {mounted &&
-        modalOpen &&
-        createPortal(
+      {modalOpen && (
+        <Portal>
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#2E2116]/45 backdrop-blur-xs overflow-y-auto">
             <div className="w-full max-w-xl rounded-[28px] border-2 border-[#E4CEAD] bg-[#FFFDF9] p-6 sm:p-7 shadow-[0_14px_34px_rgba(46,33,22,0.28)] space-y-4 my-8">
               <div>
@@ -649,14 +611,13 @@ export default function BookManager({ books, categories }) {
                 </div>
               </form>
             </div>
-          </div>,
-          document.body
-        )}
+          </div>
+        </Portal>
+      )}
 
-      {mounted &&
-        deleteModal.isOpen &&
-        deleteModal.book &&
-        createPortal(
+      {deleteModal.isOpen &&
+        deleteModal.book && (
+        <Portal>
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#2E2116]/45 backdrop-blur-xs">
             <div className="w-full max-w-md rounded-[28px] border-2 border-[#E4CEAD] bg-[#FFFDF9] p-6 sm:p-7 shadow-[0_14px_34px_rgba(46,33,22,0.28)] space-y-5">
               <div>
@@ -714,9 +675,9 @@ export default function BookManager({ books, categories }) {
                 </button>
               </div>
             </div>
-          </div>,
-          document.body
-        )}
+          </div>
+        </Portal>
+      )}
     </div>
   );
 }

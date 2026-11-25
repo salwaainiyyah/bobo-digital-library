@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import BookCoverImage from '@/components/ui/BookCoverImage';
 
 const SPINE_PALETTES = [
   {
@@ -30,40 +31,6 @@ const SPINE_PALETTES = [
     band: 'bg-[#D7E4DE]/30',
   },
 ];
-
-function CoverWithFallback({ book, palette }) {
-  const [imgError, setImgError] = useState(false);
-
-  if (!book.cover_url || imgError) {
-    return (
-      <div
-        className={`w-full h-full bg-gradient-to-br ${palette.bg} ${palette.text} p-3.5 pl-4 flex flex-col justify-between select-none`}
-      >
-        <div className="border border-current/25 rounded-xs h-full p-2.5 flex flex-col justify-between text-left">
-          <div className="flex items-center justify-between text-[8px] font-bold uppercase tracking-[0.16em] opacity-80">
-            <span>Bo&apos;bo</span>
-            <span className="font-serif text-[10px]">ᨅᨚᨅᨚ</span>
-          </div>
-          <p className="font-editorial text-xs sm:text-sm font-bold leading-snug line-clamp-4">
-            {book.title}
-          </p>
-          <p className="text-[10px] opacity-80 line-clamp-1 border-t border-current/20 pt-1">
-            {book.author}
-          </p>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <img
-      src={book.cover_url}
-      alt={book.title}
-      onError={() => setImgError(true)}
-      className="w-full h-full object-cover"
-    />
-  );
-}
 
 function CabinetShelfRow({ shelfBooks, shelfNumber, startIndex }) {
   const [activeIndex, setActiveIndex] = useState(shelfBooks.length > 0 ? 0 : null);
@@ -224,7 +191,16 @@ function CabinetShelfRow({ shelfBooks, shelfNumber, startIndex }) {
                                shadow-[0_18px_28px_-6px_rgba(92,59,40,0.36),6px_0_0_#F7EFE2,7px_0_0_#D8C3A5]
                                transition-transform duration-300 ease-out hover:-translate-y-1 hover:rotate-1"
                   >
-                    <CoverWithFallback book={book} palette={palette} />
+                    <BookCoverImage
+                      src={book.cover_url}
+                      title={book.title}
+                      author={book.author}
+                      fallbackClassName={`${palette.bg} ${palette.text}`}
+                      fallbackPaddingClassName="p-3.5 pl-4"
+                      fallbackInnerClassName="border border-current/25 rounded-xs h-full p-2.5 flex flex-col justify-between text-left"
+                      titleClassName="font-editorial text-xs sm:text-sm font-bold leading-snug line-clamp-4"
+                      authorClassName="text-[10px] opacity-80 line-clamp-1 border-t border-current/20 pt-1"
+                    />
 
                     <div
                       aria-hidden="true"

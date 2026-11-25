@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useRef } from 'react';
-import Image from 'next/image';
 
 export default function BookCover3D({ coverUrl, title, stockAvailable }) {
   const [rotateX, setRotateX] = useState(0);

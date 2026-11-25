@@ -5,6 +5,7 @@ import { requireRole } from '@/lib/auth/permissions';
 import { verifySession } from '@/lib/auth/session';
 import { createUser, updateUser, deleteUser, resetUserPassword } from '@/lib/queries/users';
 import { ROLES } from '@/lib/constants';
+import { validatePasswordChangeInput } from '@/lib/validation';
 
 export async function createUserAction(formData) {
   try {
@@ -87,24 +88,9 @@ export async function resetUserPasswordAction(id, formData) {
     const newPassword = formData.get('newPassword');
     const confirmPassword = formData.get('confirmPassword');
 
-    if (typeof newPassword !== 'string' || typeof confirmPassword !== 'string') {
-      return { success: false, error: 'Password baru dan konfirmasi password wajib diisi.' };
-    }
-
-    if (newPassword.trim().length === 0) {
-      return { success: false, error: 'Password baru tidak boleh kosong atau hanya berisi spasi.' };
-    }
-
-    if (newPassword.length < 6) {
-      return { success: false, error: 'Password baru minimal harus terdiri dari 6 karakter.' };
-    }
-
-    if (Buffer.byteLength(newPassword, 'utf8') > 72) {
-      return { success: false, error: 'Password baru terlalu panjang (maksimal 72 byte).' };
-    }
-
-    if (newPassword !== confirmPassword) {
-      return { success: false, error: 'Konfirmasi password tidak cocok dengan password baru.' };
+    const validationError = validatePasswordChangeInput(newPassword, confirmPassword);
+    if (validationError) {
+      return { success: false, error: validationError };
     }
 
     const updatedUser = await resetUserPassword(id, newPassword, {

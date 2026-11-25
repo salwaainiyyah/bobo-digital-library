@@ -5,6 +5,16 @@ export const ROLES = {
   GUEST: 'guest',
 };
 
+export const ROLE_META = {
+  [ROLES.ADMIN]: { label: 'Admin', variant: 'terracotta' },
+  [ROLES.PEGAWAI]: { label: 'Pegawai', variant: 'yellow' },
+  [ROLES.MAHASISWA]: { label: 'Mahasiswa', variant: 'sage' },
+};
+
+export function getRoleBadgeVariant(role) {
+  return ROLE_META[role]?.variant || 'beige';
+}
+
 export const LOAN_STATUS = {
   PENDING: 'PENDING',       // Menunggu Konfirmasi
   BORROWED: 'BORROWED',     // Sedang Dipinjam
@@ -29,6 +39,16 @@ export const ANNOUNCEMENT_STATUS = {
 };
 
 export const ANNOUNCEMENT_CATEGORIES = ['OPERASIONAL', 'LAYANAN', 'ACARA'];
+
+export const ANNOUNCEMENT_CATEGORY_BADGE = {
+  ACARA: 'yellow',
+  OPERASIONAL: 'terracotta',
+  LAYANAN: 'sage',
+};
+
+export function getAnnouncementCategoryBadge(category) {
+  return ANNOUNCEMENT_CATEGORY_BADGE[category] || 'sage';
+}
 
 export const DEFAULT_CONFIG = {
   LOAN_DURATION_DAYS: 7,

@@ -6,6 +6,7 @@ import Badge from '@/components/ui/Badge';
 import ScrollReveal from '@/components/ui/ScrollReveal';
 import { getCurrentUser } from '@/lib/auth/permissions';
 import { getAnnouncementById } from '@/lib/queries/announcements';
+import { getAnnouncementCategoryBadge } from '@/lib/constants';
 
 export const revalidate = 0;
 
@@ -26,8 +27,7 @@ export default async function AnnouncementDetailPage({ params }) {
     }
   }
 
-  const categoryVariant =
-    announcement.category === 'ACARA' ? 'yellow' : announcement.category === 'OPERASIONAL' ? 'terracotta' : 'sage';
+  const categoryVariant = getAnnouncementCategoryBadge(announcement.category);
 
   return (
     <div className="min-h-screen flex flex-col bg-[#F7EBD8]">

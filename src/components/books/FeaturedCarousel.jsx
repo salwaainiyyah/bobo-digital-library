@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react';
 import Link from 'next/link';
+import BookCoverImage from '@/components/ui/BookCoverImage';
 
 const FALLBACK_THEMES = [
   'from-[#68774E] to-[#4E5B39] text-[#FAF6EE]',
@@ -63,43 +64,10 @@ function getBookBinding(book, index) {
   return BOOK_BINDINGS[index % BOOK_BINDINGS.length];
 }
 
-function CarouselCover({ book, index }) {
-  const [imgError, setImgError] = useState(false);
-  const theme = FALLBACK_THEMES[index % FALLBACK_THEMES.length];
-
-  if (!book.cover_url || imgError) {
-    return (
-      <div className={`w-full h-full bg-gradient-to-br ${theme} p-3 pl-4 flex flex-col justify-between select-none`}>
-        <div className="border border-white/25 rounded-xs h-full p-2 flex flex-col justify-between text-left">
-          <div className="flex items-center justify-between text-[8px] font-bold uppercase tracking-[0.15em] opacity-80">
-            <span>Bo&apos;bo</span>
-            <span className="font-serif text-[10px]">ᨅᨚᨅᨚ</span>
-          </div>
-          <p className="font-editorial text-xs font-bold leading-snug line-clamp-4">
-            {book.title}
-          </p>
-          <p className="text-[9px] opacity-80 line-clamp-1 border-t border-white/15 pt-1">
-            {book.author}
-          </p>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <img
-      src={book.cover_url}
-      alt={book.title}
-      draggable={false}
-      onError={() => setImgError(true)}
-      className="w-full h-full object-cover select-none"
-    />
-  );
-}
-
 // Komponen Buku Hardcover 3D dengan Tumpukan Halaman & Pita Pembatas
 function HardcoverBook3D({ book, index, isCenter }) {
   const binding = getBookBinding(book, index);
+  const fallbackTheme = FALLBACK_THEMES[index % FALLBACK_THEMES.length];
 
   return (
     <div
@@ -122,7 +90,14 @@ function HardcoverBook3D({ book, index, isCenter }) {
         className={`relative aspect-[3/4] w-full overflow-hidden rounded-tl-2xl rounded-tr-xl rounded-bl-xs bg-gradient-to-r ${binding.shellBg} pl-[5px] pt-[2px] pr-[2px]`}
       >
         <div className="relative h-full w-full overflow-hidden rounded-tl-xl rounded-tr-[10px] bg-[#EFE2CE]">
-          <CarouselCover book={book} index={index} />
+          <BookCoverImage
+            src={book.cover_url}
+            title={book.title}
+            author={book.author}
+            fallbackClassName={fallbackTheme}
+            draggable={false}
+            imgClassName="w-full h-full object-cover select-none"
+          />
 
           {/* Efek lekukan engsel & pencahayaan 3D punggung buku di sisi kiri */}
           <div

@@ -15,8 +15,6 @@ export default function BoboIntro() {
       // If sessionStorage is unavailable, still show the intro once on this mount.
     }
 
-    setVisible(true);
-
     const reducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
     ).matches;
@@ -29,6 +27,10 @@ export default function BoboIntro() {
       }
     };
 
+    const showFrame = window.requestAnimationFrame(() => {
+      setVisible(true);
+    });
+
     const leaveTimer = window.setTimeout(() => {
       markAsShown();
       setLeaving(true);
@@ -40,6 +42,7 @@ export default function BoboIntro() {
     }, reducedMotion ? 900 : 3400);
 
     return () => {
+      window.cancelAnimationFrame(showFrame);
       window.clearTimeout(leaveTimer);
       window.clearTimeout(removeTimer);
     };

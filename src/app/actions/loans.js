@@ -1,7 +1,7 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import { requireUser, requireRole } from '@/lib/auth/permissions';
+import { requireRole } from '@/lib/auth/permissions';
 import { requestLoan, approveLoan, rejectLoan, returnLoan } from '@/lib/services/loan-service';
 import { ROLES } from '@/lib/constants';
 

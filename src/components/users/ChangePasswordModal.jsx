@@ -1,8 +1,10 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { createPortal } from 'react-dom';
 import Badge from '@/components/ui/Badge';
+import Portal from '@/components/ui/Portal';
+import { getRoleBadgeVariant } from '@/lib/constants';
+import { validatePasswordChangeInput } from '@/lib/validation';
 import { resetUserPasswordAction } from '@/app/actions/users';
 
 function evaluatePasswordStrength(password) {
@@ -162,39 +164,15 @@ export default function ChangePasswordModal({
   const passwordsMismatch = hasConfirmInput && newPassword !== confirmPassword;
   const isSelf = targetUser.id === currentAdminId;
 
-  const roleBadgeVariant =
-    targetUser.role === 'admin'
-      ? 'terracotta'
-      : targetUser.role === 'pegawai'
-      ? 'yellow'
-      : 'sage';
+  const roleBadgeVariant = getRoleBadgeVariant(targetUser.role);
 
   async function handleSubmit(e) {
     e.preventDefault();
     setInlineError('');
 
-    if (!newPassword || newPassword.trim().length === 0) {
-      setInlineError('Password baru wajib diisi dan tidak boleh hanya berupa spasi.');
-      return;
-    }
-
-    if (newPassword.length < 6) {
-      setInlineError('Password baru minimal harus terdiri dari 6 karakter.');
-      return;
-    }
-
-    if (new TextEncoder().encode(newPassword).length > 72) {
-      setInlineError('Password baru terlalu panjang (maksimal 72 karakter/byte).');
-      return;
-    }
-
-    if (!confirmPassword) {
-      setInlineError('Konfirmasi password baru wajib diisi.');
-      return;
-    }
-
-    if (newPassword !== confirmPassword) {
-      setInlineError('Konfirmasi password tidak cocok dengan password baru.');
+    const validationError = validatePasswordChangeInput(newPassword, confirmPassword);
+    if (validationError) {
+      setInlineError(validationError);
       return;
     }
 
@@ -224,9 +202,10 @@ export default function ChangePasswordModal({
     }
   }
 
-  return createPortal(
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#2E2116]/45 backdrop-blur-xs animate-fade-in"
+  return (
+    <Portal>
+      <div
+        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#2E2116]/45 backdrop-blur-xs animate-fade-in"
       onClick={() => {
         if (!isSubmitting) onClose();
       }}
@@ -539,7 +518,7 @@ export default function ChangePasswordModal({
           </div>
         </form>
       </div>
-    </div>,
-    document.body
+    </div>
+    </Portal>
   );
 }

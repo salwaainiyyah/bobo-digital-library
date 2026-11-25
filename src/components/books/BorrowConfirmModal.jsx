@@ -1,9 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { createPortal } from 'react-dom';
+import { useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import Portal from '@/components/ui/Portal';
 
 export default function BorrowConfirmModal({
   isOpen,
@@ -15,12 +15,6 @@ export default function BorrowConfirmModal({
   dailyFine = 'Rp 1.000 / hari',
   feedback = null, // { type: 'success' | 'error', message: '...' }
 }) {
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
   // Tutup modal dengan tombol ESC
   useEffect(() => {
     if (!isOpen) return;
@@ -31,11 +25,12 @@ export default function BorrowConfirmModal({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, loading, onClose]);
 
-  if (!isOpen || !mounted) return null;
+  if (!isOpen) return null;
 
   const isSuccess = feedback?.type === 'success';
 
-  return createPortal(
+  return (
+    <Portal>
     <div
       role="dialog"
       aria-modal="true"
@@ -194,7 +189,7 @@ export default function BorrowConfirmModal({
           )}
         </div>
       </div>
-    </div>,
-    document.body
+    </div>
+    </Portal>
   );
 }

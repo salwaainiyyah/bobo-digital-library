@@ -65,12 +65,15 @@ export default function NotificationBell({ userId }) {
 
   // Muat riwayat status "sudah dibaca" dari localStorage per akun
   useEffect(() => {
-    try {
-      const saved = window.localStorage.getItem(storageKey);
-      setReadIds(saved ? JSON.parse(saved) : []);
-    } catch {
-      setReadIds([]);
-    }
+    const frameId = window.requestAnimationFrame(() => {
+      try {
+        const saved = window.localStorage.getItem(storageKey);
+        setReadIds(saved ? JSON.parse(saved) : []);
+      } catch {
+        setReadIds([]);
+      }
+    });
+    return () => window.cancelAnimationFrame(frameId);
   }, [storageKey]);
 
   const persistReadIds = useCallback(
@@ -99,10 +102,26 @@ export default function NotificationBell({ userId }) {
   }, []);
 
   useEffect(() => {
-    fetchNotifications();
-    const interval = setInterval(fetchNotifications, 15000);
-    return () => clearInterval(interval);
-  }, [fetchNotifications]);
+    let active = true;
+    async function load() {
+      try {
+        const res = await fetch('/api/notifications', { cache: 'no-store' });
+        if (!res.ok || !active) return;
+        const data = await res.json();
+        if (active) setNotifications(data.notifications || []);
+      } catch {
+        // Abaikan gangguan sementara
+      } finally {
+        if (active) setIsLoading(false);
+      }
+    }
+    load();
+    const interval = setInterval(load, 15000);
+    return () => {
+      active = false;
+      clearInterval(interval);
+    };
+  }, []);
 
   // Tutup popover saat klik di luar area
   useEffect(() => {

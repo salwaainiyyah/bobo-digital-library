@@ -41,17 +41,3 @@ export async function createReview({ loanId, studentId, rating, comment }) {
 
   return result.rows[0];
 }
-
-export async function getBookReviews(bookId) {
-  const query = `
-    SELECT 
-      r.id, r.rating, r.comment, r.created_at,
-      u.full_name AS student_name, u.identity_number AS student_nim
-    FROM reviews r
-    JOIN users u ON r.student_id = u.id
-    WHERE r.book_id = $1
-    ORDER BY r.created_at DESC;
-  `;
-  const result = await pool.query(query, [bookId]);
-  return result.rows;
-}
