@@ -2,7 +2,8 @@
 
 import { revalidatePath } from 'next/cache';
 import { requireRole } from '@/lib/auth/permissions';
-import { createUser, updateUser, deleteUser } from '@/lib/queries/users';
+import { verifySession } from '@/lib/auth/session';
+import { createUser, updateUser, deleteUser, resetUserPassword } from '@/lib/queries/users';
 import { ROLES } from '@/lib/constants';
 
 export async function createUserAction(formData) {
@@ -66,5 +67,60 @@ export async function deleteUserAction(id) {
     return { success: true, message: result.message };
   } catch (error) {
     return { success: false, error: error.message };
+  }
+}
+
+export async function resetUserPasswordAction(id, formData) {
+  try {
+    const session = await verifySession();
+    if (!session) {
+      return { success: false, error: 'Sesi Anda telah berakhir. Silakan login kembali.' };
+    }
+
+    if (session.user.role !== ROLES.ADMIN) {
+      return {
+        success: false,
+        error: 'Akses ditolak. Hanya Administrator yang memiliki izin mengubah password akun.',
+      };
+    }
+
+    const newPassword = formData.get('newPassword');
+    const confirmPassword = formData.get('confirmPassword');
+
+    if (typeof newPassword !== 'string' || typeof confirmPassword !== 'string') {
+      return { success: false, error: 'Password baru dan konfirmasi password wajib diisi.' };
+    }
+
+    if (newPassword.trim().length === 0) {
+      return { success: false, error: 'Password baru tidak boleh kosong atau hanya berisi spasi.' };
+    }
+
+    if (newPassword.length < 6) {
+      return { success: false, error: 'Password baru minimal harus terdiri dari 6 karakter.' };
+    }
+
+    if (Buffer.byteLength(newPassword, 'utf8') > 72) {
+      return { success: false, error: 'Password baru terlalu panjang (maksimal 72 byte).' };
+    }
+
+    if (newPassword !== confirmPassword) {
+      return { success: false, error: 'Konfirmasi password tidak cocok dengan password baru.' };
+    }
+
+    const updatedUser = await resetUserPassword(id, newPassword, {
+      currentAdminId: session.user.id,
+      currentSessionId: session.sessionId,
+    });
+
+    revalidatePath('/dashboard/admin/users');
+    return {
+      success: true,
+      message: `Password akun "${updatedUser.full_name}" berhasil diperbarui.`,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: error.message || 'Gagal memperbarui password akun pengguna.',
+    };
   }
 }

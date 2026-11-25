@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { useRouter } from 'next/navigation';
 import Badge from '@/components/ui/Badge';
+import ChangePasswordModal from '@/components/users/ChangePasswordModal';
 import { createUserAction, updateUserAction, deleteUserAction } from '@/app/actions/users';
 
 export default function UserManager({ initialUsers, currentAdminId }) {
@@ -15,6 +16,11 @@ export default function UserManager({ initialUsers, currentAdminId }) {
   const [editingUser, setEditingUser] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [feedback, setFeedback] = useState(null);
+
+  const [passwordModal, setPasswordModal] = useState({
+    isOpen: false,
+    targetUser: null,
+  });
 
   const [deleteModal, setDeleteModal] = useState({
     isOpen: false,
@@ -99,6 +105,11 @@ export default function UserManager({ initialUsers, currentAdminId }) {
     } else {
       setFeedback({ type: 'error', text: res.error || 'Gagal memproses data akun.' });
     }
+  }
+
+  function openPasswordModal(u) {
+    setFeedback(null);
+    setPasswordModal({ isOpen: true, targetUser: u });
   }
 
   function handleDeleteClick(u) {
@@ -222,12 +233,12 @@ export default function UserManager({ initialUsers, currentAdminId }) {
           <table className="w-full text-left text-xs">
             <thead className="bg-[#F8F1E3]">
               <tr className="border-b border-[#EAD5B5] text-[#5A3E28]/70 uppercase text-[10px] font-bold tracking-wider">
-                <th className="py-3 px-4 min-w-[220px]">Nama Pengguna &amp; Email</th>
-                <th className="py-3 px-4 w-[120px] whitespace-nowrap">Peran (Role)</th>
-                <th className="py-3 px-4 w-[145px] whitespace-nowrap">No. Identitas / NIM</th>
-                <th className="py-3 px-4 w-[165px] whitespace-nowrap">Aktivitas Pinjam</th>
-                <th className="py-3 px-4 w-[108px] whitespace-nowrap">Status Akun</th>
-                <th className="py-3 px-4 w-[166px] whitespace-nowrap text-right">Aksi</th>
+                <th className="py-3 px-4 min-w-[190px]">Nama Pengguna &amp; Email</th>
+                <th className="py-3 px-4 w-[106px] whitespace-nowrap">Peran (Role)</th>
+                <th className="py-3 px-4 w-[125px] whitespace-nowrap">No. Identitas / NIM</th>
+                <th className="py-3 px-4 w-[145px] whitespace-nowrap">Aktivitas Pinjam</th>
+                <th className="py-3 px-4 w-[96px] whitespace-nowrap">Status Akun</th>
+                <th className="py-3 px-4 w-[258px] whitespace-nowrap text-right">Aksi</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-[#EAD5B5]/60 bg-[#FFFDF9]">
@@ -245,8 +256,8 @@ export default function UserManager({ initialUsers, currentAdminId }) {
                         </span>
                       )}
                     </td>
-                    <td className="py-3.5 px-4 w-[120px] whitespace-nowrap">
-                      <span className="inline-flex w-[92px]">
+                    <td className="py-3.5 px-4 w-[106px] whitespace-nowrap">
+                      <span className="inline-flex w-[90px]">
                         <Badge
                           variant={
                             u.role === 'admin'
@@ -260,10 +271,10 @@ export default function UserManager({ initialUsers, currentAdminId }) {
                         </Badge>
                       </span>
                     </td>
-                    <td className="py-3.5 px-4 w-[145px] font-mono text-[11px] text-[#5A3E28] whitespace-nowrap">
+                    <td className="py-3.5 px-4 w-[125px] font-mono text-[11px] text-[#5A3E28] whitespace-nowrap">
                       {u.identity_number || '-'}
                     </td>
-                    <td className="py-3.5 px-4 w-[165px] text-[11px] text-[#6E5038]">
+                    <td className="py-3.5 px-4 w-[145px] text-[11px] text-[#6E5038]">
                       <div>Total: {u.total_loans || 0} pinjaman</div>
                       {parseInt(u.active_loans, 10) > 0 && (
                         <span className="text-[#9A6B19] font-semibold">
@@ -276,8 +287,8 @@ export default function UserManager({ initialUsers, currentAdminId }) {
                         </span>
                       )}
                     </td>
-                    <td className="py-3.5 px-4 w-[108px] whitespace-nowrap">
-                      <span className="inline-flex w-[84px]">
+                    <td className="py-3.5 px-4 w-[96px] whitespace-nowrap">
+                      <span className="inline-flex w-[80px]">
                         {u.is_active ? (
                           <Badge variant="sage">Aktif</Badge>
                         ) : (
@@ -285,26 +296,47 @@ export default function UserManager({ initialUsers, currentAdminId }) {
                         )}
                       </span>
                     </td>
-                    <td className="py-3.5 px-4 w-[166px] whitespace-nowrap text-right">
-                      <div className="inline-flex items-center justify-end gap-2">
+                    <td className="py-3.5 px-4 w-[258px] whitespace-nowrap text-right">
+                      <div className="inline-flex items-center justify-end gap-1.5">
                         <button
                           type="button"
                           onClick={() => openEditModal(u)}
-                          className="w-[62px] py-1.5 rounded-xl border border-[#DFC7A2] bg-[#FAF4E8] hover:bg-[#F1E4CD] text-[#5A3E28] font-bold text-[11px] text-center transition-colors cursor-pointer"
+                          className="px-2.5 py-1.5 rounded-xl border border-[#DFC7A2] bg-[#FAF4E8] hover:bg-[#F1E4CD] text-[#5A3E28] font-bold text-[11px] text-center transition-colors cursor-pointer"
                         >
                           Edit
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => openPasswordModal(u)}
+                          className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl border border-[#8BA372]/45 bg-[#EEF4E6] hover:bg-[#E1ECD4] text-[#425732] font-bold text-[11px] text-center transition-colors cursor-pointer"
+                          title={`Ubah password untuk ${u.full_name}`}
+                        >
+                          <svg
+                            className="h-3.5 w-3.5 shrink-0"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            strokeWidth={2}
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"
+                            />
+                          </svg>
+                          <span>Ubah Password</span>
                         </button>
                         {!isSelf ? (
                           <button
                             type="button"
                             onClick={() => handleDeleteClick(u)}
-                            className="w-[68px] py-1.5 rounded-xl border border-[#C96858]/35 bg-[#FBECE9] hover:bg-[#F6DCD6] text-[#8A3729] font-bold text-[11px] text-center transition-colors cursor-pointer"
+                            className="w-[58px] py-1.5 rounded-xl border border-[#C96858]/35 bg-[#FBECE9] hover:bg-[#F6DCD6] text-[#8A3729] font-bold text-[11px] text-center transition-colors cursor-pointer"
                             title="Hapus / Nonaktifkan Akun"
                           >
                             Hapus
                           </button>
                         ) : (
-                          <span aria-hidden="true" className="inline-block w-[68px]" />
+                          <span aria-hidden="true" className="inline-block w-[58px]" />
                         )}
                       </div>
                     </td>
@@ -549,6 +581,23 @@ export default function UserManager({ initialUsers, currentAdminId }) {
           </div>,
           document.body
         )}
+
+      {mounted && passwordModal.isOpen && passwordModal.targetUser && (
+        <ChangePasswordModal
+          key={passwordModal.targetUser.id}
+          targetUser={passwordModal.targetUser}
+          currentAdminId={currentAdminId}
+          onClose={() => setPasswordModal({ isOpen: false, targetUser: null })}
+          onSuccess={(message) => {
+            setPasswordModal({ isOpen: false, targetUser: null });
+            setFeedback({ type: 'success', text: message });
+            router.refresh();
+          }}
+          onError={(message) => {
+            setFeedback({ type: 'error', text: message });
+          }}
+        />
+      )}
     </div>
   );
 }

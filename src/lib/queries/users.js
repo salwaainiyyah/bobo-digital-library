@@ -176,3 +176,71 @@ export async function deleteUser(id, currentAdminId) {
   await pool.query('DELETE FROM users WHERE id = $1', [targetId]);
   return { id: targetId, softDeleted: false, message: 'Akun berhasil dihapus permanen.' };
 }
+
+export async function resetUserPassword(id, newPassword, { currentAdminId, currentSessionId } = {}) {
+  const targetId = parseInt(id, 10);
+  if (!Number.isInteger(targetId) || targetId <= 0) {
+    throw new Error('ID akun pengguna tidak valid.');
+  }
+
+  if (typeof newPassword !== 'string' || newPassword.trim().length === 0) {
+    throw new Error('Password baru wajib diisi.');
+  }
+
+  if (newPassword.length < 6) {
+    throw new Error('Password baru minimal harus terdiri dari 6 karakter.');
+  }
+
+  if (Buffer.byteLength(newPassword, 'utf8') > 72) {
+    throw new Error('Password baru maksimal 72 byte.');
+  }
+
+  const existingRes = await pool.query(
+    'SELECT id, full_name, email, role FROM users WHERE id = $1',
+    [targetId]
+  );
+  const existingUser = existingRes.rows[0];
+
+  if (!existingUser) {
+    throw new Error('Akun pengguna tidak ditemukan.');
+  }
+
+  const passwordHash = await hashPassword(newPassword);
+
+  const client = await pool.connect();
+  try {
+    await client.query('BEGIN');
+
+    const updateRes = await client.query(
+      `UPDATE users
+       SET password_hash = $1, updated_at = CURRENT_TIMESTAMP
+       WHERE id = $2
+       RETURNING id, full_name, email, role, identity_number, is_active`,
+      [passwordHash, targetId]
+    );
+
+    if (targetId === parseInt(currentAdminId, 10) && currentSessionId) {
+      await client.query(
+        `UPDATE sessions
+         SET revoked_at = CURRENT_TIMESTAMP
+         WHERE user_id = $1 AND revoked_at IS NULL AND id <> $2`,
+        [targetId, currentSessionId]
+      );
+    } else {
+      await client.query(
+        `UPDATE sessions
+         SET revoked_at = CURRENT_TIMESTAMP
+         WHERE user_id = $1 AND revoked_at IS NULL`,
+        [targetId]
+      );
+    }
+
+    await client.query('COMMIT');
+    return updateRes.rows[0];
+  } catch (error) {
+    await client.query('ROLLBACK');
+    throw error;
+  } finally {
+    client.release();
+  }
+}
