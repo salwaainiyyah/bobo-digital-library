@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState, useRef, useEffect, useCallback } from 'react';
+import StudentNavbar from './StudentNavbar';
 import { ROLES } from '@/lib/constants';
 
 function SidebarNavIcon({ name, active }) {
@@ -91,7 +92,7 @@ function SidebarNavIcon({ name, active }) {
   }
 }
 
-export default function DashboardShell({ user, children }) {
+function StaffDashboardShell({ user, children }) {
   const pathname = usePathname();
   const router = useRouter();
   const sidebarScrollRef = useRef(null);
@@ -369,4 +370,25 @@ export default function DashboardShell({ user, children }) {
       </div>
     </div>
   );
+}
+
+function StudentDashboardShell({ user, children }) {
+  return (
+    <div className="min-h-screen flex flex-col bg-[#F3EAD8]">
+      <StudentNavbar user={user} />
+      <main className="flex-1 p-4 sm:p-6 lg:p-7 max-w-7xl mx-auto w-full">{children}</main>
+    </div>
+  );
+}
+
+/**
+ * Shell dashboard.
+ * - Mahasiswa      -> navbar horizontal bersama (StudentNavbar)
+ * - Pegawai/Admin  -> sidebar lama, TIDAK diubah
+ */
+export default function DashboardShell({ user, children }) {
+  if (user?.role === ROLES.MAHASISWA) {
+    return <StudentDashboardShell user={user}>{children}</StudentDashboardShell>;
+  }
+  return <StaffDashboardShell user={user}>{children}</StaffDashboardShell>;
 }

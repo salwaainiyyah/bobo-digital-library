@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 
-function formatRelativeTime(dateString) {
+export function formatRelativeTime(dateString) {
   const now = new Date();
   const past = new Date(dateString);
   const diffSeconds = Math.max(1, Math.floor((now - past) / 1000));
@@ -23,7 +23,7 @@ function formatRelativeTime(dateString) {
   });
 }
 
-function getCategoryStyle(category) {
+export function getCategoryStyle(category) {
   switch (category) {
     case 'AKUN':
       return {
@@ -166,8 +166,8 @@ export default function NotificationBell({ userId }) {
       : enrichedList;
 
   return (
-    <div ref={wrapperRef} className="relative">
-      {/* Tombol Ikon Lonceng di Navbar */}
+    <div ref={wrapperRef} className="sm:relative">
+      {/* Tombol Ikon Lonceng Bulat di Navbar */}
       <button
         type="button"
         onClick={() => {
@@ -175,10 +175,10 @@ export default function NotificationBell({ userId }) {
           if (!isOpen) fetchNotifications();
         }}
         aria-label="Notifikasi"
-        className={`relative flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-2xl border transition-all cursor-pointer ${
+        className={`relative flex h-9 w-9 sm:h-10 sm:w-10 shrink-0 items-center justify-center rounded-full border transition-all cursor-pointer ${
           isOpen
-            ? 'border-[#929D75] bg-[#EEF4E6] text-[#556B43]'
-            : 'border-[#EBCFA9] bg-white/90 text-[#79543D] hover:bg-[#FAF4E8]'
+            ? 'border-[#68774E] bg-[#E6ECD8] text-[#54603B]'
+            : 'border-[#EBCFA9] bg-[#F7EBD8] text-[#79543D] hover:bg-[#E6ECD8]/60'
         }`}
       >
         <svg
@@ -203,11 +203,11 @@ export default function NotificationBell({ userId }) {
 
       {/* Popover Daftar Notifikasi */}
       {isOpen && (
-        <div className="absolute right-0 mt-3 w-[330px] sm:w-[390px] z-50 rounded-3xl border-2 border-[#E4CEAD] bg-[#FFFDF9] shadow-[0_18px_40px_rgba(90,60,42,0.2)] overflow-hidden">
+        <div className="absolute inset-x-3 top-full mt-2 sm:inset-x-auto sm:right-0 sm:top-auto sm:mt-3 sm:w-[390px] z-50 rounded-3xl border-2 border-[#E4CEAD] bg-[#FFFDF9] shadow-[0_18px_40px_rgba(90,60,42,0.2)] overflow-hidden">
           {/* Segitiga Pointer Atas */}
           <div
             aria-hidden="true"
-            className="absolute -top-2 right-3.5 h-3.5 w-3.5 rotate-45 border-l-2 border-t-2 border-[#E4CEAD] bg-[#FFFDF9]"
+            className="hidden sm:block absolute -top-2 right-[13px] h-3.5 w-3.5 rotate-45 border-l-2 border-t-2 border-[#E4CEAD] bg-[#FFFDF9]"
           />
 
           {/* Header Popover */}
